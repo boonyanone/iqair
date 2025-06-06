@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการโฆษณา - Air Quality Signage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Kanit', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            color: #333;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #667eea;
+        }
+        
+        .form-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Kanit', Arial, sans-serif;
+        }
+        
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Kanit', Arial, sans-serif;
+            font-weight: 600;
+        }
+        
+        button:hover {
+            background: #5a6fd8;
+        }
+        
+        .ad-list {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .ad-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ad-preview {
+            flex: 1;
+            margin-right: 15px;
+        }
+        
+        .ad-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .settings-section {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← กลับไปหน้าแสดงผล</a>
+        
+        <h1>🛠️ จัดการโฆษณาและการตั้งค่า</h1>
+        
+        <!-- ตั้งค่า API -->
+        <div class="settings-section">
+            <h2>⚙️ การตั้งค่า API</h2>
+            <div class="form-group">
+                <label for="api-key">IQAir API Key:</label>
+                <input type="text" id="api-key" placeholder="ใส่ API Key ของคุณ">
+            </div>
+            <div class="form-group">
+                <label for="city">เมือง:</label>
+                <input type="text" id="city" value="Bangkok">
+            </div>
+            <button onclick="saveSettings()">💾 บันทึกการตั้งค่า</button>
+        </div>
+        
+        <!-- เพิ่มโฆษณา -->
+        <div class="form-section">
+            <h2>➕ เพิ่มโฆษณาใหม่</h2>
+            <div class="form-group">
+                <label for="ad-type">ประเภทโฆษณา:</label>
+                <select id="ad-type" onchange="toggleAdForm()">
+                    <option value="text">ข้อความ</option>
+                    <option value="image">รูปภาพ</option>
+                </select>
+            </div>
+            
+            <div id="text-form">
+                <div class="form-group">
+                    <label for="ad-content">เนื้อหาโฆษณา:</label>
+                    <textarea id="ad-content" placeholder="ใส่เนื้อหาโฆษณา (สามารถใช้ HTML ได้)"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ad-background">สีพื้นหลัง (Gradient CSS):</label>
+                    <input type="text" id="ad-background" placeholder="linear-gradient(45deg, #ff6b6b, #4ecdc4)">
+                </div>
+            </div>
+            
+            <div id="image-form" style="display: none;">
+                <div class="form-group">
+                    <label for="ad-image">อัพโหลดรูปภาพ:</label>
+                    <input type="file" id="ad-image" accept="image/*">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="ad-duration">ระยะเวลาแสดง (วินาที):</label>
+                <input type="number" id="ad-duration" value="15" min="5" max="60">
+            </div>
+            
+            <button onclick="addAdvertisement()">➕ เพิ่มโฆษณา</button>
+        </div>
+        
+        <!-- รายการโฆษณา -->
+        <div class="form-section">
+            <h2>📋 รายการโฆษณาปัจจุบัน</h2>
+            <div id="ad-list" class="ad-list">
+                <!-- จะถูกโหลดด้วย JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let advertisements = [];
+        
+        // โหลดโฆษณาปัจจุบัน
+        async function loadAdvertisements() {
+            try {
+                const response = await fetch('/api/get-ads');
+                const data = await response.json();
+                advertisements = data.ads || [];
+                renderAdList();
+            } catch (error) {
+                console.error('Error loading ads:', error);
+                advertisements = [];
+                renderAdList();
+            }
+        }
+        
+        // แสดงรายการโฆษณา
+        function renderAdList() {
+            const adList = document.getElementById('ad-list');
+            
+            if (advertisements.length === 0) {
+                adList.innerHTML = '<div style="text-align: center; color: #999;">ยังไม่มีโฆษณา</div>';
+                return;
+            }
+            
+            adList.innerHTML = advertisements.map((ad, index) => `
+                <div class="ad-item">
+                    <div class="ad-preview">
+                        <strong>ประเภท:</strong> ${ad.type === 'text' ? 'ข้อความ' : 'รูปภาพ'}<br>
+                        ${ad.type === 'text' ? 
+                            `<div style="margin-top: 10px;">${ad.content}</div>` : 
+                            `<img src="${ad.src}" style="max-width: 200px; max-height: 100px;" alt="Ad Preview">`
+                        }
+                    </div>
+                    <div class="ad-actions">
+                        <button onclick="editAd(${index})">✏️ แก้ไข</button>
+                        <button class="btn-danger" onclick="deleteAd(${index})">🗑️ ลบ</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // เพิ่มโฆษณา
+        async function addAdvertisement() {
+            const type = document.getElementById('ad-type').value;
+            const duration = parseInt(document.getElementById('ad-duration').value) * 1000;
+            
+            let adData = { type, duration };
+            
+            if (type === 'text') {
+                adData.content = document.getElementById('ad-content').value;
+                adData.background = document.getElementById('ad-background').value || 'linear-gradient(45deg, #ff6b6b, #4ecdc4)';
+            } else if (type === 'image') {
+                const fileInput = document.getElementById('ad-image');
+                if (!fileInput.files[0]) {
+                    alert('กรุณาเลือกรูปภาพ');
+                    return;
+                }
+                
+                // อัพโหลดรูปภาพ
+                const formData = new FormData();
+                formData.append('image', fileInput.files[0]);
+                
+                try {
+                    const uploadResponse = await fetch('/api/upload-image', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const uploadData = await uploadResponse.json();
+                    adData.src = uploadData.url;
+                } catch (error) {
+                    alert('เกิดข้อผิดพลาดในการอัพโหลดรูปภาพ');
+                    return;
+                }
+            }
+            
+            advertisements.push(adData);
+            await saveAdvertisements();
+            resetForm();
+            loadAdvertisements();
+        }
+        
+        // ลบโฆษณา
+        async function deleteAd(index) {
+            if (confirm('ต้องการลบโฆษณานี้หรือไม่?')) {
+                advertisements.splice(index, 1);
+                await saveAdvertisements();
+                loadAdvertisements();
+            }
+        }
+        
+        // บันทึกโฆษณา
+        async function saveAdvertisements() {
+            try {
+                await fetch('/api/save-ads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ads: advertisements })
+                });
+                alert('บันทึกสำเร็จ!');
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการบันทึก');
+            }
+        }
+        
+        // บันทึกการตั้งค่า
+        async function saveSettings() {
+            const apiKey = document.getElementById('api-key').value;
+            const city = document.getElementById('city').value;
+            
+            try {
+                await fetch('/api/save-settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ apiKey, city })
+                });
+                alert('บันทึกการตั้งค่าสำเร็จ!');
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการบันทึกการตั้งค่า');
+            }
+        }
+        
+        // สลับฟอร์ม
+        function toggleAdForm() {
+            const type = document.getElementById('ad-type').value;
+            document.getElementById('text-form').style.display = type === 'text' ? 'block' : 'none';
+            document.getElementById('image-form').style.display = type === 'image' ? 'block' : 'none';
+        }
+        
+        // รีเซ็ตฟอร์ม
+        function resetForm() {
+            document.getElementById('ad-content').value = '';
+            document.getElementById('ad-background').value = '';
+            document.getElementById('ad-image').value = '';
+            document.getElementById('ad-duration').value = '15';
+        }
+        
+        // โหลดข้อมูลเริ่มต้น
+        document.addEventListener('DOMContentLoaded', loadAdvertisements);
+    </script>
+</body>
+</html>

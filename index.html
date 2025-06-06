@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Quality Digital Signage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS เดิม + เพิ่ม */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Kanit', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            height: 100vh;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .air-quality-panel {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .aqi-display {
+            font-size: 9rem;
+            font-weight: 700;
+            margin: 30px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+        }
+        
+        .advertisement-panel {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .ad-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            overflow: hidden;
+            min-height: 400px;
+        }
+        
+        .ad-text {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            padding: 40px;
+            line-height: 1.4;
+        }
+        
+        .ad-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* AQI Colors */
+        .aqi-good { color: #00e400; }
+        .aqi-moderate { color: #ffff00; }
+        .aqi-unhealthy { color: #ff0000; }
+        
+        .admin-link {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            opacity: 0.3;
+            transition: opacity 0.3s;
+        }
+        
+        .admin-link:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="air-quality-panel">
+            <div>🌬️ คุณภาพอากาศ</div>
+            <div id="location">📍 Bangkok, Thailand</div>
+            <div class="aqi-display aqi-moderate" id="aqi-value">67</div>
+            <div id="aqi-status">ปานกลาง 😐</div>
+        </div>
+        
+        <div class="advertisement-panel">
+            <div>📢 ข้อมูลและโฆษณา</div>
+            <div class="ad-content" id="ad-content">
+                <div class="ad-text">กำลังโหลดโฆษณา...</div>
+            </div>
+        </div>
+    </div>
+    
+    <a href="admin.html" class="admin-link">⚙️ จัดการ</a>
+
+    <script>
+        // Configuration
+        let advertisements = [];
+        let currentAdIndex = 0;
+        
+        // โหลดโฆษณาจาก API
+        async function loadAdvertisements() {
+            try {
+                const response = await fetch('/api/get-ads');
+                const data = await response.json();
+                advertisements = data.ads || [];
+                console.log('โหลดโฆษณา:', advertisements.length, 'รายการ');
+                
+                if (advertisements.length === 0) {
+                    // ใช้โฆษณาเริ่มต้น
+                    advertisements = [
+                        {
+                            type: 'text',
+                            content: '🏢 คอนโดมิเนียม เดอะ เรสซิเดนซ์<br>📍 ใจกลางเมือง เดินทางสะดวก<br>💰 เริ่มต้น 2.5 ล้านบาท',
+                            background: 'linear-gradient(45deg, #667eea, #764ba2)'
+                        }
+                    ];
+                }
+                
+                startAdRotation();
+            } catch (error) {
+                console.error('Error loading ads:', error);
+                // ใช้โฆษณาเริ่มต้น
+                advertisements = [
+                    {
+                        type: 'text',
+                        content: '🏢 ยินดีต้อนรับสู่ Digital Signage<br>📱 ระบบแสดงผลอัจฉริยะ<br>⚡ พร้อมใช้งาน 24/7',
+                        background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)'
+                    }
+                ];
+                startAdRotation();
+            }
+        }
+        
+        // หมุนเวียนโฆษณา
+        function rotateAdvertisement() {
+            const adContent = document.getElementById('ad-content');
+            const ad = advertisements[currentAdIndex];
+            
+            if (ad.type === 'text') {
+                adContent.style.background = ad.background || 'linear-gradient(45deg, #ff6b6b, #4ecdc4)';
+                adContent.innerHTML = `<div class="ad-text">${ad.content}</div>`;
+            } else if (ad.type === 'image') {
+                adContent.style.background = 'none';
+                adContent.innerHTML = `<img class="ad-image" src="${ad.src}" alt="Advertisement">`;
+            }
+            
+            currentAdIndex = (currentAdIndex + 1) % advertisements.length;
+        }
+        
+        function startAdRotation() {
+            rotateAdvertisement();
+            setInterval(rotateAdvertisement, 15000); // 15 วินาที
+        }
+        
+        // โหลดข้อมูลอากาศ
+        async function loadAirQuality() {
+            try {
+                const response = await fetch('/api/air-quality');
+                const data = await response.json();
+                // อัพเดทข้อมูล AQI
+                updateAirQualityDisplay(data);
+            } catch (error) {
+                console.error('Error loading air quality:', error);
+            }
+        }
+        
+        function updateAirQualityDisplay(data) {
+            // อัพเดท UI
+        }
+        
+        // เริ่มต้น
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAdvertisements();
+            loadAirQuality();
+            setInterval(loadAirQuality, 10 * 60 * 1000); // 10 นาที
+        });
+    </script>
+</body>
+</html>
