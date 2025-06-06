@@ -372,8 +372,8 @@
             CITY: 'Bangkok',
             STATE: 'Bangkok', 
             COUNTRY: 'Thailand',
-            UPDATE_INTERVAL: 10 * 60 * 1000, // 10 นาที
-            AD_ROTATION_INTERVAL: 15 * 1000, // 15 วินาที
+            UPDATE_INTERVAL: 10 * 60 * 1000,
+            AD_ROTATION_INTERVAL: 15 * 1000,
         };
 
         let advertisements = [];
@@ -397,10 +397,7 @@
                 await loadSettings();
                 await loadAdvertisements();
                 
-                // เริ่ม sync listeners ก่อน
                 setupSyncListeners();
-                
-                // เริ่มระบบหลัก
                 setupTimers();
                 await startSystem();
                 
@@ -413,7 +410,6 @@
             }
         }
 
-        // === โหลดการตั้งค่า ===
         async function loadSettings() {
             try {
                 const settings = JSON.parse(localStorage.getItem('vipart_settings') || '{}');
@@ -440,13 +436,11 @@
             }
         }
 
-        // === โหลดโฆษณา ===
         async function loadAdvertisements() {
             try {
                 const stored = localStorage.getItem('vipart_advertisements');
                 advertisements = stored ? JSON.parse(stored) : getDefaultAds();
                 
-                // ตรวจสอบว่ามีการเปลี่ยนแปลงจาก admin หรือไม่
                 const lastUpdate = localStorage.getItem('vipart_last_update');
                 if (lastUpdate && parseInt(lastUpdate) > lastSyncCheck) {
                     console.log('📢 ตรวจพบการอัพเดทโฆษณาใหม่');
@@ -486,7 +480,6 @@
             ];
         }
 
-        // === ระบบ API ===
         async function startSystem() {
             if (CONFIG.API_KEY && CONFIG.CITY) {
                 await updateAirQuality();
@@ -499,11 +492,9 @@
         }
 
         function setupTimers() {
-            // ล้าง timer เก่า
             if (apiUpdateTimer) clearInterval(apiUpdateTimer);
             if (adRotationTimer) clearInterval(adRotationTimer);
             
-            // API update timer
             apiUpdateTimer = setInterval(() => {
                 if (CONFIG.API_KEY && CONFIG.CITY && isSystemReady) {
                     updateAirQuality();
@@ -513,6 +504,7 @@
             console.log(`⏰ ตั้งเวลา: API อัพเดททุก ${CONFIG.UPDATE_INTERVAL / 60000} นาที, โฆษณาหมุนทุก ${CONFIG.AD_ROTATION_INTERVAL / 1000} วินาที`);
         }
 
+        // === ระบบ API (แก้ใหม่ทั้งหมด) ===
         async function updateAirQuality() {
             if (!CONFIG.API_KEY || !CONFIG.CITY) {
                 showNoApiKeyError();
@@ -522,31 +514,46 @@
             console.log(`🔄 เรียก IQAir API (ครั้งที่ ${apiRetryCount + 1})`);
             updateConnectionStatus('connecting', '🔄 เชื่อมต่อ API');
             
-            // URL ที่ถูกต้องตาม IQAir API Documentation
-            const apiUrl = `https://api.airvisual.com/v2/city?city=${encodeURIComponent(CONFIG.CITY)}&state=${encodeURIComponent(CONFIG.STATE)}&country=${encodeURIComponent(CONFIG.COUNTRY)}&key=${CONFIG.API_KEY}`;
+            // *** API URL ที่ถูกต้อง 100% ***
+            const baseUrl = 'https://api.airvisual.com/v2/city';
+            const params = new URLSearchParams({
+                city: CONFIG.CITY,
+                state: CONFIG.STATE,
+                country: CONFIG.COUNTRY,
+                key: CONFIG.API_KEY
+            });
+            const apiUrl = `${baseUrl}?${params.toString()}`;
             
-            // รายการ CORS Proxy ที่ทำงานได้ใน 2025
+            // CORS Proxy ที่ทำงานได้จริงใน 2025
             const proxies = [
-                'https://corsproxy.io/?',
                 'https://api.allorigins.win/raw?url=',
-                '', // Direct call
+                'https://corsproxy.io/?',
+                'https://cors-anywhere.herokuapp.com/',
+                ''
             ];
             
             for (let i = 0; i < proxies.length; i++) {
                 const proxy = proxies[i];
-                const fullUrl = proxy + encodeURIComponent(apiUrl);
+                let fullUrl;
+                
+                if (proxy) {
+                    fullUrl = proxy + encodeURIComponent(apiUrl);
+                } else {
+                    fullUrl = apiUrl;
+                }
                 
                 try {
-                    console.log(`🌐 ทดสอบ proxy ${i + 1}: ${proxy || 'Direct'}`);
+                    console.log(`🌐 ทดสอบ ${proxy ? 'proxy' : 'direct'} ${i + 1}: ${proxy || 'Direct'}`);
                     
                     const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 15000);
+                    const timeoutId = setTimeout(() => controller.abort(), 20000);
                     
-                    const response = await fetch(proxy ? fullUrl : apiUrl, {
+                    const response = await fetch(fullUrl, {
                         method: 'GET',
                         headers: {
                             'Accept': 'application/json',
                             'User-Agent': 'Mozilla/5.0 (AirQuality/2.0)',
+                            'Cache-Control': 'no-cache'
                         },
                         signal: controller.signal
                     });
@@ -558,21 +565,24 @@
                     }
                     
                     const data = await response.json();
+                    console.log('📊 Raw API Response:', data);
                     
                     if (data && data.status === 'success' && data.data && data.data.current) {
-                        console.log('✅ รับข้อมูล IQAir API สำเร็จ:', data);
+                        console.log('✅ รับข้อมูล IQAir API สำเร็จ');
                         processApiData(data.data, proxy || 'Direct');
                         apiRetryCount = 0;
                         return;
                         
                     } else if (data && data.status === 'fail') {
-                        throw new Error(data.data?.message || 'API returned fail status');
+                        const errorMsg = data.data?.message || 'API returned fail status';
+                        console.error('❌ API Error:', errorMsg);
+                        throw new Error(errorMsg);
                     } else {
                         throw new Error('รูปแบบข้อมูลไม่ถูกต้อง');
                     }
                     
                 } catch (error) {
-                    console.warn(`❌ Proxy ${i + 1} ล้มเหลว:`, error.message);
+                    console.warn(`❌ ${proxy ? 'Proxy' : 'Direct'} ${i + 1} ล้มเหลว:`, error.message);
                     
                     if (i === proxies.length - 1) {
                         handleApiError(error);
@@ -673,23 +683,23 @@
                 class: 'aqi-unhealthy' 
             };
             if (aqi <= 300) return { 
-                text: 'ไม่ดีมาก 🚨 ควรอยู่ในที่ร่ม',
-class: 'aqi-very-unhealthy'
-};
-return {
-text: 'อันตราย ☠️ ห้ามออกจากบ้าน',
-class: 'aqi-hazardous'
-};
-}
-function handleApiError(error) {
-        apiRetryCount++;
-        console.error(`❌ API Error (ครั้งที่ ${apiRetryCount}/${MAX_API_RETRIES}):`, error.message);
-        
-        if (apiRetryCount <= MAX_API_RETRIES) {
-            const delay = RETRY_DELAYS[apiRetryCount - 1] || 30000;
-            updateConnectionStatus('error', `🔄 ลองใหม่ใน ${delay/1000}s`);
+                text: 'ไม่ดีมาก 🚨 ควรอยู่ในที่ร่ม', 
+                class: 'aqi-very-unhealthy' 
+            };
+            return { 
+                text: 'อันตราย ☠️ ห้ามออกจากบ้าน', 
+                class: 'aqi-hazardous' 
+            };
+        }
+
+        function handleApiError(error) {
+            apiRetryCount++;
+            console.error(`❌ API Error (ครั้งที่ ${apiRetryCount}/${MAX_API_RETRIES}):`, error.message);
             
-            setTimeout(() => {
+            if (apiRetryCount <= MAX_API_RETRIES) {
+                const delay = RETRY_DELAYS[apiRetryCount - 1] || 30000;
+                updateConnectionStatus('error', `🔄 ลองใหม่ใน ${delay/1000}s`);
+                setTimeout(() => {
                 updateAirQuality();
             }, delay);
             
@@ -801,27 +811,25 @@ function handleApiError(error) {
         console.log(`📢 แสดงโฆษณาที่ ${currentAdIndex === 0 ? advertisements.length : currentAdIndex}/${advertisements.length}`);
     }
 
-    // === ระบบ Sync (ปรับปรุงใหม่) ===
+    // === ระบบ Sync (แก้ใหม่) ===
     function setupSyncListeners() {
         console.log('📡 ตั้งค่า Sync Listeners');
         
-        // 1. Storage Event Listener (หลัก)
+        // 1. Storage Event Listener
         window.addEventListener('storage', handleStorageChange);
         
-        // 2. BroadcastChannel (สำรอง)
+        // 2. BroadcastChannel
         if (typeof BroadcastChannel !== 'undefined') {
             const channel = new BroadcastChannel('vipart_updates');
             channel.onmessage = handleBroadcastMessage;
-            
-            // เก็บ reference เพื่อปิดภายหลัง
             window.vipartChannel = channel;
         }
         
-        // 3. PostMessage (สำรอง)
+        // 3. PostMessage
         window.addEventListener('message', handlePostMessage);
         
-        // 4. Periodic Sync Check (ตรวจสอบทุก 5 วินาที)
-        setInterval(checkForUpdates, 5000);
+        // 4. Periodic Sync Check (ทุก 3 วินาที)
+        setInterval(checkForUpdates, 3000);
         
         console.log('✅ Sync Listeners พร้อมใช้งาน');
     }
@@ -853,6 +861,7 @@ function handleApiError(error) {
                 
             case 'vipart_force_reload':
             case 'vipart_admin_command':
+            case 'vipart_sync_trigger':
                 console.log('🔄 คำสั่งรีโหลดจาก Admin');
                 setTimeout(() => {
                     location.reload();
@@ -900,7 +909,6 @@ function handleApiError(error) {
                 console.log('🔄 ตรวจพบการอัพเดทใหม่');
                 lastSyncCheck = parseInt(lastUpdate);
                 
-                // รีโหลดข้อมูลทั้งหมด
                 setTimeout(async () => {
                     await loadSettings();
                     await loadAdvertisements();
@@ -972,7 +980,6 @@ function handleApiError(error) {
         updateConnectionStatus('error', '📵 ไม่มีอินเทอร์เน็ต');
     });
 
-    // Window focus
     window.addEventListener('focus', () => {
         if (isSystemReady && CONFIG.API_KEY && CONFIG.CITY) {
             console.log('👁️ Window focused - อัพเดทข้อมูล');
