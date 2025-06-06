@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Air Quality Digital Signage Pro - Real Data</title>
+    <title>Air Quality Digital Signage Pro - Real Data v2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -20,18 +20,63 @@
             overflow: hidden;
             padding: 20px;
             position: relative;
+            transition: all 0.5s ease;
         }
         
+        /* === Container Layouts === */
         .container {
+            height: calc(100vh - 40px);
+            gap: 20px;
+            transition: all 0.5s ease;
+        }
+        
+        /* แนวนอน (Landscape) - Default */
+        .container.landscape {
             display: grid;
             grid-template-columns: 1fr 2fr;
             grid-template-rows: 1fr auto;
-            height: calc(100vh - 40px);
-            gap: 20px;
+        }
+        
+        /* แนวตั้ง (Portrait) */
+        .container.portrait {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr auto;
+        }
+        
+        /* เต็มจอ AQI (Fullscreen AQI) */
+        .container.fullscreen-aqi {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr auto;
+        }
+        
+        .container.fullscreen-aqi .advertisement-section {
+            display: none;
+        }
+        
+        /* เต็มจอ Ads (Fullscreen Ads) */
+        .container.fullscreen-ads {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr auto;
+        }
+        
+        .container.fullscreen-ads .air-quality-section {
+            display: none;
+        }
+        
+        /* TV Mode - แสดงทั้งคู่แต่ใหญ่ขึ้น */
+        .container.tv-mode {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr auto;
+            gap: 30px;
+            padding: 30px;
         }
         
         @media (max-width: 768px) {
-            .container {
+            .container.landscape {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto 1fr auto;
             }
@@ -49,6 +94,15 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            transition: all 0.5s ease;
+        }
+        
+        .container.portrait .air-quality-section {
+            padding: 20px;
+        }
+        
+        .container.fullscreen-aqi .air-quality-section {
+            padding: 60px;
         }
         
         .header-title {
@@ -56,6 +110,16 @@
             margin-bottom: 15px;
             font-weight: 700;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .container.fullscreen-aqi .header-title {
+            font-size: 4rem;
+            margin-bottom: 30px;
+        }
+        
+        .container.tv-mode .header-title {
+            font-size: 2.5rem;
         }
         
         .location-info {
@@ -63,6 +127,12 @@
             opacity: 0.95;
             margin-bottom: 25px;
             font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .container.fullscreen-aqi .location-info {
+            font-size: 2rem;
+            margin-bottom: 40px;
         }
         
         .aqi-display {
@@ -74,11 +144,33 @@
             animation: pulse 2s infinite;
         }
         
+        .container.portrait .aqi-display {
+            font-size: 5rem;
+        }
+        
+        .container.fullscreen-aqi .aqi-display {
+            font-size: 12rem;
+            margin: 40px 0;
+        }
+        
+        .container.tv-mode .aqi-display {
+            font-size: 8rem;
+        }
+        
         .aqi-status {
             font-size: 2.4rem;
             font-weight: 600;
             margin: 15px 0;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .container.portrait .aqi-status {
+            font-size: 2rem;
+        }
+        
+        .container.fullscreen-aqi .aqi-status {
+            font-size: 3rem;
         }
         
         .details-grid {
@@ -87,6 +179,18 @@
             gap: 20px;
             width: 100%;
             margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .container.fullscreen-aqi .details-grid {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .container.portrait .details-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
         }
         
         .detail-item {
@@ -104,6 +208,10 @@
             transform: translateY(-2px);
         }
         
+        .container.fullscreen-aqi .detail-item {
+            padding: 30px;
+        }
+        
         .detail-label {
             font-size: 1rem;
             opacity: 0.9;
@@ -111,10 +219,19 @@
             font-weight: 500;
         }
         
+        .container.fullscreen-aqi .detail-label {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+        }
+        
         .detail-value {
             font-size: 1.5rem;
             font-weight: 700;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .container.fullscreen-aqi .detail-value {
+            font-size: 2.2rem;
         }
         
         .advertisement-section {
@@ -126,6 +243,11 @@
             flex-direction: column;
             border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
+            transition: all 0.5s ease;
+        }
+        
+        .container.fullscreen-ads .advertisement-section {
+            padding: 60px;
         }
         
         .ad-header {
@@ -135,6 +257,12 @@
             font-weight: 700;
             opacity: 0.95;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .container.fullscreen-ads .ad-header {
+            font-size: 3rem;
+            margin-bottom: 40px;
         }
         
         .ad-content {
@@ -151,6 +279,14 @@
             transition: all 0.5s ease;
         }
         
+        .container.portrait .ad-content {
+            min-height: 300px;
+        }
+        
+        .container.fullscreen-ads .ad-content {
+            min-height: 70vh;
+        }
+        
         .ad-text {
             text-align: center;
             font-weight: 700;
@@ -159,6 +295,16 @@
             line-height: 1.5;
             font-size: 2.5rem;
             animation: fadeIn 1s ease-in-out;
+        }
+        
+        .container.portrait .ad-text {
+            font-size: 2rem;
+            padding: 30px;
+        }
+        
+        .container.fullscreen-ads .ad-text {
+            font-size: 4rem;
+            padding: 60px;
         }
         
         .ad-image, .ad-video {
@@ -177,7 +323,17 @@
             font-size: 1rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
             font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .container.landscape .footer {
             grid-column: 1 / -1;
+        }
+        
+        .container.tv-mode .footer {
+            grid-column: 1 / -1;
+            font-size: 1.2rem;
+            padding: 25px;
         }
         
         /* AQI Colors */
@@ -241,6 +397,12 @@
             animation: pulse 1.5s infinite;
         }
         
+        .status-fallback {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.3), rgba(255, 171, 0, 0.2));
+            color: #ffc107;
+            border: 2px solid rgba(255, 193, 7, 0.5);
+        }
+        
         .admin-link {
             position: fixed;
             bottom: 30px;
@@ -262,26 +424,44 @@
             transform: scale(1.1);
         }
         
-        .manual-refresh {
+        .mode-indicator {
             position: fixed;
-            top: 100px;
-            right: 30px;
+            top: 30px;
+            left: 30px;
             background: rgba(0,0,0,0.7);
             color: white;
             padding: 10px 15px;
-            border: none;
             border-radius: 10px;
-            cursor: pointer;
-            font-family: 'Kanit';
+            font-size: 0.9rem;
             font-weight: 600;
             z-index: 1000;
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
+            opacity: 0;
         }
         
-        .manual-refresh:hover {
-            background: rgba(0,0,0,0.9);
-            transform: scale(1.05);
+        .mode-indicator.show {
+            opacity: 1;
+        }
+        
+        .shortcuts-help {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            max-width: 300px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .shortcuts-help.show {
+            opacity: 0.9;
         }
         
         @keyframes fadeIn {
@@ -303,6 +483,16 @@
             0%, 100% { box-shadow: 0 4px 15px rgba(255,0,0,0.2); }
             50% { box-shadow: 0 4px 25px rgba(255,0,0,0.4); }
         }
+        
+        /* Loading Animation */
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading {
+            animation: rotate 2s linear infinite;
+        }
     </style>
 </head>
 <body>
@@ -311,11 +501,22 @@
         <span id="status-text">🔄 เริ่มต้นระบบ</span>
     </div>
     
-    <!-- Manual Refresh Button -->
-    <button class="manual-refresh" onclick="forceRefresh()">🔄 รีเฟรช</button>
+    <!-- Mode Indicator -->
+    <div class="mode-indicator" id="mode-indicator">
+        📺 แนวนอน (Landscape)
+    </div>
+    
+    <!-- Shortcuts Help -->
+    <div class="shortcuts-help" id="shortcuts-help">
+        <strong>🎮 ปุ่มลัด:</strong><br>
+        1 = แนวตั้ง | 2 = แนวนอน | 3 = เต็มจอ AQI<br>
+        4 = เต็มจอ Ads | 5 = TV Mode<br>
+        R = รีเฟรช | U = อัพเดท API<br>
+        H = แสดง/ซ่อนช่วยเหลือ | Space = หยุด/เริ่มโฆษณา
+    </div>
     
     <!-- Main Container -->
-    <div class="container" id="container">
+    <div class="container landscape" id="container">
         <!-- Air Quality Section -->
         <div class="air-quality-section">
             <div class="header-title">🌬️ คุณภาพอากาศ</div>
@@ -349,7 +550,7 @@
             <div class="ad-content" id="ad-content">
                 <div class="ad-text">
                     🌟 ยินดีต้อนรับสู่ระบบ<br>
-                    📊 Air Quality Digital Signage Pro<br>
+                    📊 Air Quality Digital Signage Pro v2.0<br>
                     ⚡ กำลังโหลดข้อมูล...
                 </div>
             </div>
@@ -358,7 +559,7 @@
         <!-- Footer -->
         <div class="footer" id="footer">
             <div id="last-updated">🕐 กำลังเริ่มต้นระบบ...</div>
-            <div>🚀 Digital Signage Pro | Real-Time Air Quality Data | Powered by IQAir</div>
+            <div>🚀 Digital Signage Pro v2.0 | Real-Time Air Quality Data | Powered by IQAir</div>
         </div>
     </div>
     
@@ -383,9 +584,20 @@
         let isSystemReady = false;
         let apiRetryCount = 0;
         let lastSyncCheck = 0;
+        let currentMode = 'landscape';
+        let helpVisible = false;
         
         const MAX_API_RETRIES = 3;
         const RETRY_DELAYS = [5000, 15000, 30000];
+
+        // Display modes
+        const DISPLAY_MODES = {
+            portrait: '📱 แนวตั้ง (Portrait)',
+            landscape: '📺 แนวนอน (Landscape)', 
+            'fullscreen-aqi': '🌬️ เต็มจอ AQI',
+            'fullscreen-ads': '📢 เต็มจอ Ads',
+            'tv-mode': '📻 TV Mode'
+        };
 
         // === เริ่มต้นระบบ ===
         async function init() {
@@ -403,6 +615,13 @@
                 
                 isSystemReady = true;
                 console.log('✅ ระบบพร้อมใช้งาน');
+                
+                // แสดงคำแนะนำเป็นเวลา 5 วินาที
+                showModeIndicator();
+                setTimeout(() => {
+                    showHelp();
+                    setTimeout(() => hideHelp(), 5000);
+                }, 1000);
                 
             } catch (error) {
                 console.error('❌ Error initializing system:', error);
@@ -465,7 +684,7 @@
             return [
                 {
                     type: 'text',
-                    content: '🌟 ยินดีต้อนรับสู่ระบบ<br>📊 Air Quality Digital Signage Pro<br>⚡ ข้อมูลคุณภาพอากาศแบบเรียลไทม์<br>🔗 เชื่อมต่อกับ IQAir API',
+                    content: '🌟 ยินดีต้อนรับสู่ระบบ<br>📊 Air Quality Digital Signage Pro v2.0<br>⚡ ข้อมูลคุณภาพอากาศแบบเรียลไทม์<br>🔗 เชื่อมต่อกับ IQAir API',
                     background: 'linear-gradient(45deg, #667eea, #764ba2)',
                     duration: 20000,
                     id: now + 1
@@ -476,6 +695,27 @@
                     background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
                     duration: 18000,
                     id: now + 2
+                },
+                {
+                    type: 'text',
+                    content: '🎉 โปรโมชั่นพิเศษ<br>💰 ลดราคาสูงสุด 50%<br>⏰ สิ้นสุด 31 ธันวาคม 2025<br>🛍️ รีบมาช็อปกันเลย!',
+                    background: 'linear-gradient(45deg, #f093fb, #f5576c)',
+                    duration: 22000,
+                    id: now + 3
+                },
+                {
+                    type: 'text',
+                    content: '🌍 ป้องกันสิ่งแวดล้อม<br>🌱 ใส่ใจคุณภาพอากาศ<br>💚 เพื่อสุขภาพที่ดีของทุกคน<br>🌿 ร่วมมือกันรักษาโลก',
+                    background: 'linear-gradient(45deg, #a8edea, #fed6e3)',
+                    duration: 20000,
+                    id: now + 4
+                },
+                {
+                    type: 'text',
+                    content: '⚠️ แจ้งเตือนคุณภาพอากาศ<br>😷 PM2.5 สูง ควรสวมหน้ากาก<br>🏠 อยู่ในที่ร่มเป็นเวลานาน<br>🚗 หลีกเลี่ยงกิจกรรมกลางแจ้ง',
+                    background: 'linear-gradient(45deg, #ffecd2, #fcb69f)',
+                    duration: 25000,
+                    id: now + 5
                 }
             ];
         }
@@ -504,213 +744,204 @@
             console.log(`⏰ ตั้งเวลา: API อัพเดททุก ${CONFIG.UPDATE_INTERVAL / 60000} นาที, โฆษณาหมุนทุก ${CONFIG.AD_ROTATION_INTERVAL / 1000} วินาที`);
         }
 
-        // === ระบบ API (แก้ใหม่ทั้งหมด) ===
-        async function updateAirQuality() {
-            if (!CONFIG.API_KEY || !CONFIG.CITY) {
-                showNoApiKeyError();
-                return;
+        // === ระบบ API (ปรับปรุงใหม่) ===
+        async function updateAirQuality()
+        {
+if (!CONFIG.API_KEY || !CONFIG.CITY) {
+showNoApiKeyError();
+return;
+}
+console.log(`🔄 เรียก IQAir API (ครั้งที่ ${apiRetryCount + 1})`);
+        updateConnectionStatus('connecting', '🔄 เชื่อมต่อ API');
+        
+        // URL ที่ถูกต้อง 100%
+        const baseUrl = 'https://api.airvisual.com/v2/city';
+        const params = new URLSearchParams({
+            city: CONFIG.CITY,
+            state: CONFIG.STATE,
+            country: CONFIG.COUNTRY,
+            key: CONFIG.API_KEY
+        });
+        const apiUrl = `${baseUrl}?${params.toString()}`;
+        
+        // CORS Proxy Services ใหม่ล่าสุด 2025
+        const proxies = [
+            'https://thingproxy.freeboard.io/fetch/',
+            'https://proxy.cors.sh/',
+            'https://api.codetabs.com/v1/proxy?quest=',
+            'https://yacdn.org/proxy/',
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?',
+            'https://cors-anywhere.herokuapp.com/',
+            ''
+        ];
+        
+        for (let i = 0; i < proxies.length; i++) {
+            const proxy = proxies[i];
+            let fullUrl;
+            
+            if (proxy) {
+                fullUrl = proxy + encodeURIComponent(apiUrl);
+            } else {
+                fullUrl = apiUrl;
             }
             
-            console.log(`🔄 เรียก IQAir API (ครั้งที่ ${apiRetryCount + 1})`);
-            updateConnectionStatus('connecting', '🔄 เชื่อมต่อ API');
-            
-            // *** API URL ที่ถูกต้อง 100% ***
-            const baseUrl = 'https://api.airvisual.com/v2/city';
-            const params = new URLSearchParams({
-                city: CONFIG.CITY,
-                state: CONFIG.STATE,
-                country: CONFIG.COUNTRY,
-                key: CONFIG.API_KEY
-            });
-            const apiUrl = `${baseUrl}?${params.toString()}`;
-            
-            // CORS Proxy ที่ทำงานได้จริงใน 2025
-            const proxies = [
-                'https://api.allorigins.win/raw?url=',
-                'https://corsproxy.io/?',
-                'https://cors-anywhere.herokuapp.com/',
-                ''
-            ];
-            
-            for (let i = 0; i < proxies.length; i++) {
-                const proxy = proxies[i];
-                let fullUrl;
-                
-                if (proxy) {
-                    fullUrl = proxy + encodeURIComponent(apiUrl);
-                } else {
-                    fullUrl = apiUrl;
-                }
-                
-                try {
-                    console.log(`🌐 ทดสอบ ${proxy ? 'proxy' : 'direct'} ${i + 1}: ${proxy || 'Direct'}`);
-                    
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 20000);
-                    
-                    const response = await fetch(fullUrl, {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json',
-                            'User-Agent': 'Mozilla/5.0 (AirQuality/2.0)',
-                            'Cache-Control': 'no-cache'
-                        },
-                        signal: controller.signal
-                    });
-                    
-                    clearTimeout(timeoutId);
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-                    
-                    const data = await response.json();
-                    console.log('📊 Raw API Response:', data);
-                    
-                    if (data && data.status === 'success' && data.data && data.data.current) {
-                        console.log('✅ รับข้อมูล IQAir API สำเร็จ');
-                        processApiData(data.data, proxy || 'Direct');
-                        apiRetryCount = 0;
-                        return;
-                        
-                    } else if (data && data.status === 'fail') {
-                        const errorMsg = data.data?.message || 'API returned fail status';
-                        console.error('❌ API Error:', errorMsg);
-                        throw new Error(errorMsg);
-                    } else {
-                        throw new Error('รูปแบบข้อมูลไม่ถูกต้อง');
-                    }
-                    
-                } catch (error) {
-                    console.warn(`❌ ${proxy ? 'Proxy' : 'Direct'} ${i + 1} ล้มเหลว:`, error.message);
-                    
-                    if (i === proxies.length - 1) {
-                        handleApiError(error);
-                        return;
-                    }
-                    
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                }
-            }
-        }
-
-        function processApiData(data, proxyUsed) {
             try {
-                const { current, city, state, country } = data;
-                const { pollution, weather } = current;
+                console.log(`🌐 ทดสอบ ${proxy ? 'proxy' : 'direct'} ${i + 1}/${proxies.length}: ${proxy || 'Direct'}`);
                 
-                console.log('📊 ประมวลผลข้อมูล:', {
-                    location: `${city}, ${state}, ${country}`,
-                    aqi: pollution.aqius,
-                    pm25: pollution.pm25?.v,
-                    temp: weather.tp,
-                    humidity: weather.hu,
-                    pressure: weather.pr,
-                    proxy: proxyUsed
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 20000);
+                
+                const response = await fetch(fullUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'User-Agent': 'Mozilla/5.0 (AirQuality/2.0)',
+                        'Cache-Control': 'no-cache'
+                    },
+                    signal: controller.signal
                 });
                 
-                // อัพเดท UI
-                document.getElementById('location').textContent = `📍 ${city}, ${state}, ${country}`;
+                clearTimeout(timeoutId);
                 
-                const aqiValue = pollution.aqius;
-                const aqiStatus = getAQIStatus(aqiValue);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
                 
-                // Smooth animation สำหรับ AQI
-                const aqiElement = document.getElementById('aqi-value');
-                const statusElement = document.getElementById('aqi-status');
+                const data = await response.json();
+                console.log('📊 Raw API Response:', data);
                 
-                aqiElement.style.transform = 'scale(0.8)';
-                aqiElement.style.opacity = '0.5';
-                
-                setTimeout(() => {
-                    aqiElement.textContent = aqiValue;
-                    aqiElement.className = `aqi-display ${aqiStatus.class}`;
-                    statusElement.textContent = aqiStatus.text;
-                    statusElement.className = `aqi-status ${aqiStatus.class}`;
+                if (data && data.status === 'success' && data.data && data.data.current) {
+                    console.log('✅ รับข้อมูล IQAir API สำเร็จ');
+                    processApiData(data.data, proxy || 'Direct');
+                    apiRetryCount = 0;
+                    return;
                     
-                    aqiElement.style.transform = 'scale(1)';
-                    aqiElement.style.opacity = '1';
-                }, 300);
+                } else if (data && data.status === 'fail') {
+                    const errorMsg = data.data?.message || 'API returned fail status';
+                    console.error('❌ API Error:', errorMsg);
+                    throw new Error(errorMsg);
+                } else {
+                    throw new Error('รูปแบบข้อมูลไม่ถูกต้อง');
+                }
                 
-                // อัพเดทรายละเอียด
-                updateDetailValue('pm25', pollution.pm25?.v, 'μg/m³');
-                updateDetailValue('temperature', weather.tp, '°C');
-                updateDetailValue('humidity', weather.hu, '%');
-                updateDetailValue('pressure', weather.pr, 'hPa');
-                
-                updateConnectionStatus('real-api', '✅ ข้อมูลจริงจาก API');
-                
-                // อัพเดทเวลา
-                const now = new Date();
-                document.getElementById('last-updated').innerHTML = 
-                    `🕐 อัพเดท: ${now.toLocaleTimeString('th-TH')} | 📅 ${now.toLocaleDateString('th-TH')}<br>🌐 ผ่าน: ${proxyUsed}`;
-                    
             } catch (error) {
-                console.error('❌ Process API data error:', error);
-                handleApiError(error);
+                console.warn(`❌ ${proxy ? 'Proxy' : 'Direct'} ${i + 1} ล้มเหลว:`, error.message);
+                
+                if (i === proxies.length - 1) {
+                    handleApiError(error);
+                    return;
+                }
+                
+                await new Promise(resolve => setTimeout(resolve, 2000));
             }
         }
+    }
 
-        function updateDetailValue(elementId, value, unit) {
-            const element = document.getElementById(elementId);
-            const displayValue = value !== null && value !== undefined ? `${value}${unit}` : `--${unit}`;
+    function processApiData(data, proxyUsed) {
+        try {
+            const { current, city, state, country } = data;
+            const { pollution, weather } = current;
             
-            element.style.transform = 'scale(0.9)';
-            element.style.opacity = '0.6';
+            console.log('📊 ประมวลผลข้อมูล:', {
+                location: `${city}, ${state}, ${country}`,
+                aqi: pollution.aqius,
+                pm25: pollution.pm25?.v,
+                temp: weather.tp,
+                humidity: weather.hu,
+                pressure: weather.pr,
+                proxy: proxyUsed
+            });
+            
+            // อัพเดท UI
+            document.getElementById('location').textContent = `📍 ${city}, ${state}, ${country}`;
+            
+            const aqiValue = pollution.aqius;
+            const aqiStatus = getAQIStatus(aqiValue);
+            
+            // Smooth animation สำหรับ AQI
+            const aqiElement = document.getElementById('aqi-value');
+            const statusElement = document.getElementById('aqi-status');
+            
+            aqiElement.style.transform = 'scale(0.8)';
+            aqiElement.style.opacity = '0.5';
             
             setTimeout(() => {
-                element.textContent = displayValue;
-                element.style.transform = 'scale(1)';
-                element.style.opacity = '1';
-            }, 100);
-        }
-
-        function getAQIStatus(aqi) {
-            if (aqi <= 50) return { 
-                text: 'ดีมาก 😊 เหมาะกับกิจกรรมกลางแจ้ง', 
-                class: 'aqi-good' 
-            };
-            if (aqi <= 100) return { 
-                text: 'ปานกลาง 😐 ปกติสำหรับคนทั่วไป', 
-                class: 'aqi-moderate' 
-            };
-            if (aqi <= 150) return { 
-                text: 'ไม่ดีสำหรับผู้แพ้ง่าย 😷', 
-                class: 'aqi-unhealthy-sensitive' 
-            };
-            if (aqi <= 200) return { 
-                text: 'ไม่ดี ⚠️ หลีกเลี่ยงกิจกรรมกลางแจ้ง', 
-                class: 'aqi-unhealthy' 
-            };
-            if (aqi <= 300) return { 
-                text: 'ไม่ดีมาก 🚨 ควรอยู่ในที่ร่ม', 
-                class: 'aqi-very-unhealthy' 
-            };
-            return { 
-                text: 'อันตราย ☠️ ห้ามออกจากบ้าน', 
-                class: 'aqi-hazardous' 
-            };
-        }
-
-        function handleApiError(error) {
-            apiRetryCount++;
-            console.error(`❌ API Error (ครั้งที่ ${apiRetryCount}/${MAX_API_RETRIES}):`, error.message);
+                aqiElement.textContent = aqiValue;
+                aqiElement.className = `aqi-display ${aqiStatus.class}`;
+                statusElement.textContent = aqiStatus.text;
+                statusElement.className = `aqi-status ${aqiStatus.class}`;
+                
+                aqiElement.style.transform = 'scale(1)';
+                aqiElement.style.opacity = '1';
+            }, 300);
             
-            if (apiRetryCount <= MAX_API_RETRIES) {
-                const delay = RETRY_DELAYS[apiRetryCount - 1] || 30000;
-                updateConnectionStatus('error', `🔄 ลองใหม่ใน ${delay/1000}s`);
-                setTimeout(() => {
+            // อัพเดทรายละเอียด
+            updateDetailValue('pm25', pollution.pm25?.v, 'μg/m³');
+            updateDetailValue('temperature', weather.tp, '°C');
+            updateDetailValue('humidity', weather.hu, '%');
+            updateDetailValue('pressure', weather.pr, 'hPa');
+            
+            updateConnectionStatus('real-api', '✅ ข้อมูลจริงจาก API');
+            
+            // อัพเดทเวลา
+            const now = new Date();
+            document.getElementById('last-updated').innerHTML = 
+                `🕐 อัพเดท: ${now.toLocaleTimeString('th-TH')} | 📅 ${now.toLocaleDateString('th-TH')}<br>🌐 ผ่าน: ${proxyUsed}`;
+                
+        } catch (error) {
+            console.error('❌ Process API data error:', error);
+            handleApiError(error);
+        }
+    }
+
+    function handleApiError(error) {
+        apiRetryCount++;
+        console.error(`❌ API Error (ครั้งที่ ${apiRetryCount}/${MAX_API_RETRIES}):`, error.message);
+        
+        if (apiRetryCount <= MAX_API_RETRIES) {
+            const delay = RETRY_DELAYS[apiRetryCount - 1] || 30000;
+            updateConnectionStatus('error', `🔄 ลองใหม่ใน ${delay/1000}s`);
+            
+            setTimeout(() => {
                 updateAirQuality();
             }, delay);
             
         } else {
-            updateConnectionStatus('error', '❌ ไม่สามารถเชื่อมต่อ API ได้');
-            
-            setTimeout(() => {
-                apiRetryCount = 0;
-                console.log('🔄 รีเซ็ต API retry counter');
-            }, 5 * 60 * 1000);
+            console.log('💾 ใช้ข้อมูล Fallback');
+            useFallbackData();
         }
+    }
+
+    function useFallbackData() {
+        console.log('🔄 เปลี่ยนเป็นข้อมูล Demo');
+        updateConnectionStatus('fallback', '📊 ข้อมูล Demo');
+        
+        // ข้อมูล fallback
+        const fallbackData = {
+            city: CONFIG.CITY,
+            state: CONFIG.STATE,
+            country: CONFIG.COUNTRY,
+            current: {
+                pollution: { 
+                    aqius: 66 + Math.floor(Math.random() * 20), 
+                    pm25: { v: 25 + Math.floor(Math.random() * 15) }
+                },
+                weather: { 
+                    tp: 29 + Math.floor(Math.random() * 6), 
+                    hu: 60 + Math.floor(Math.random() * 20), 
+                    pr: 1008 + Math.floor(Math.random() * 20) 
+                }
+            }
+        };
+        
+        processApiData(fallbackData, 'Fallback Demo Data');
+        
+        // รีเซ็ต retry counter หลัง 10 นาที
+        setTimeout(() => {
+            apiRetryCount = 0;
+            console.log('🔄 รีเซ็ต API retry - ลองเชื่อมต่อจริงอีกครั้ง');
+        }, 10 * 60 * 1000);
     }
 
     function showNoApiKeyError() {
@@ -725,6 +956,47 @@
         document.getElementById('humidity').textContent = '--%';
         document.getElementById('pressure').textContent = '-- hPa';
         document.getElementById('last-updated').textContent = '🔧 กรุณาตั้งค่า API Key ในหน้า Admin';
+    }
+
+    function updateDetailValue(elementId, value, unit) {
+        const element = document.getElementById(elementId);
+        const displayValue = value !== null && value !== undefined ? `${value}${unit}` : `--${unit}`;
+        
+        element.style.transform = 'scale(0.9)';
+        element.style.opacity = '0.6';
+        
+        setTimeout(() => {
+            element.textContent = displayValue;
+            element.style.transform = 'scale(1)';
+            element.style.opacity = '1';
+        }, 100);
+    }
+
+    function getAQIStatus(aqi) {
+        if (aqi <= 50) return { 
+            text: 'ดีมาก 😊 เหมาะกับกิจกรรมกลางแจ้ง', 
+            class: 'aqi-good' 
+        };
+        if (aqi <= 100) return { 
+            text: 'ปานกลาง 😐 ปกติสำหรับคนทั่วไป', 
+            class: 'aqi-moderate' 
+        };
+        if (aqi <= 150) return { 
+            text: 'ไม่ดีสำหรับผู้แพ้ง่าย 😷', 
+            class: 'aqi-unhealthy-sensitive' 
+        };
+        if (aqi <= 200) return { 
+            text: 'ไม่ดี ⚠️ หลีกเลี่ยงกิจกรรมกลางแจ้ง', 
+            class: 'aqi-unhealthy' 
+        };
+        if (aqi <= 300) return { 
+            text: 'ไม่ดีมาก 🚨 ควรอยู่ในที่ร่ม', 
+            class: 'aqi-very-unhealthy' 
+        };
+        return { 
+            text: 'อันตราย ☠️ ห้ามออกจากบ้าน', 
+            class: 'aqi-hazardous' 
+        };
     }
 
     function updateConnectionStatus(status, message) {
@@ -742,7 +1014,7 @@
         document.getElementById('last-updated').textContent = 'เกิดข้อผิดพลาดในระบบ';
     }
 
-    // === ระบบโฆษณา ===
+    // === ระบบโฆษณา (ปรับปรุงใหม่) ===
     function startAdRotation() {
         if (adRotationTimer) clearInterval(adRotationTimer);
         
@@ -751,13 +1023,18 @@
             adRotationTimer = setInterval(rotateAdvertisement, CONFIG.AD_ROTATION_INTERVAL);
             console.log(`🎬 เริ่มหมุนเวียนโฆษณา: ${advertisements.length} รายการ, ทุก ${CONFIG.AD_ROTATION_INTERVAL/1000} วินาที`);
         } else {
-            console.warn('⚠️ ไม่มีโฆษณาให้แสดง');
+            console.warn('⚠️ ไม่มีโฆษณาให้แสดง - ใช้ default ads');
+            advertisements = getDefaultAds();
+            localStorage.setItem('vipart_advertisements', JSON.stringify(advertisements));
+            startAdRotation();
         }
     }
 
     function rotateAdvertisement() {
         if (!advertisements || advertisements.length === 0) {
-            console.warn('⚠️ ไม่มีโฆษณา');
+            console.warn('⚠️ ไม่มีโฆษณา - โหลด default');
+            advertisements = getDefaultAds();
+            localStorage.setItem('vipart_advertisements', JSON.stringify(advertisements));
             return;
         }
         
@@ -811,9 +1088,9 @@
         console.log(`📢 แสดงโฆษณาที่ ${currentAdIndex === 0 ? advertisements.length : currentAdIndex}/${advertisements.length}`);
     }
 
-    // === ระบบ Sync (แก้ใหม่) ===
+    // === ระบบ Sync (ปรับปรุงใหม่) ===
     function setupSyncListeners() {
-        console.log('📡 ตั้งค่า Sync Listeners');
+        console.log('📡 ตั้งค่า Enhanced Sync Listeners');
         
         // 1. Storage Event Listener
         window.addEventListener('storage', handleStorageChange);
@@ -828,10 +1105,13 @@
         // 3. PostMessage
         window.addEventListener('message', handlePostMessage);
         
-        // 4. Periodic Sync Check (ทุก 3 วินาที)
-        setInterval(checkForUpdates, 3000);
+        // 4. Periodic Sync Check (ทุก 2 วินาที)
+        setInterval(checkForUpdates, 2000);
         
-        console.log('✅ Sync Listeners พร้อมใช้งาน');
+        // 5. Visibility Change Detection
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        
+        console.log('✅ Enhanced Sync Listeners พร้อมใช้งาน');
     }
 
     function handleStorageChange(e) {
@@ -902,6 +1182,21 @@
         }
     }
 
+    function handleVisibilityChange() {
+        if (!document.hidden && isSystemReady) {
+            console.log('👁️ หน้าต่างกลับมามองเห็น - sync ข้อมูล');
+            setTimeout(async () => {
+                await loadSettings();
+                await loadAdvertisements();
+                if (CONFIG.API_KEY && CONFIG.CITY) {
+                    apiRetryCount = 0;
+                    updateAirQuality();
+                }
+                startAdRotation();
+            }, 1000);
+        }
+    }
+
     function checkForUpdates() {
         try {
             const lastUpdate = localStorage.getItem('vipart_last_update');
@@ -926,18 +1221,89 @@
         }
     }
 
-    // === ฟังก์ชันเสริม ===
-    function forceRefresh() {
-        console.log('🔄 บังคับรีเฟรช');
-        location.reload();
+    // === ระบบ Display Modes (ใหม่) ===
+    function setDisplayMode(mode) {
+        const container = document.getElementById('container');
+        const modeIndicator = document.getElementById('mode-indicator');
+        
+        // ลบ class เก่าทั้งหมด
+        Object.keys(DISPLAY_MODES).forEach(m => {
+            container.classList.remove(m);
+        });
+        
+        // เพิ่ม class ใหม่
+        container.classList.add(mode);
+        currentMode = mode;
+        
+        // อัพเดทตัวบ่งชี้
+        modeIndicator.textContent = DISPLAY_MODES[mode] || mode;
+        modeIndicator.classList.add('show');
+        
+        console.log(`📺 เปลี่ยนเป็น: ${DISPLAY_MODES[mode]}`);
+        
+        // ซ่อนตัวบ่งชี้หลัง 3 วินาที
+        setTimeout(() => {
+            modeIndicator.classList.remove('show');
+        }, 3000);
+        
+        // บันทึกการตั้งค่า
+        localStorage.setItem('vipart_display_mode', mode);
+    }
+
+    function showModeIndicator() {
+        const modeIndicator = document.getElementById('mode-indicator');
+        modeIndicator.textContent = DISPLAY_MODES[currentMode];
+        modeIndicator.classList.add('show');
+        
+        setTimeout(() => {
+            modeIndicator.classList.remove('show');
+        }, 3000);
+    }
+
+    function showHelp() {
+        helpVisible = true;
+        document.getElementById('shortcuts-help').classList.add('show');
+    }
+
+    function hideHelp() {
+        helpVisible = false;
+        document.getElementById('shortcuts-help').classList.remove('show');
+    }
+
+    function toggleHelp() {
+        if (helpVisible) {
+            hideHelp();
+        } else {
+            showHelp();
+        }
     }
 
     // === Event Listeners ===
     document.addEventListener('DOMContentLoaded', init);
 
-    // Keyboard shortcuts
+    // Enhanced Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
+        console.log(`⌨️ Key pressed: ${e.key}`);
+        
         switch(e.key) {
+            // Display Modes
+            case '1':
+                setDisplayMode('portrait');
+                break;
+            case '2':
+                setDisplayMode('landscape');
+                break;
+            case '3':
+                setDisplayMode('fullscreen-aqi');
+                break;
+            case '4':
+                setDisplayMode('fullscreen-ads');
+                break;
+            case '5':
+                setDisplayMode('tv-mode');
+                break;
+                
+            // System Controls
             case 'r':
             case 'R':
                 if (confirm('🔄 รีเฟรชหน้าหรือไม่?')) {
@@ -948,9 +1314,21 @@
             case 'U':
                 apiRetryCount = 0;
                 updateAirQuality();
+                showModeIndicator();
+                break;
+            case 'h':
+            case 'H':
+                toggleHelp();
                 break;
             case 'ArrowRight':
                 rotateAdvertisement();
+                showModeIndicator();
+                break;
+            case 'ArrowLeft':
+                // ย้อนกลับโฆษณา
+                currentAdIndex = currentAdIndex > 0 ? currentAdIndex - 1 : advertisements.length - 1;
+                rotateAdvertisement();
+                showModeIndicator();
                 break;
             case ' ':
                 e.preventDefault();
@@ -958,10 +1336,26 @@
                     clearInterval(adRotationTimer);
                     adRotationTimer = null;
                     console.log('⏸️ หยุดหมุนเวียนโฆษณา');
+                    showModeIndicator();
                 } else {
                     startAdRotation();
                     console.log('▶️ เริ่มหมุนเวียนโฆษณาใหม่');
+                    showModeIndicator();
                 }
+                break;
+            case 'f':
+            case 'F':
+                // Toggle fullscreen
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.log('Cannot enter fullscreen:', err);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+                break;
+            case 'Escape':
+                hideHelp();
                 break;
         }
     });
@@ -980,10 +1374,21 @@
         updateConnectionStatus('error', '📵 ไม่มีอินเทอร์เน็ต');
     });
 
+    // Window focus
     window.addEventListener('focus', () => {
         if (isSystemReady && CONFIG.API_KEY && CONFIG.CITY) {
             console.log('👁️ Window focused - อัพเดทข้อมูล');
             updateAirQuality();
+        }
+    });
+
+    // Fullscreen change
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+            console.log('🖥️ เข้าสู่โหมดเต็มจอ');
+            hideHelp();
+        } else {
+            console.log('🪟 ออกจากโหมดเต็มจอ');
         }
     });
 
@@ -994,8 +1399,20 @@
         }
     });
 
+    // Load saved display mode
+    window.addEventListener('load', () => {
+        const savedMode = localStorage.getItem('vipart_display_mode');
+        if (savedMode && DISPLAY_MODES[savedMode]) {
+            setDisplayMode(savedMode);
+        }
+    });
+
     console.log('🎉 Air Quality Digital Signage Pro v2.0 พร้อมใช้งาน');
-    console.log('🔑 Keyboard: R=รีเฟรช, U=อัพเดท API, Space=หยุด/เริ่มโฆษณา, →=โฆษณาถัดไป');
+    console.log('🔑 Keyboard Shortcuts:');
+    console.log('   1-5 = Display Modes | R = Refresh | U = Update API');
+    console.log('   H = Help | F = Fullscreen | Space = Pause/Resume Ads');
+    console.log('   ← → = Navigate Ads | Esc = Hide Help');
+    console.log('🎮 กดปุ่ม H เพื่อดูคำแนะนำ');
 </script>
 </body>
 </html>
