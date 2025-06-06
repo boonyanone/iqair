@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Air Quality Digital Signage</title>
+    <title>Air Quality Digital Signage - Real Data</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -14,86 +14,94 @@
         
         body {
             font-family: 'Kanit', Arial, sans-serif;
-            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             height: 100vh;
             overflow: hidden;
-        }
-        
-        /* Portrait Layout (แนวตั้ง) */
-        .container.portrait {
-            display: grid;
-            grid-template-rows: auto 1fr auto;
-            height: 100vh;
             padding: 20px;
-            gap: 20px;
         }
         
-        /* Landscape Layout (แนวนอน) */
         .container.landscape {
             display: grid;
             grid-template-columns: 1fr 2fr;
-            height: 100vh;
-            padding: 20px;
+            grid-template-rows: 1fr auto;
+            height: calc(100vh - 40px);
             gap: 20px;
         }
         
-        /* Air Quality Section */
+        .container.portrait {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            height: calc(100vh - 40px);
+            gap: 20px;
+        }
+        
         .air-quality-section {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(15px);
             border-radius: 25px;
             padding: 30px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        /* Portrait Air Quality */
-        .container.portrait .air-quality-section {
-            text-align: center;
-        }
-        
-        .container.portrait .aqi-display {
-            font-size: 4rem;
-            font-weight: 700;
-            margin: 15px 0;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
-        }
-        
-        .container.portrait .aqi-status {
-            font-size: 1.8rem;
-            margin: 10px 0;
-            font-weight: 600;
-        }
-        
-        .container.portrait .details-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        /* Landscape Air Quality */
         .container.landscape .air-quality-section {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            grid-row: 1;
         }
         
-        .container.landscape .aqi-display {
-            font-size: 8rem;
-            font-weight: 700;
-            margin: 30px 0;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+        .container.portrait .air-quality-section {
+            text-align: center;
         }
         
-        .container.landscape .aqi-status {
-            font-size: 2.5rem;
-            margin: 20px 0;
+        .header-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
             font-weight: 600;
         }
         
-        .container.landscape .details-grid {
+        .location-info {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .aqi-display {
+            font-weight: 700;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+            transition: all 0.5s ease;
+        }
+        
+        .container.landscape .aqi-display {
+            font-size: 6rem;
+        }
+        
+        .container.portrait .aqi-display {
+            font-size: 4rem;
+        }
+        
+        .aqi-status {
+            font-weight: 600;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .container.landscape .aqi-status {
+            font-size: 2.2rem;
+        }
+        
+        .container.portrait .aqi-status {
+            font-size: 1.8rem;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
             width: 100%;
         }
         
@@ -102,27 +110,40 @@
             padding: 15px;
             border-radius: 10px;
             text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .detail-label {
             font-size: 0.9rem;
             opacity: 0.8;
+            margin-bottom: 5px;
         }
         
         .detail-value {
             font-size: 1.3rem;
             font-weight: 600;
-            margin-top: 5px;
         }
         
-        /* Advertisement Section */
         .advertisement-section {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
             border-radius: 25px;
-            padding: 20px;
+            padding: 25px;
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .container.landscape .advertisement-section {
+            grid-row: 1;
+        }
+        
+        .ad-header {
+            text-align: center;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            opacity: 0.9;
         }
         
         .ad-content {
@@ -133,14 +154,8 @@
             border-radius: 20px;
             overflow: hidden;
             position: relative;
-        }
-        
-        .container.portrait .ad-content {
-            min-height: 400px;
-        }
-        
-        .container.landscape .ad-content {
-            min-height: 300px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            min-height: 350px;
         }
         
         .ad-text {
@@ -149,15 +164,8 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             padding: 30px;
             line-height: 1.4;
-            animation: fadeIn 1s ease-in-out;
-        }
-        
-        .container.portrait .ad-text {
-            font-size: 2rem;
-        }
-        
-        .container.landscape .ad-text {
             font-size: 2.2rem;
+            animation: fadeIn 1s ease-in-out;
         }
         
         .ad-image, .ad-video {
@@ -167,47 +175,123 @@
             border-radius: 15px;
         }
         
-        /* Footer */
         .footer {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 15px;
             text-align: center;
             font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .container.landscape .footer {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 10px;
+            grid-column: 1 / -1;
+            grid-row: 2;
         }
         
-        /* AQI Colors */
-        .aqi-good { color: #00e400; }
-        .aqi-moderate { color: #ffff00; }
-        .aqi-unhealthy-sensitive { color: #ff7e00; }
-        .aqi-unhealthy { color: #ff0000; }
-        .aqi-very-unhealthy { color: #8f3f97; }
-        .aqi-hazardous { color: #7e0023; }
+        /* AQI Colors - ตามมาตรฐาน */
+        .aqi-good { 
+            color: #00e400; 
+            text-shadow: 0 0 20px rgba(0, 228, 0, 0.3);
+        }
+        .aqi-moderate { 
+            color: #ffff00; 
+            text-shadow: 0 0 20px rgba(255, 255, 0, 0.3);
+        }
+        .aqi-unhealthy-sensitive { 
+            color: #ff7e00; 
+            text-shadow: 0 0 20px rgba(255, 126, 0, 0.3);
+        }
+        .aqi-unhealthy { 
+            color: #ff0000; 
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+        .aqi-very-unhealthy { 
+            color: #8f3f97; 
+            text-shadow: 0 0 20px rgba(143, 63, 151, 0.3);
+        }
+        .aqi-hazardous { 
+            color: #7e0023; 
+            text-shadow: 0 0 20px rgba(126, 0, 35, 0.3);
+        }
         
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
         }
         
-        /* Controls */
+        .connection-status {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .status-real-api {
+            background: rgba(0, 228, 0, 0.3);
+            color: #00e400;
+            border: 1px solid rgba(0, 228, 0, 0.5);
+        }
+        
+        .status-error {
+            background: rgba(255, 0, 0, 0.3);
+            color: #ff0000;
+            border: 1px solid rgba(255, 0, 0, 0.5);
+        }
+        
+        .status-no-api {
+            background: rgba(255, 165, 0, 0.3);
+            color: #ffa500;
+            border: 1px solid rgba(255, 165, 0, 0.5);
+        }
+        
+        .admin-link {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 1.2rem;
+            opacity: 0.4;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .admin-link:hover {
+            opacity: 1;
+        }
+        
+        .api-info {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            backdrop-filter: blur(5px);
+        }
+        
         .orientation-controls {
             position: fixed;
-            top: 10px;
-            left: 10px;
-            background: rgba(0, 0, 0, 0.5);
+            top: 30px;
+            left: 30px;
+            background: rgba(0, 0, 0, 0.7);
             padding: 10px;
             border-radius: 10px;
             z-index: 1000;
             display: none;
+            backdrop-filter: blur(10px);
         }
         
         .orientation-controls.show {
@@ -218,11 +302,12 @@
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 8px 12px;
             margin: 2px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
+            font-family: 'Kanit';
         }
         
         .orientation-btn:hover {
@@ -232,317 +317,270 @@
         .orientation-btn.active {
             background: #667eea;
         }
-        
-        .admin-link {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.3);
-            color: white;
-            padding: 8px;
-            border-radius: 50%;
-            text-decoration: none;
-            font-size: 1.2rem;
-            opacity: 0.3;
-            transition: opacity 0.3s;
-            z-index: 1000;
-        }
-        
-        .admin-link:hover {
-            opacity: 1;
-        }
-        
-        .connection-status {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            z-index: 1000;
-        }
-        
-        .online {
-            background: rgba(0, 228, 0, 0.3);
-            color: #00e400;
-        }
-        
-        .offline {
-            background: rgba(255, 0, 0, 0.3);
-            color: #ff0000;
-        }
-
-        /* Auto-hide cursor */
-        body.hide-cursor {
-            cursor: none;
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .container.landscape {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto 1fr;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="connection-status online" id="connection-status">
-        <span id="status-text">⚡ เชื่อมต่อ</span>
+    <div class="connection-status status-no-api" id="connection-status">
+        <span id="status-text">🔄 กำลังเชื่อมต่อ</span>
     </div>
     
     <div class="orientation-controls" id="orientation-controls">
-        <button class="orientation-btn" onclick="setOrientation('portrait')">📱</button>
-        <button class="orientation-btn" onclick="setOrientation('landscape')">💻</button>
-        <button class="orientation-btn" onclick="setOrientation('auto')">🔄</button>
-        <button class="orientation-btn" onclick="toggleControls()">✖️</button>
+        <button class="orientation-btn" onclick="setOrientation('portrait')" title="แนวตั้ง">📱</button>
+        <button class="orientation-btn" onclick="setOrientation('landscape')" title="แนวนอน">💻</button>
+        <button class="orientation-btn" onclick="setOrientation('auto')" title="อัตโนมัติ">🔄</button>
+        <button class="orientation-btn" onclick="toggleControls()" title="ปิด">✖️</button>
+    </div>
+    
+    <div class="api-info" id="api-info">
+        <div>API: ยังไม่ได้ตั้งค่า</div>
+        <div>สถานที่: ยังไม่ได้เลือก</div>
     </div>
     
     <div class="container landscape" id="container">
         <!-- Air Quality Section -->
         <div class="air-quality-section">
             <div class="header-title">🌬️ คุณภาพอากาศ</div>
-            <div id="location">📍 Bangkok, Thailand</div>
-            <div class="aqi-display aqi-moderate" id="aqi-value">67</div>
-            <div class="aqi-status aqi-moderate" id="aqi-status">ปานกลาง 😐</div>
+            <div class="location-info" id="location">📍 กำลังโหลด...</div>
+            <div class="aqi-display aqi-moderate" id="aqi-value">--</div>
+            <div class="aqi-status aqi-moderate" id="aqi-status">กำลังโหลดข้อมูล</div>
             
             <div class="details-grid">
                 <div class="detail-item">
                     <div class="detail-label">🌫️ PM2.5</div>
-                    <div class="detail-value" id="pm25">33 μg/m³</div>
+                    <div class="detail-value" id="pm25">-- μg/m³</div>
                 </div>
                 <div class="detail-item">
                     <div class="detail-label">🌡️ อุณหภูมิ</div>
-                    <div class="detail-value" id="temperature">32°C</div>
+                    <div class="detail-value" id="temperature">--°C</div>
                 </div>
                 <div class="detail-item">
                     <div class="detail-label">💧 ความชื้น</div>
-                    <div class="detail-value" id="humidity">77%</div>
+                    <div class="detail-value" id="humidity">--%</div>
                 </div>
                 <div class="detail-item">
                     <div class="detail-label">📊 ความดัน</div>
-                    <div class="detail-value" id="pressure">1018 hPa</div>
+                    <div class="detail-value" id="pressure">-- hPa</div>
                 </div>
             </div>
         </div>
         
         <!-- Advertisement Section -->
         <div class="advertisement-section">
+            <div class="ad-header">📢 ข้อมูลและโฆษณา</div>
             <div class="ad-content" id="ad-content">
                 <div class="ad-text">กำลังโหลดโฆษณา...</div>
             </div>
         </div>
         
-        <!-- Footer (for portrait mode) -->
+        <!-- Footer -->
         <div class="footer" id="footer">
-            <div id="last-updated">อัพเดทล่าสุด: 11:36:46</div>
-            <div>Digital Signage System | Powered by AI</div>
+            <div id="last-updated">อัพเดทล่าสุด: --:--:--</div>
+            <div>Digital Signage System | Real-Time Air Quality Data</div>
         </div>
     </div>
     
-    <a href="admin.html" class="admin-link">⚙️</a>
+    <a href="admin.html" class="admin-link" title="จัดการระบบ">⚙️</a>
 
     <script>
-        // Configuration
-        const CONFIG = {
-            API_KEY: '4e6fad4d-a9f8-4653-b36b-6c48c7358d1a',
-            CITY: 'Bangkok',
-            STATE: 'Bangkok',
-            COUNTRY: 'Thailand',
-            UPDATE_INTERVAL: 10 * 60 * 1000,
-            AD_ROTATION_INTERVAL: 15 * 1000,
+        // Configuration - จะถูกโหลดจาก localStorage
+        let CONFIG = {
+            API_KEY: '',
+            CITY: '',
+            STATE: '',
+            COUNTRY: '',
+            UPDATE_INTERVAL: 10 * 60 * 1000, // 10 นาที
+            AD_ROTATION_INTERVAL: 15 * 1000, // 15 วินาที
         };
 
         let advertisements = [];
         let currentAdIndex = 0;
         let adRotationTimer;
         let currentOrientation = 'landscape';
-        let mouseTimer;
+        let lastApiCall = null;
+        let apiRetryCount = 0;
+        const MAX_API_RETRIES = 3;
 
-        // โหลดการตั้งค่าและข้อมูล
+        // เริ่มต้นระบบ
         function init() {
+            console.log('🚀 เริ่มต้น Real-Time Air Quality Digital Signage');
+            console.log('📊 ระบบนี้ใช้ข้อมูลจริงจาก IQAir API เท่านั้น');
+            
+            loadSettings();
             loadOrientation();
             loadAdvertisements();
-            loadSettings();
-            updateAirQuality();
-            startAdRotation();
             
-            // Auto-hide cursor
-            setupCursorHiding();
-            
-            // ตั้งเวลาอัพเดท
-            setInterval(updateAirQuality, CONFIG.UPDATE_INTERVAL);
-            
-            console.log('✅ Digital Signage initialized');
-        }
-
-        // โหลดโฆษณาจาก localStorage
-        function loadAdvertisements() {
-            try {
-                const stored = localStorage.getItem('vipart_advertisements');
-                advertisements = stored ? JSON.parse(stored) : getDefaultAds();
-                console.log('โหลดโฆษณา:', advertisements.length, 'รายการ');
-            } catch (error) {
-                console.error('Error loading ads:', error);
-                advertisements = getDefaultAds();
+            // ตรวจสอบ API Key ก่อนเรียกใช้
+            if (CONFIG.API_KEY && CONFIG.CITY) {
+                updateAirQuality();
+                setInterval(updateAirQuality, CONFIG.UPDATE_INTERVAL);
+            } else {
+                showNoApiKeyError();
             }
+            
+            setTimeout(() => {
+                startAdRotation();
+            }, 1000);
+            
+            console.log('✅ ระบบพร้อมใช้งาน');
         }
 
-        // โฆษณาเริ่มต้น
-        function getDefaultAds() {
-            return [
-                {
-                    type: 'text',
-                    content: '🏢 ยินดีต้อนรับสู่ Digital Signage<br>📱 ระบบแสดงผลอัจฉริยะ<br>⚡ พร้อมใช้งาน 24/7',
-                    background: 'linear-gradient(45deg, #667eea, #764ba2)',
-                    duration: 20000
-                },
-                {
-                    type: 'text',
-                    content: '🌟 ระบบจัดการโฆษณาอัตโนมัติ<br>📊 แสดงข้อมูลคุณภาพอากาศแบบ Real-time<br>🔧 สามารถปรับแต่งได้ตามต้องการ',
-                    background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
-                    duration: 20000
-                }
-            ];
-        }
-
-        // โหลดการตั้งค่า
+        // โหลดการตั้งค่าจาก localStorage
         function loadSettings() {
             try {
                 const settings = JSON.parse(localStorage.getItem('vipart_settings') || '{}');
+                const location = JSON.parse(localStorage.getItem('vipart_location') || '{}');
                 
-                if (settings.apiKey) CONFIG.API_KEY = settings.apiKey;
-                if (settings.city) CONFIG.CITY = settings.city;
-                if (settings.updateInterval) CONFIG.UPDATE_INTERVAL = settings.updateInterval * 60 * 1000;
-                if (settings.adInterval) CONFIG.AD_ROTATION_INTERVAL = settings.adInterval * 1000;
+                // API Settings
+                if (settings.apiKey) {
+                    CONFIG.API_KEY = settings.apiKey;
+                }
+                if (settings.updateInterval) {
+                    CONFIG.UPDATE_INTERVAL = settings.updateInterval * 60 * 1000;
+                }
+                if (settings.adInterval) {
+                    CONFIG.AD_ROTATION_INTERVAL = settings.adInterval * 1000;
+                }
+                
+                // Location Settings
+                if (location.city) {
+                    CONFIG.CITY = location.city;
+                    CONFIG.STATE = location.state || location.city;
+                    CONFIG.COUNTRY = location.country || 'Thailand';
+                } else {
+                    // ค่าเริ่มต้น
+                    CONFIG.CITY = 'Bangkok';
+                    CONFIG.STATE = 'Bangkok';
+                    CONFIG.COUNTRY = 'Thailand';
+                }
+                
+                // อัพเดท API Info
+                updateApiInfo();
+                
+                console.log('⚙️ โหลดการตั้งค่า:', {
+                    hasApiKey: !!CONFIG.API_KEY,
+                    city: CONFIG.CITY,
+                    country: CONFIG.COUNTRY,
+                    updateInterval: CONFIG.UPDATE_INTERVAL / 60000 + ' นาที'
+                });
                 
             } catch (error) {
-                console.error('Error loading settings:', error);
+                console.error('❌ Error loading settings:', error);
+                showNoApiKeyError();
             }
         }
 
-        // โหลดการตั้งค่าการแสดงผล
-        function loadOrientation() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const urlMode = urlParams.get('mode');
+        // อัพเดทข้อมูล API Info
+        function updateApiInfo() {
+            const apiInfo = document.getElementById('api-info');
+            const hasKey = CONFIG.API_KEY ? '✅ ตั้งค่าแล้ว' : '❌ ยังไม่ได้ตั้งค่า';
+            const location = CONFIG.CITY ? `${CONFIG.CITY}, ${CONFIG.COUNTRY}` : 'ยังไม่ได้เลือก';
             
-            if (urlMode && ['portrait', 'landscape', 'auto'].includes(urlMode)) {
-                currentOrientation = urlMode;
-            } else {
-                currentOrientation = localStorage.getItem('vipart_orientation') || 'landscape';
+            apiInfo.innerHTML = `
+                <div>API: ${hasKey}</div>
+                <div>สถานที่: ${location}</div>
+            `;
+        }
+
+        // แสดงข้อผิดพลาดเมื่อไม่มี API Key
+        function showNoApiKeyError() {
+            updateConnectionStatus('no-api', '❌ ยังไม่ได้ตั้งค่า API');
+            
+            document.getElementById('location').textContent = '📍 กรุณาตั้งค่า API Key ในหน้า Admin';
+            document.getElementById('aqi-value').textContent = '--';
+            document.getElementById('aqi-status').textContent = 'ยังไม่ได้ตั้งค่า API Key';
+            
+            // รีเซ็ตข้อมูลอื่น ๆ
+            document.getElementById('pm25').textContent = '-- μg/m³';
+            document.getElementById('temperature').textContent = '--°C';
+            document.getElementById('humidity').textContent = '--%';
+            document.getElementById('pressure').textContent = '-- hPa';
+            document.getElementById('last-updated').textContent = 'กรุณาตั้งค่า API Key ในหน้า Admin';
+        }
+
+        // ดึงข้อมูลจาก IQAir API จริง
+        async function updateAirQuality() {
+            if (!CONFIG.API_KEY || !CONFIG.CITY) {
+                showNoApiKeyError();
+                return;
             }
             
-            applyOrientation();
-        }
-
-        // ใช้การตั้งค่าการแสดงผล
-        function applyOrientation() {
-            const container = document.getElementById('container');
-            const footer = document.getElementById('footer');
+            console.log('🔄 กำลังดึงข้อมูลจาก IQAir API...');
+            updateConnectionStatus('connecting', '🔄 กำลังเชื่อมต่อ');
             
-            container.className = `container ${currentOrientation}`;
+            // สร้าง URL สำหรับ IQAir API
+            const apiUrl = `https://api.airvisual.com/v2/city?city=${encodeURIComponent(CONFIG.CITY)}&state=${encodeURIComponent(CONFIG.STATE)}&country=${encodeURIComponent(CONFIG.COUNTRY)}&key=${CONFIG.API_KEY}`;
             
-            if (currentOrientation === 'auto') {
-                // ใช้ CSS media queries สำหรับ auto mode
-                container.className = 'container landscape';
-            }
+            // ลิสต์ CORS Proxy ที่จะลอง
+            const proxies = [
+                'https://api.allorigins.win/raw?url=',
+                'https://corsproxy.io/?',
+                'https://cors-anywhere.herokuapp.com/',
+                '' // Direct call (อาจจะไม่ได้ผลเพราะ CORS)
+            ];
             
-            // ซ่อน/แสดง footer ตามโหมด
-            if (currentOrientation === 'landscape') {
-                footer.style.display = 'none';
-            } else {
-                footer.style.display = 'block';
-            }
-            
-            console.log('Applied orientation:', currentOrientation);
-        }
-
-        // ตั้งค่าการแสดงผล
-        function setOrientation(mode) {
-            currentOrientation = mode;
-            localStorage.setItem('vipart_orientation', mode);
-            applyOrientation();
-            
-            // อัพเดทปุ่ม
-            document.querySelectorAll('.orientation-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-        }
-
-        // แสดง/ซ่อนตัวควบคุม
-        function toggleControls() {
-            const controls = document.getElementById('orientation-controls');
-            controls.classList.toggle('show');
-        }
-
-        // หมุนเวียนโฆษณา
-        function rotateAdvertisement() {
-            if (advertisements.length === 0) return;
-            
-            const adContent = document.getElementById('ad-content');
-            const ad = advertisements[currentAdIndex];
-            
-            if (ad.type === 'text') {
-                adContent.style.background = ad.background || 'linear-gradient(45deg, #ff6b6b, #4ecdc4)';
-                adContent.innerHTML = `<div class="ad-text">${ad.content}</div>`;
-            } else if (ad.type === 'image') {
-                adContent.style.background = 'none';
-                adContent.innerHTML = `<img class="ad-image" src="${ad.src}" alt="Advertisement">`;
-            } else if (ad.type === 'video') {
-                adContent.style.background = 'none';
-                adContent.innerHTML = `
-                    <video class="ad-video" autoplay muted loop playsinline>
-                        <source src="${ad.src}" type="video/mp4">
-                        ไม่สามารถเล่นวีดีโอได้
-                    </video>
-                `;
-            }
-            
-            currentAdIndex = (currentAdIndex + 1) % advertisements.length;
-            console.log('แสดงโฆษณาที่:', currentAdIndex, '/', advertisements.length);
-        }
-
-        function startAdRotation() {
-            if (adRotationTimer) {
-                clearInterval(adRotationTimer);
-            }
-            
-            rotateAdvertisement();
-            adRotationTimer = setInterval(rotateAdvertisement, CONFIG.AD_ROTATION_INTERVAL);
-        }
-
-        // อัพเดทข้อมูลอากาศ
-        function updateAirQuality() {
-            // ใช้ข้อมูลตัวอย่าง (สามารถเชื่อมต่อ API จริงได้)
-            const sampleData = {
-                city: CONFIG.CITY,
-                state: CONFIG.STATE || CONFIG.CITY,
-                country: "Thailand",
-                current: {
-                    pollution: {
-                        aqius: Math.floor(Math.random() * 100) + 30,
-                        pm25: Math.floor(Math.random() * 50) + 10
-                    },
-                    weather: {
-                        tp: Math.floor(Math.random() * 10) + 28,
-                        hu: Math.floor(Math.random() * 30) + 50,
-                        pr: Math.floor(Math.random() * 20) + 1005
+            for (let i = 0; i < proxies.length; i++) {
+                const proxy = proxies[i];
+                const fullUrl = proxy + apiUrl;
+                
+                try {
+                    console.log(`🌐 ลอง proxy ${i + 1}/${proxies.length}: ${proxy || 'Direct'}`, fullUrl);
+                    
+                    const response = await fetch(fullUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'User-Agent': 'Air Quality Digital Signage'
+                        },
+                        timeout: 10000 // 10 วินาที
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // ตรวจสอบรูปแบบข้อมูลจาก IQAir
+                    if (data && data.status === 'success' && data.data && data.data.current) {
+                        console.log('✅ ได้รับข้อมูลจาก IQAir API สำเร็จ:', data);
+                        processRealApiData(data.data);
+                        updateConnectionStatus('real-api', '✅ ข้อมูลจริงจาก API');
+                        apiRetryCount = 0;
+                        lastApiCall = new Date();
+                        return;
+                    } else {
+                        throw new Error('รูปแบบข้อมูลไม่ถูกต้อง');
+                    }
+                    
+                } catch (error) {
+                    console.warn(`❌ Proxy ${i + 1} ล้มเหลว:`, error.message);
+                    
+                    if (i === proxies.length - 1) {
+                        // ลองทุก proxy แล้ว
+                        handleApiError(error);
                     }
                 }
-            };
-            
-            updateAirQualityDisplay(sampleData);
+            }
         }
 
-        function updateAirQualityDisplay(data) {
-            const { current } = data;
+        // ประมวลผลข้อมูลจริงจาก API
+        function processRealApiData(data) {
+            const { current, city, state, country } = data;
             const { pollution, weather } = current;
-
-            document.getElementById('location').textContent = 
-                `📍 ${data.city}, ${data.country}`;
-
+            
+            console.log('📊 ประมวลผลข้อมูลจริง:', {
+                location: `${city}, ${state}, ${country}`,
+                aqi: pollution.aqius,
+                pm25: pollution.pm25,
+                temperature: weather.tp,
+                humidity: weather.hu,
+                pressure: weather.pr
+            });
+            
+            // อัพเดทข้อมูลตำแหน่ง
+            document.getElementById('location').textContent = `📍 ${city}, ${state}, ${country}`;
+            
+            // อัพเดท AQI
             const aqiValue = pollution.aqius;
             const aqiStatus = getAQIStatus(aqiValue);
             
@@ -550,17 +588,47 @@
             document.getElementById('aqi-value').className = `aqi-display ${aqiStatus.class}`;
             document.getElementById('aqi-status').textContent = aqiStatus.text;
             document.getElementById('aqi-status').className = `aqi-status ${aqiStatus.class}`;
-
-            document.getElementById('pm25').textContent = `${pollution.pm25} μg/m³`;
-            document.getElementById('temperature').textContent = `${weather.tp}°C`;
-            document.getElementById('humidity').textContent = `${weather.hu}%`;
-            document.getElementById('pressure').textContent = `${weather.pr} hPa`;
-
+            
+            // อัพเดทข้อมูลรายละเอียด
+            document.getElementById('pm25').textContent = pollution.pm25 ? `${pollution.pm25} μg/m³` : 'N/A';
+            document.getElementById('temperature').textContent = weather.tp ? `${weather.tp}°C` : 'N/A';
+            document.getElementById('humidity').textContent = weather.hu ? `${weather.hu}%` : 'N/A';
+            document.getElementById('pressure').textContent = weather.pr ? `${weather.pr} hPa` : 'N/A';
+            
+            // อัพเดทเวลา
             const now = new Date();
             document.getElementById('last-updated').textContent = 
-                `อัพเดทล่าสุด: ${now.toLocaleTimeString('th-TH')}`;
+                `อัพเดทล่าสุด: ${now.toLocaleTimeString('th-TH')} (ข้อมูลจริงจาก IQAir)`;
         }
 
+        // จัดการข้อผิดพลาด API
+        function handleApiError(error) {
+            apiRetryCount++;
+            console.error(`❌ API Error (ครั้งที่ ${apiRetryCount}):`, error.message);
+            
+            if (apiRetryCount <= MAX_API_RETRIES) {
+                updateConnectionStatus('error', `🔄 ลองใหม่ ${apiRetryCount}/${MAX_API_RETRIES}`);
+                
+                // ลองใหม่หลัง 5 วินาที
+                setTimeout(() => {
+                    updateAirQuality();
+                }, 5000);
+            } else {
+                updateConnectionStatus('error', '❌ ไม่สามารถเชื่อมต่อ API ได้');
+                
+                // แสดงข้อความแจ้งเตือน
+                document.getElementById('aqi-status').textContent = 'ไม่สามารถเชื่อมต่อ IQAir API ได้';
+                document.getElementById('last-updated').textContent = 
+                    `ไม่สามารถดึงข้อมูลได้ เวลา: ${new Date().toLocaleTimeString('th-TH')}`;
+                
+                // รีเซ็ต retry counter หลังจาก 1 นาที
+                setTimeout(() => {
+                    apiRetryCount = 0;
+                }, 60000);
+            }
+        }
+
+        // แปลงค่า AQI เป็นสถานะ (ตามมาตรฐาน US EPA)
         function getAQIStatus(aqi) {
             if (aqi <= 50) return { text: 'ดีมาก 😊', class: 'aqi-good' };
             if (aqi <= 100) return { text: 'ปานกลาง 😐', class: 'aqi-moderate' };
@@ -570,63 +638,165 @@
             return { text: 'อันตราย ☠️', class: 'aqi-hazardous' };
         }
 
-        // ซ่อน cursor อัตโนมัติ
-        function setupCursorHiding() {
-            let hideTimer;
+        // อัพเดทสถานะการเชื่อมต่อ
+        function updateConnectionStatus(status, message) {
+            const statusElement = document.getElementById('connection-status');
+            const textElement = document.getElementById('status-text');
             
-            function showCursor() {
-                document.body.classList.remove('hide-cursor');
-                clearTimeout(hideTimer);
-                hideTimer = setTimeout(() => {
-                    document.body.classList.add('hide-cursor');
-                }, 3000);
-            }
-            
-            document.addEventListener('mousemove', showCursor);
-            document.addEventListener('click', showCursor);
-            
-            // ซ่อนทันทีเมื่อเริ่มต้น
-            setTimeout(() => {
-                document.body.classList.add('hide-cursor');
-            }, 5000);
+            statusElement.className = `connection-status status-${status}`;
+            textElement.textContent = message;
         }
 
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', init);
-        
-        // รับการอัพเดทจาก Admin
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'vipart_update_trigger') {
-                loadAdvertisements();
-                loadSettings();
-                startAdRotation();
-                console.log('Updated from admin panel');
+        // โหลดโฆษณา
+        function loadAdvertisements() {
+            try {
+                const stored = localStorage.getItem('vipart_advertisements');
+                advertisements = stored ? JSON.parse(stored) : getDefaultAds();
+                console.log('📢 โหลดโฆษณา:', advertisements.length, 'รายการ');
+            } catch (error) {
+                console.error('❌ Error loading ads:', error);
+                advertisements = getDefaultAds();
             }
-        });
-
-        // รับ postMessage จาก Admin
-        window.addEventListener('message', (e) => {
-            if (e.data && e.data.type === 'vipart_update') {
-                loadAdvertisements();
-                loadSettings();
-                startAdRotation();
-                console.log('Updated via postMessage');
-            }
-        });
-
-        // BroadcastChannel
-        if (typeof BroadcastChannel !== 'undefined') {
-            const channel = new BroadcastChannel('vipart_updates');
-            channel.onmessage = (e) => {
-                if (e.data && e.data.type === 'ads_updated') {
-                    loadAdvertisements();
-                    startAdRotation();
-                    console.log('Updated via BroadcastChannel');
-                }
-            };
         }
 
-        // Keyboard shortcuts
+        // โฆษณาเริ่มต้น
+        function getDefaultAds() {
+            return [
+                {
+                    type: 'text',
+                    content: '🌍 Real-Time Air Quality Data<br>📊 ข้อมูลคุณภาพอากาศแบบเรียลไทม์<br>🔗 เชื่อมต่อกับ IQAir API',
+                   background: 'linear-gradient(45deg, #667eea, #764ba2)',
+                   duration: 20000,
+                   id: Date.now()
+               },
+               {
+                   type: 'text',
+                   content: '⚡ Digital Signage System<br>📱 ระบบป้ายดิจิทัลอัจฉริยะ<br>🎯 แสดงข้อมูลจริง 100%',
+                   background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
+                   duration: 20000,
+                   id: Date.now() + 1
+               }
+           ];
+       }
+
+       // หมุนเวียนโฆษณา
+       function rotateAdvertisement() {
+           if (!advertisements || advertisements.length === 0) {
+               console.warn('⚠️ ไม่มีโฆษณาให้แสดง');
+               return;
+           }
+           
+           const adContent = document.getElementById('ad-content');
+           const ad = advertisements[currentAdIndex];
+           
+           if (ad.type === 'text') {
+               const background = ad.background || 'linear-gradient(45deg, #ff6b6b, #4ecdc4)';
+               adContent.style.background = background;
+               adContent.innerHTML = `<div class="ad-text">${ad.content}</div>`;
+               
+           } else if (ad.type === 'image') {
+               adContent.style.background = 'none';
+               adContent.innerHTML = `<img class="ad-image" src="${ad.src}" alt="Advertisement">`;
+               
+           } else if (ad.type === 'video') {
+               adContent.style.background = 'none';
+               adContent.innerHTML = `
+                   <video class="ad-video" autoplay muted loop playsinline>
+                       <source src="${ad.src}" type="video/mp4">
+                       ไม่สามารถเล่นวีดีโอได้
+                   </video>
+               `;
+           }
+           
+           currentAdIndex = (currentAdIndex + 1) % advertisements.length;
+           console.log(`📢 แสดงโฆษณาที่ ${currentAdIndex}/${advertisements.length}`);
+       }
+
+       function startAdRotation() {
+           if (adRotationTimer) {
+               clearInterval(adRotationTimer);
+           }
+           
+           rotateAdvertisement();
+           adRotationTimer = setInterval(rotateAdvertisement, CONFIG.AD_ROTATION_INTERVAL);
+           console.log(`🎬 เริ่มการหมุนเวียนโฆษณา ทุก ${CONFIG.AD_ROTATION_INTERVAL/1000} วินาที`);
+       }
+
+       // การตั้งค่าการแสดงผล
+       function loadOrientation() {
+           const urlParams = new URLSearchParams(window.location.search);
+           const urlMode = urlParams.get('mode');
+           
+           if (urlMode && ['portrait', 'landscape', 'auto'].includes(urlMode)) {
+               currentOrientation = urlMode;
+           } else {
+               currentOrientation = localStorage.getItem('vipart_orientation') || 'landscape';
+           }
+           
+           applyOrientation();
+       }
+
+       function applyOrientation() {
+           const container = document.getElementById('container');
+           container.className = `container ${currentOrientation}`;
+           console.log('📐 ใช้การแสดงผล:', currentOrientation);
+       }
+
+       function setOrientation(mode) {
+           currentOrientation = mode;
+           localStorage.setItem('vipart_orientation', mode);
+           applyOrientation();
+           
+           document.querySelectorAll('.orientation-btn').forEach(btn => {
+               btn.classList.remove('active');
+           });
+           event.target.classList.add('active');
+       }
+
+       function toggleControls() {
+           const controls = document.getElementById('orientation-controls');
+           controls.classList.toggle('show');
+       }
+
+       // Event Listeners
+       document.addEventListener('DOMContentLoaded', init);
+       
+       // รับการอัพเดทจาก Admin
+       window.addEventListener('storage', (e) => {
+           if (e.key === 'vipart_settings' || e.key === 'vipart_location' || e.key === 'vipart_advertisements') {
+               console.log('🔄 ได้รับการอัพเดทการตั้งค่าจาก Admin');
+               loadSettings();
+               loadAdvertisements();
+               
+               // รีเฟรช API ถ้ามีการเปลี่ยน API Key หรือสถานที่
+               if (e.key === 'vipart_settings' || e.key === 'vipart_location') {
+                   apiRetryCount = 0; // รีเซ็ต retry counter
+                   updateAirQuality();
+               }
+               
+               if (e.key === 'vipart_advertisements') {
+                   startAdRotation();
+               }
+           }
+       });
+
+       // BroadcastChannel
+       if (typeof BroadcastChannel !== 'undefined') {
+           const channel = new BroadcastChannel('vipart_updates');
+           channel.onmessage = (e) => {
+               if (e.data && e.data.type === 'settings_updated') {
+                   console.log('📡 ได้รับการอัพเดทผ่าน BroadcastChannel');
+                   loadSettings();
+                   updateAirQuality();
+               }
+               if (e.data && e.data.type === 'ads_updated') {
+                   loadAdvertisements();
+                   startAdRotation();
+               }
+           };
+       }
+
+       // Keyboard shortcuts
        document.addEventListener('keydown', (e) => {
            switch(e.key) {
                case '1':
@@ -648,44 +818,43 @@
                    break;
                case 'f':
                case 'F':
-                   toggleFullscreen();
+                   if (document.fullscreenElement) {
+                       document.exitFullscreen();
+                   } else {
+                       document.documentElement.requestFullscreen();
+                   }
                    break;
-               case 'ArrowLeft':
-                   // Previous ad
-                   currentAdIndex = currentAdIndex === 0 ? advertisements.length - 1 : currentAdIndex - 1;
-                   rotateAdvertisement();
+               case 'u':
+               case 'U':
+                   // Force update API
+                   apiRetryCount = 0;
+                   updateAirQuality();
                    break;
                case 'ArrowRight':
-                   // Next ad
                    rotateAdvertisement();
                    break;
            }
        });
 
-       // Toggle fullscreen
-       function toggleFullscreen() {
-           if (!document.fullscreenElement) {
-               document.documentElement.requestFullscreen().catch(err => {
-                   console.log(`Error attempting to enable fullscreen: ${err.message}`);
-               });
-           } else {
-               document.exitFullscreen();
-           }
-       }
-
-       // Debug functions (เรียกใน console ได้)
+       // Debug functions
        window.debugVipart = {
-           loadAds: loadAdvertisements,
-           nextAd: rotateAdvertisement,
-           setOrientation: setOrientation,
-           toggleControls: toggleControls,
-           updateAQI: updateAirQuality,
-           getAds: () => advertisements,
-           getConfig: () => CONFIG
+           config: () => CONFIG,
+           forceApiUpdate: () => {
+               apiRetryCount = 0;
+               updateAirQuality();
+           },
+           testApi: async () => {
+               const url = `https://api.airvisual.com/v2/city?city=${CONFIG.CITY}&state=${CONFIG.STATE}&country=${CONFIG.COUNTRY}&key=${CONFIG.API_KEY}`;
+               console.log('Testing API URL:', url);
+               return url;
+           },
+           getLastCall: () => lastApiCall,
+           getRetryCount: () => apiRetryCount
        };
 
-       console.log('📋 Digital Signage loaded successfully');
-       console.log('⌨️ Keyboard shortcuts: 1=Portrait, 2=Landscape, 3=Auto, C=Controls, F=Fullscreen, R=Reload');
+       console.log('📋 Real-Time Air Quality Digital Signage โหลดเสร็จแล้ว');
+       console.log('🔑 คำสั่งคีย์บอร์ด: 1=แนวตั้ง, 2=แนวนอน, C=ควบคุม, F=เต็มจอ, R=รีเฟรช, U=อัพเดท API');
+       console.log('🛠️ Debug: window.debugVipart');
    </script>
 </body>
 </html>
