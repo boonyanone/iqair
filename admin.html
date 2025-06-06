@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>จัดการโฆษณา - Admin Panel</title>
+    <title>Admin Panel - Air Quality Digital Signage</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,11 +32,13 @@
             background: rgba(255, 255, 255, 0.9);
             padding: 40px;
             border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         
         .login-form h1 {
             color: #667eea;
             margin-bottom: 30px;
+            font-size: 2rem;
         }
         
         .form-group {
@@ -48,6 +50,7 @@
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
+            color: #555;
         }
         
         input, textarea, select {
@@ -57,6 +60,13 @@
             border-radius: 8px;
             font-family: 'Kanit', Arial, sans-serif;
             font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         
         button {
@@ -92,6 +102,23 @@
             background: #218838;
         }
         
+        .btn-info {
+            background: #17a2b8;
+        }
+        
+        .btn-info:hover {
+            background: #138496;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #000;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
         /* Admin Panel */
         .admin-panel {
             display: none;
@@ -121,84 +148,58 @@
             padding: 25px;
             border-radius: 15px;
             margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         
         .section h2 {
             color: #667eea;
             margin-bottom: 20px;
+            font-size: 1.5rem;
         }
         
-        .ad-list {
-            display: grid;
-            gap: 15px;
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid transparent;
         }
         
-        .ad-item {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .ad-preview {
-            flex: 1;
-            margin-right: 20px;
-        }
-        
-        .ad-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .success-message {
+        .alert-success {
             background: #d4edda;
             color: #155724;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-            border: 1px solid #c3e6cb;
+            border-color: #c3e6cb;
         }
         
-        .error-message {
+        .alert-danger {
             background: #f8d7da;
             color: #721c24;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-            border: 1px solid #f5c6cb;
+            border-color: #f5c6cb;
         }
         
-        .file-preview {
-            max-width: 200px;
-            max-height: 150px;
-            margin-top: 10px;
-            border-radius: 8px;
-        }
-        
-        .video-preview {
-            max-width: 300px;
-            max-height: 200px;
-            margin-top: 10px;
-            border-radius: 8px;
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-color: #bee5eb;
         }
         
         .tabs {
             display: flex;
             margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
         }
         
         .tab {
-            background: #e9ecef;
+            background: none;
             border: none;
-            padding: 10px 20px;
+            padding: 15px 25px;
             margin-right: 5px;
             border-radius: 8px 8px 0 0;
             cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
         }
         
         .tab.active {
@@ -214,21 +215,98 @@
             display: block;
         }
         
-        .orientation-controls {
-            background: #e8f4f8;
+        /* API Configuration */
+        .api-test-result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .api-status-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .status-card {
+            background: white;
             padding: 20px;
             border-radius: 10px;
-            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
-        .orientation-controls h3 {
-            margin-bottom: 15px;
+        .status-card h4 {
             color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1rem;
         }
         
-        .orientation-buttons {
+        .status-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        /* Advertisement Management */
+        .ad-list {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .ad-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .ad-preview {
+            flex: 1;
+            margin-right: 20px;
+        }
+        
+        .ad-actions {
             display: flex;
             gap: 10px;
+            flex-shrink: 0;
+        }
+        
+        .ad-actions button {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+        }
+        
+        .file-preview {
+            max-width: 200px;
+            max-height: 150px;
+            margin-top: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .video-preview {
+            max-width: 300px;
+            max-height: 200px;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
         }
         
         .preview-link {
@@ -239,10 +317,54 @@
             text-decoration: none;
             border-radius: 8px;
             margin: 10px 10px 10px 0;
+            transition: background 0.3s;
         }
         
         .preview-link:hover {
             background: #138496;
+            color: white;
+            text-decoration: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                flex: 1;
+                min-width: 120px;
+            }
+            
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .ad-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .ad-preview {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
         }
     </style>
 </head>
@@ -252,15 +374,20 @@
         <h1>🔐 เข้าสู่ระบบจัดการ</h1>
         <div class="form-group">
             <label for="username">ชื่อผู้ใช้:</label>
-            <input type="text" id="username" placeholder="กรุณาใส่ชื่อผู้ใช้">
+            <input type="text" id="username" placeholder="admin">
         </div>
         <div class="form-group">
             <label for="password">รหัสผ่าน:</label>
-            <input type="password" id="password" placeholder="กรุณาใส่รหัสผ่าน">
+            <input type="password" id="password" placeholder="vipart2025">
         </div>
         <button onclick="login()">🚀 เข้าสู่ระบบ</button>
-        <div class="error-message" id="loginError">
+        <div class="alert alert-danger" id="loginError">
             ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง
+        </div>
+        <div style="margin-top: 20px; font-size: 0.9rem; color: #666;">
+            <strong>ข้อมูลเริ่มต้น:</strong><br>
+            ชื่อผู้ใช้: admin<br>
+            รหัสผ่าน: vipart2025
         </div>
     </div>
 
@@ -271,23 +398,69 @@
             <button class="logout-btn" onclick="logout()">ออกจากระบบ</button>
         </div>
         
-        <div class="success-message" id="successMessage">
+        <div class="alert alert-success" id="successMessage">
             ✅ บันทึกข้อมูลเรียบร้อยแล้ว!
         </div>
         
-        <div class="error-message" id="errorMessage">
+        <div class="alert alert-danger" id="errorMessage">
             ❌ เกิดข้อผิดพลาด!
         </div>
         
         <!-- Tabs -->
         <div class="tabs">
-            <button class="tab active" onclick="showTab('ads')">📢 จัดการโฆษณา</button>
+            <button class="tab active" onclick="showTab('api')">🔑 API Configuration</button>
+            <button class="tab" onclick="showTab('ads')">📢 จัดการโฆษณา</button>
             <button class="tab" onclick="showTab('settings')">⚙️ การตั้งค่า</button>
             <button class="tab" onclick="showTab('preview')">👁️ ดูตัวอย่าง</button>
         </div>
         
+        <!-- Tab: API Configuration -->
+        <div id="tab-api" class="tab-content active">
+            <div class="section">
+                <h2>🔑 IQAir API Configuration & Testing</h2>
+                
+                <div class="form-group">
+                    <label for="api-key">IQAir API Key: <span style="color: red;">*จำเป็น</span></label>
+                    <input type="text" id="api-key" placeholder="ใส่ API Key จาก IQAir Dashboard">
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        📋 ได้รับ API Key ฟรีจาก: <a href="https://dashboard.iqair.com/" target="_blank">https://dashboard.iqair.com/</a>
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label>📍 สถานที่ที่ต้องการตรวจวัด:</label>
+                    <div class="grid-3">
+                        <input type="text" id="city" placeholder="City (เช่น Bangkok)">
+                        <input type="text" id="state" placeholder="State/Province (เช่น Bangkok)">
+                        <input type="text" id="country" placeholder="Country (เช่น Thailand)">
+                    </div>
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        💡 หาสถานที่ที่รองรับได้ที่: <a href="https://www.iqair.com/" target="_blank">IQAir Website</a>
+                    </small>
+                </div>
+                
+                <div class="form-row">
+                    <button class="btn-info" onclick="testApiConnection()">
+                        🧪 ทดสอบ API
+                    </button>
+                    <button onclick="saveApiSettings()">
+                        💾 บันทึก API
+                    </button>
+                </div>
+                
+                <div id="api-test-result" class="api-test-result"></div>
+            </div>
+            
+            <div class="section">
+                <h2>📊 API Status Dashboard</h2>
+                <div id="api-status-dashboard" class="api-status-dashboard">
+                    <!-- จะถูกอัพเดทด้วย JavaScript -->
+                </div>
+            </div>
+        </div>
+        
         <!-- Tab: จัดการโฆษณา -->
-        <div id="tab-ads" class="tab-content active">
+        <div id="tab-ads" class="tab-content">
             <div class="section">
                 <h2>➕ เพิ่มโฆษณาใหม่</h2>
                 <div class="form-group">
@@ -302,7 +475,7 @@
                 <div id="text-form">
                     <div class="form-group">
                         <label for="ad-content">เนื้อหาโฆษณา:</label>
-                        <textarea id="ad-content" placeholder="ใส่เนื้อหาโฆษณา (สามารถใช้ HTML ได้)"></textarea>
+                        <textarea id="ad-content" placeholder="ใส่เนื้อหาโฆษณา (สามารถใช้ HTML ได้)&#10;ตัวอย่าง:&#10;🏢 ชื่อธุรกิจ&#10;📞 เบอร์โทร&#10;💰 ราคาพิเศษ"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="ad-background">สีพื้นหลัง (Gradient CSS):</label>
@@ -314,6 +487,9 @@
                     <div class="form-group">
                         <label for="ad-file">อัพโหลดไฟล์:</label>
                         <input type="file" id="ad-file" accept="image/*,video/*" onchange="previewFile()">
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            📝 รองรับ: JPG, PNG, GIF, MP4 (ขนาดไม่เกิน 10MB)
+                        </small>
                         <div id="file-preview"></div>
                     </div>
                 </div>
@@ -323,7 +499,10 @@
                     <input type="number" id="ad-duration" value="15" min="5" max="120">
                 </div>
                 
-                <button onclick="addAdvertisement()">➕ เพิ่มโฆษณา</button>
+                <div class="form-row">
+                    <button onclick="addAdvertisement()">➕ เพิ่มโฆษณา</button>
+                    <button class="btn-warning" onclick="addTestAd()">🧪 เพิ่มโฆษณาทดสอบ</button>
+                </div>
             </div>
             
             <div class="section">
@@ -337,15 +516,7 @@
         <!-- Tab: การตั้งค่า -->
         <div id="tab-settings" class="tab-content">
             <div class="section">
-                <h2>⚙️ การตั้งค่า API</h2>
-                <div class="form-group">
-                    <label for="api-key">IQAir API Key:</label>
-                    <input type="text" id="api-key" placeholder="ใส่ API Key ของคุณ">
-                </div>
-                <div class="form-group">
-                    <label for="city">เมือง:</label>
-                    <input type="text" id="city" value="Bangkok">
-                </div>
+                <h2>⚙️ การตั้งค่าระบบ</h2>
                 <div class="form-group">
                     <label for="update-interval">ระยะเวลาอัพเดท AQI (นาที):</label>
                     <input type="number" id="update-interval" value="10" min="1" max="60">
@@ -354,20 +525,31 @@
                     <label for="ad-interval">ระยะเวลาหมุนเวียนโฆษณา (วินาที):</label>
                     <input type="number" id="ad-interval" value="15" min="5" max="60">
                 </div>
-                <button onclick="saveSettings()">💾 บันทึกการตั้งค่า</button>
+                <button onclick="saveSystemSettings()">💾 บันทึกการตั้งค่า</button>
             </div>
             
-            <div class="orientation-controls">
-                <h3>📱 การตั้งค่าการแสดงผล</h3>
+            <div class="section">
+                <h2>📱 การตั้งค่าการแสดงผล</h2>
                 <p>เลือกโหมดการแสดงผลสำหรับหน้าจอ:</p>
-                <div class="orientation-buttons">
+                <div class="form-row">
                     <button onclick="setOrientation('portrait')">📱 แนวตั้ง</button>
                     <button onclick="setOrientation('landscape')">💻 แนวนอน</button>
                     <button onclick="setOrientation('auto')">🔄 อัตโนมัติ</button>
                 </div>
                 <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">
-                    หมายเหตุ: การตั้งค่านี้จะมีผลกับการแสดงผลหน้าหลัก
+                    💡 การตั้งค่านี้จะมีผลกับการแสดงผลหน้าหลัก
                 </p>
+            </div>
+            
+            <div class="section">
+                <h2>🗑️ ล้างข้อมูล</h2>
+                <p style="color: #dc3545; margin-bottom: 15px;">
+                    ⚠️ การดำเนินการนี้ไม่สามารถย้อนกลับได้
+                </p>
+                <div class="form-row">
+                    <button class="btn-danger" onclick="clearAllAds()">🗑️ ลบโฆษณาทั้งหมด</button>
+                    <button class="btn-danger" onclick="clearAllSettings()">🔄 รีเซ็ตการตั้งค่า</button>
+                </div>
             </div>
         </div>
         
@@ -381,13 +563,31 @@
                     <a href="index.html?mode=portrait" class="preview-link" target="_blank">📱 โหมดแนวตั้ง</a>
                     <a href="index.html?mode=landscape" class="preview-link" target="_blank">💻 โหมดแนวนอน</a>
                 </div>
-                <div style="background: #e9ecef; padding: 15px; border-radius: 8px;">
-                    <strong>คำแนะนำสำหรับ Smart TV:</strong>
-                    <ul style="margin-left: 20px; margin-top: 10px;">
-                        <li>เปิด Browser บน Smart TV</li>
+                
+                <div style="background: #e9ecef; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📋 คำแนะนำสำหรับ Smart TV</h3>
+                    <ol style="margin-left: 20px; line-height: 1.6;">
+                        <li>เปิด Browser บน Smart TV (Samsung Internet, LG WebOS Browser)</li>
                         <li>เข้าไปที่ URL: <strong>https://vipart.netlify.app</strong></li>
                         <li>กดปุ่ม F11 หรือเข้า Full Screen Mode</li>
-                        <li>ใช้การตั้งค่าการแสดงผลที่ต้องการ</li>
+                        <li>ใช้รีโมทหรือคีย์บอร์ด:</li>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li><strong>1</strong> = แนวตั้ง</li>
+                            <li><strong>2</strong> = แนวนอน</li>
+                            <li><strong>C</strong> = แสดงตัวควบคุม</li>
+                            <li><strong>F</strong> = เต็มจอ</li>
+                            <li><strong>U</strong> = อัพเดท API ทันที</li>
+                        </ul>
+                    </ol>
+                </div>
+                
+                <div style="background: #d4edda; padding: 20px; border-radius: 10px; margin-top: 20px;">
+                    <h3 style="color: #155724; margin-bottom: 15px;">✅ ตรวจสอบก่อนใช้งาน</h3>
+                    <ul style="margin-left: 20px; line-height: 1.6; color: #155724;">
+                        <li>✅ ตั้งค่า IQAir API Key แล้ว</li>
+                        <li>✅ ทดสอบการเชื่อมต่อ API สำเร็จ</li>
+                        <li>✅ เพิ่มโฆษณาอย่างน้อย 1 รายการ</li>
+                        <li>✅ ทดสอบการแสดงผลบนหน้าจอจริง</li>
                     </ul>
                 </div>
             </div>
@@ -398,7 +598,7 @@
         let advertisements = [];
         let isLoggedIn = false;
 
-        // ข้อมูล Login (เปลี่ยนได้ตามต้องการ)
+        // ข้อมูล Login
         const ADMIN_CREDENTIALS = {
             username: 'admin',
             password: 'vipart2025'
@@ -411,15 +611,14 @@
             
             if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
                 isLoggedIn = true;
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('loginTime', Date.now().toString());
+                localStorage.setItem('vipart_admin_login', 'true');
+                localStorage.setItem('vipart_login_time', Date.now().toString());
                 
                 document.getElementById('loginForm').style.display = 'none';
                 document.getElementById('adminPanel').classList.add('show');
                 document.getElementById('loginError').style.display = 'none';
                 
-                loadAdvertisements();
-                loadSettings();
+                loadAllData();
                 showSuccess('เข้าสู่ระบบสำเร็จ!');
             } else {
                 document.getElementById('loginError').style.display = 'block';
@@ -431,30 +630,26 @@
 
         function logout() {
             isLoggedIn = false;
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('loginTime');
+            localStorage.removeItem('vipart_admin_login');
+            localStorage.removeItem('vipart_login_time');
             document.getElementById('loginForm').style.display = 'block';
             document.getElementById('adminPanel').classList.remove('show');
             
-            // Clear form
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
         }
 
-        // ตรวจสอบ Session
         function checkSession() {
-            const savedLogin = localStorage.getItem('isLoggedIn');
-            const loginTime = localStorage.getItem('loginTime');
+            const savedLogin = localStorage.getItem('vipart_admin_login');
+            const loginTime = localStorage.getItem('vipart_login_time');
             
             if (savedLogin === 'true' && loginTime) {
-                // Session หมดอายุใน 24 ชั่วโมง
-                const sessionDuration = 24 * 60 * 60 * 1000;
+                const sessionDuration = 24 * 60 * 60 * 1000; // 24 ชั่วโมง
                 if (Date.now() - parseInt(loginTime) < sessionDuration) {
                     isLoggedIn = true;
                     document.getElementById('loginForm').style.display = 'none';
                     document.getElementById('adminPanel').classList.add('show');
-                    loadAdvertisements();
-                    loadSettings();
+                    loadAllData();
                 } else {
                     logout();
                 }
@@ -474,317 +669,694 @@
             event.target.classList.add('active');
         }
 
-        // จัดการฟอร์มโฆษณา
-        function toggleAdForm() {
-            const type = document.getElementById('ad-type').value;
-            document.getElementById('text-form').style.display = type === 'text' ? 'block' : 'none';
-            document.getElementById('file-form').style.display = (type === 'image' || type === 'video') ? 'block' : 'none';
-            
-            const fileInput = document.getElementById('ad-file');
-            if (type === 'image') {
-                fileInput.accept = 'image/*';
-            } else if (type === 'video') {
-                fileInput.accept = 'video/*';
-            }
+        // โหลดข้อมูลทั้งหมด
+        function loadAllData() {
+            loadApiSettings();
+            loadAdvertisements();
+            loadSystemSettings();
+            updateApiStatusDashboard();
         }
 
-        // Preview ไฟล์
-        function previewFile() {
-            const fileInput = document.getElementById('ad-file');
-            const preview = document.getElementById('file-preview');
-            const file = fileInput.files[0];
-            
-            if (file) {
-                // ตรวจสอบขนาดไฟล์ (จำกัด 10MB)
-                if (file.size > 10 * 1024 * 1024) {
-                    showError('ไฟล์มีขนาดใหญ่เกินไป (จำกัด 10MB)');
-                    fileInput.value = '';
-                    preview.innerHTML = '';
-                    return;
+        // API Configuration
+        function loadApiSettings() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('vipart_settings') || '{}');
+                const location = JSON.parse(localStorage.getItem('vipart_location') || '{}');
+                
+                if (settings.apiKey) {
+                    document.getElementById('api-key').value = settings.apiKey;
                 }
                 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    if (file.type.startsWith('image/')) {
-                        preview.innerHTML = `<img src="${e.target.result}" class="file-preview" alt="Preview">`;
-                    } else if (file.type.startsWith('video/')) {
-                        preview.innerHTML = `<video src="${e.target.result}" class="video-preview" controls></video>`;
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // โหลดโฆษณา
-        function loadAdvertisements() {
-            try {
-                const stored = localStorage.getItem('vipart_advertisements');
-                advertisements = stored ? JSON.parse(stored) : [];
-                console.log('โหลดโฆษณา:', advertisements.length, 'รายการ');
-                renderAdList();
+                if (location.city) {
+                    document.getElementById('city').value = location.city;
+                    document.getElementById('state').value = location.state || '';
+                    document.getElementById('country').value = location.country || '';
+                }
+                
             } catch (error) {
-                console.error('Error loading ads:', error);
-                advertisements = [];
-                renderAdList();
+                console.error('Error loading API settings:', error);
             }
         }
 
-        // แสดงรายการโฆษณา
-        function renderAdList() {
-            const adList = document.getElementById('ad-list');
-            const adCount = document.getElementById('ad-count');
+        async function testApiConnection() {
+            const apiKey = document.getElementById('api-key').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const state = document.getElementById('state').value.trim();
+            const country = document.getElementById('country').value.trim();
             
-            adCount.textContent = advertisements.length;
+            const resultDiv = document.getElementById('api-test-result');
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = '#e9ecef';
+            resultDiv.innerHTML = '🔄 กำลังทดสอบการเชื่อมต่อ API...';
             
-            if (advertisements.length === 0) {
-                adList.innerHTML = '<div style="text-align: center; color: #999; padding: 40px;">ยังไม่มีโฆษณา</div>';
+            if (!apiKey) {
+                showApiTestResult('error', '❌ กรุณาใส่ API Key');
                 return;
             }
             
-            adList.innerHTML = advertisements.map((ad, index) => `
-                <div class="ad-item">
-                    <div class="ad-preview">
-                        <strong>ประเภท:</strong> ${getAdTypeText(ad.type)}<br>
-                        <strong>ระยะเวลา:</strong> ${ad.duration/1000} วินาที<br>
-                        <strong>เพิ่มเมื่อ:</strong> ${new Date(ad.id).toLocaleString('th-TH')}<br>
-                        ${ad.type === 'text' ? 
-                            `<div style="margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 5px; font-size: 0.9rem;">${ad.content.substring(0, 100)}${ad.content.length > 100 ? '...' : ''}</div>` : 
-                            ad.type === 'image' ?
-                            `<img src="${ad.src}" style="max-width: 200px; max-height: 100px; margin-top: 10px; border-radius: 5px;" alt="Ad Preview">` :
-                            `<video src="${ad.src}" style="max-width: 200px; max-height: 100px; margin-top: 10px; border-radius: 5px;" controls muted></video>`
-                        }
-                    </div>
-                    <div class="ad-actions">
-                        <button onclick="editAd(${index})">✏️ แก้ไข</button>
-                        <button class="btn-danger" onclick="deleteAd(${index})">🗑️ ลบ</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function getAdTypeText(type) {
-            switch(type) {
-                case 'text': return 'ข้อความ';
-                case 'image': return 'รูปภาพ';
-                case 'video': return 'วีดีโอ';
-                default: return 'ไม่ทราบ';
-            }
-        }
-
-        // เพิ่มโฆษณา
-        function addAdvertisement() {
-            const type = document.getElementById('ad-type').value;
-            const duration = parseInt(document.getElementById('ad-duration').value) * 1000;
-            
-            if (!duration || duration < 5000) {
-                showError('ระยะเวลาแสดงต้องมากกว่า 5 วินาที');
+            if (!city || !country) {
+                showApiTestResult('error', '❌ กรุณาใส่ชื่อเมืองและประเทศ');
                 return;
             }
             
-            let adData = { 
-                type, 
-                duration,
-                id: Date.now()
-            };
-            
-            if (type === 'text') {
-                const content = document.getElementById('ad-content').value.trim();
-                const background = document.getElementById('ad-background').value.trim();
-                
-                if (!content) {
-                    showError('กรุณาใส่เนื้อหาโฆษณา');
-                    return;
-                }
-                
-                adData.content = content;
-                adData.background = background || 'linear-gradient(45deg, #ff6b6b, #4ecdc4)';
-                
-                advertisements.push(adData);
-                saveAdvertisements();
-                resetForm();
-                renderAdList();
-                showSuccess('เพิ่มโฆษณาข้อความสำเร็จ!');
-                
-            } else if (type === 'image' || type === 'video') {
-                const fileInput = document.getElementById('ad-file');
-                
-                if (!fileInput.files[0]) {
-                    showError(`กรุณาเลือก${type === 'image' ? 'รูปภาพ' : 'วีดีโอ'}`);
-                    return;
-                }
-                
-                const file = fileInput.files[0];
-                
-                // ตรวจสอบประเภทไฟล์
-                if (type === 'image' && !file.type.startsWith('image/')) {
-                    showError('กรุณาเลือกไฟล์รูปภาพ');
-                    return;
-                }
-                
-                if (type === 'video' && !file.type.startsWith('video/')) {
-                    showError('กรุณาเลือกไฟล์วีดีโอ');
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    adData.src = e.target.result;
-                    adData.fileName = file.name;
-                    adData.fileSize = Math.round(file.size / 1024) + ' KB';
-                    
-                    advertisements.push(adData);
-                    saveAdvertisements();
-                    resetForm();
-                    renderAdList();
-                    showSuccess(`เพิ่มโฆษณา${type === 'image' ? 'รูปภาพ' : 'วีดีโอ'}สำเร็จ!`);
-                };
-                
-                reader.onerror = function() {
-                    showError('เกิดข้อผิดพลาดในการอ่านไฟล์');
-                };
-                
-                reader.readAsDataURL(file);
-                return;
-            }
-        }
-
-        // ลบโฆษณา
-        function deleteAd(index) {
-            if (confirm('ต้องการลบโฆษณานี้หรือไม่?')) {
-                const deletedAd = advertisements[index];
-                advertisements.splice(index, 1);
-                saveAdvertisements();
-                renderAdList();
-                showSuccess('ลบโฆษณาเรียบร้อยแล้ว!');
-                
-                // แจ้งหน้าแสดงผลให้อัพเดท
-                broadcastUpdate();
-            }
-        }
-
-        // แก้ไขโฆษณา
-        function editAd(index) {
-            const ad = advertisements[index];
-            
-            document.getElementById('ad-type').value = ad.type;
-            document.getElementById('ad-duration').value = ad.duration / 1000;
-            
-            toggleAdForm();
-            
-            if (ad.type === 'text') {
-                document.getElementById('ad-content').value = ad.content;
-                document.getElementById('ad-background').value = ad.background;
-            }
-            
-            // ลบโฆษณาเก่า
-            advertisements.splice(index, 1);
-            saveAdvertisements();
-            renderAdList();
-            
-            showSuccess('ข้อมูลโฆษณาถูกโหลดในฟอร์มแล้ว กรุณาแก้ไขและกดเพิ่มโฆษณา');
-        }
-
-        // บันทึกโฆษณา
-        function saveAdvertisements() {
             try {
-                const dataToSave = JSON.stringify(advertisements);
-                localStorage.setItem('vipart_advertisements', dataToSave);
+                const testUrl = `https://api.airvisual.com/v2/city?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state || city)}&country=${encodeURIComponent(country)}&key=${apiKey}`;
                 
-                console.log('บันทึกโฆษณาสำเร็จ:', advertisements.length, 'รายการ');
+                const proxies = [
+                    'https://api.allorigins.win/raw?url=',
+                    'https://corsproxy.io/?'
+                ];
                 
-                // แจ้งหน้าแสดงผลให้อัพเดท
-                broadcastUpdate();
-                
-                return true;
-            } catch (error) {
-                console.error('Error saving ads:', error);
-                showError('เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + error.message);
-                return false;
-            }
-        }
-
-        // แจ้งการอัพเดทไปยังหน้าอื่น
-        function broadcastUpdate() {
-            try {
-                // ใช้ localStorage event เพื่อแจ้งหน้าอื่น
-                localStorage.setItem('vipart_update_trigger', Date.now().toString());
-                
-                // ใช้ postMessage สำหรับ same-origin
-                if (window.opener) {
-                    window.opener.postMessage({
-                        type: 'vipart_update',
-                        ads: advertisements,
-                        timestamp: Date.now()
-                    }, '*');
-                }
-                
-                // ใช้ BroadcastChannel ถ้าใช้งานได้
-                if (typeof BroadcastChannel !== 'undefined') {
-                    const channel = new BroadcastChannel('vipart_updates');
-                    channel.postMessage({
-                        type: 'ads_updated',
-                        ads: advertisements,
-                       timestamp: Date.now()
-                   });
-                   channel.close();
+                for (let proxy of proxies) {
+                    try {
+                        console.log('Testing with proxy:', proxy);
+                        const response = await fetch(proxy + testUrl, {
+                            timeout: 15000
+                        });
+                        const data = await response.json();
+                        
+                        if (data && data.status === 'success' && data.data && data.data.current) {
+                            const { current, city: resCity, state: resState, country: resCountry } = data.data;
+                            const { pollution, weather } = current;
+                            
+                            showApiTestResult('success', `
+                               ✅ การเชื่อมต่อสำเร็จ!<br><br>
+                               <strong>📍 สถานที่:</strong> ${resCity}, ${resState}, ${resCountry}<br>
+                               <strong>🌬️ AQI:</strong> ${pollution.aqius} (${getAQIStatusText(pollution.aqius)})<br>
+                               <strong>🌫️ PM2.5:</strong> ${pollution.pm25 || 'N/A'} μg/m³<br>
+                               <strong>🌡️ อุณหภูมิ:</strong> ${weather.tp || 'N/A'}°C<br>
+                               <strong>💧 ความชื้น:</strong> ${weather.hu || 'N/A'}%<br>
+                               <strong>📊 ความดัน:</strong> ${weather.pr || 'N/A'} hPa<br><br>
+                               <em>✅ ข้อมูลนี้จะถูกใช้ในระบบจริง</em>
+                           `);
+                           return;
+                           
+                       } else if (data && data.status === 'fail') {
+                           throw new Error(data.data.message || 'API returned fail status');
+                       } else {
+                           throw new Error('รูปแบบข้อมูลไม่ถูกต้อง');
+                       }
+                       
+                   } catch (error) {
+                       console.warn('Proxy failed:', proxy, error);
+                       continue;
+                   }
                }
                
+               throw new Error('ไม่สามารถเชื่อมต่อผ่าน proxy ใด ๆ ได้');
+               
            } catch (error) {
-               console.error('Error broadcasting update:', error);
+               console.error('API Test Error:', error);
+               
+               let errorMessage = '❌ การทดสอบล้มเหลว<br><br>';
+               
+               if (error.message.includes('Invalid API key')) {
+                   errorMessage += '<strong>สาเหตุ:</strong> API Key ไม่ถูกต้อง<br>';
+                   errorMessage += '<strong>แก้ไข:</strong> ตรวจสอบ API Key ที่ <a href="https://dashboard.iqair.com/" target="_blank">IQAir Dashboard</a>';
+               } else if (error.message.includes('feature_not_available')) {
+                   errorMessage += '<strong>สาเหตุ:</strong> แพ็กเกจ API ไม่รองรับสถานที่นี้<br>';
+                   errorMessage += '<strong>แก้ไข:</strong> ลองเปลี่ยนสถานที่หรืออัพเกรดแพ็กเกจ';
+               } else if (error.message.includes('call_limit_reached')) {
+                   errorMessage += '<strong>สาเหตุ:</strong> ใช้ API เกินขีดจำกัด<br>';
+                   errorMessage += '<strong>แก้ไข:</strong> รอ 1 ชั่วโมงแล้วลองใหม่';
+               } else if (error.message.includes('city_not_found')) {
+                   errorMessage += '<strong>สาเหตุ:</strong> ไม่พบข้อมูลสำหรับสถานที่นี้<br>';
+                   errorMessage += '<strong>แก้ไข:</strong> ตรวจสอบการสะกดชื่อเมือง/ประเทศ';
+               } else {
+                   errorMessage += `<strong>สาเหตุ:</strong> ${error.message}<br>`;
+                   errorMessage += '<strong>แก้ไข:</strong> ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตและลองใหม่';
+               }
+               
+               showApiTestResult('error', errorMessage);
            }
        }
 
-       // โหลดการตั้งค่า
-       function loadSettings() {
-           try {
-               const settings = JSON.parse(localStorage.getItem('vipart_settings') || '{}');
-               
-               document.getElementById('api-key').value = settings.apiKey || '';
-               document.getElementById('city').value = settings.city || 'Bangkok';
-               document.getElementById('update-interval').value = settings.updateInterval || 10;
-               document.getElementById('ad-interval').value = settings.adInterval || 15;
-               
-           } catch (error) {
-               console.error('Error loading settings:', error);
-           }
-       }
-
-       // บันทึกการตั้งค่า
-       function saveSettings() {
-           const settings = {
-               apiKey: document.getElementById('api-key').value.trim(),
-               city: document.getElementById('city').value.trim(),
-               updateInterval: parseInt(document.getElementById('update-interval').value),
-               adInterval: parseInt(document.getElementById('ad-interval').value)
-           };
+       function showApiTestResult(type, message) {
+           const resultDiv = document.getElementById('api-test-result');
            
-           // ตรวจสอบข้อมูล
-           if (!settings.city) {
-               showError('กรุณาใส่ชื่อเมือง');
+           if (type === 'success') {
+               resultDiv.style.background = '#d4edda';
+               resultDiv.style.color = '#155724';
+               resultDiv.style.border = '1px solid #c3e6cb';
+           } else {
+               resultDiv.style.background = '#f8d7da';
+               resultDiv.style.color = '#721c24';
+               resultDiv.style.border = '1px solid #f5c6cb';
+           }
+           
+           resultDiv.innerHTML = message;
+       }
+
+       function getAQIStatusText(aqi) {
+           if (aqi <= 50) return 'ดีมาก';
+           if (aqi <= 100) return 'ปานกลาง';
+           if (aqi <= 150) return 'ไม่ดีสำหรับผู้แพ้ง่าย';
+           if (aqi <= 200) return 'ไม่ดี';
+           if (aqi <= 300) return 'ไม่ดีมาก';
+           return 'อันตราย';
+       }
+
+       function saveApiSettings() {
+           const apiKey = document.getElementById('api-key').value.trim();
+           const city = document.getElementById('city').value.trim();
+           const state = document.getElementById('state').value.trim();
+           const country = document.getElementById('country').value.trim();
+           
+           if (!apiKey) {
+               showError('กรุณาใส่ API Key');
                return;
            }
            
-           if (settings.updateInterval < 1 || settings.updateInterval > 60) {
+           if (!city || !country) {
+               showError('กรุณาใส่ชื่อเมืองและประเทศ');
+               return;
+           }
+           
+           try {
+               const settings = JSON.parse(localStorage.getItem('vipart_settings') || '{}');
+               settings.apiKey = apiKey;
+               
+               const location = {
+                   city: city,
+                   state: state || city,
+                   country: country
+               };
+               
+               localStorage.setItem('vipart_settings', JSON.stringify(settings));
+               localStorage.setItem('vipart_location', JSON.stringify(location));
+               
+               broadcastUpdate();
+               updateApiStatusDashboard();
+               showSuccess('บันทึก API Configuration สำเร็จ!');
+               
+           } catch (error) {
+               showError('เกิดข้อผิดพลาดในการบันทึก: ' + error.message);
+           }
+       }
+
+       function updateApiStatusDashboard() {
+           const dashboard = document.getElementById('api-status-dashboard');
+           
+           try {
+               const settings = JSON.parse(localStorage.getItem('vipart_settings') || '{}');
+               const location = JSON.parse(localStorage.getItem('vipart_location') || '{}');
+               
+               dashboard.innerHTML = `
+                   <div class="status-card">
+                       <h4>🔑 API Status</h4>
+                       <div class="status-value" style="color: ${settings.apiKey ? '#28a745' : '#dc3545'};">
+                           ${settings.apiKey ? '✅ ตั้งค่าแล้ว' : '❌ ยังไม่ได้ตั้งค่า'}
+                       </div>
+                   </div>
+                   
+                   <div class="status-card">
+                       <h4>📍 สถานที่</h4>
+                       <div class="status-value">
+                           ${location.city ? `${location.city}, ${location.country}` : 'ยังไม่ได้เลือก'}
+                       </div>
+                   </div>
+                   
+                   <div class="status-card">
+                       <h4>🔄 อัพเดทข้อมูล</h4>
+                       <div class="status-value">
+                           ทุก ${settings.updateInterval || 10} นาที
+                       </div>
+                   </div>
+                   
+                   <div class="status-card">
+                       <h4>📢 หมุนเวียนโฆษณา</h4>
+                       <div class="status-value">
+                           ทุก ${settings.adInterval || 15} วินาที
+                       </div>
+                   </div>
+               `;
+               
+           } catch (error) {
+               dashboard.innerHTML = '<div class="status-card" style="color: #dc3545; text-align: center;">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
+           }
+       }
+
+       // Advertisement Management
+       function loadAdvertisements() {
+           try {
+               const stored = localStorage.getItem('vipart_advertisements');
+               advertisements = stored ? JSON.parse(stored) : [];
+               renderAdList();
+           } catch (error) {
+               console.error('Error loading ads:', error);
+               advertisements = [];
+               renderAdList();
+           }
+       }
+
+       function renderAdList() {
+           const adList = document.getElementById('ad-list');
+           const adCount = document.getElementById('ad-count');
+           
+           if (adCount) {
+               adCount.textContent = advertisements.length;
+           }
+           
+           if (advertisements.length === 0) {
+               adList.innerHTML = `
+                   <div style="text-align: center; color: #999; padding: 40px; background: white; border-radius: 10px;">
+                       <h3>📭 ยังไม่มีโฆษณา</h3>
+                       <p>เริ่มต้นด้วยการเพิ่มโฆษณาแรกของคุณ</p>
+                       <button onclick="document.getElementById('ad-content').focus()" style="margin-top: 15px;">
+                           ➕ เพิ่มโฆษณาทันที
+                       </button>
+                   </div>
+               `;
+               return;
+           }
+           
+           adList.innerHTML = advertisements.map((ad, index) => `
+               <div class="ad-item">
+                   <div class="ad-preview">
+                       <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                           <strong style="color: #667eea;">โฆษณาที่ ${index + 1}</strong>
+                           <span style="font-size: 0.8rem; color: #666;">
+                               ${getAdTypeText(ad.type)} | ${ad.duration/1000}s
+                           </span>
+                       </div>
+                       
+                       <div style="margin-bottom: 10px;">
+                           <strong>เพิ่มเมื่อ:</strong> 
+                           <span style="color: #666;">${new Date(ad.id).toLocaleString('th-TH')}</span>
+                       </div>
+                       
+                       ${ad.type === 'text' ? `
+                           <div style="margin: 10px 0;">
+                               <strong>เนื้อหา:</strong>
+                               <div style="
+                                   margin-top: 8px; 
+                                   padding: 15px; 
+                                   background: ${ad.background || 'linear-gradient(45deg, #ff6b6b, #4ecdc4)'}; 
+                                   border-radius: 8px; 
+                                   color: white;
+                                   font-size: 0.9rem;
+                                   text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+                                   min-height: 60px;
+                                   display: flex;
+                                   align-items: center;
+                                   justify-content: center;
+                                   text-align: center;
+                               ">${ad.content}</div>
+                           </div>
+                       ` : ad.type === 'image' ? `
+                           <div style="margin: 10px 0;">
+                               <strong>รูปภาพ:</strong>
+                               <div style="margin-top: 8px;">
+                                   <img src="${ad.src}" class="file-preview" alt="Ad Preview">
+                               </div>
+                               ${ad.fileName ? `<div style="font-size: 0.8rem; color: #666; margin-top: 5px;">
+                                   📁 ${ad.fileName} (${ad.fileSize})
+                               </div>` : ''}
+                           </div>
+                       ` : `
+                           <div style="margin: 10px 0;">
+                               <strong>วีดีโอ:</strong>
+                               <div style="margin-top: 8px;">
+                                   <video src="${ad.src}" class="video-preview" controls muted></video>
+                               </div>
+                               ${ad.fileName ? `<div style="font-size: 0.8rem; color: #666; margin-top: 5px;">
+                                   📁 ${ad.fileName} (${ad.fileSize})
+                               </div>` : ''}
+                           </div>
+                       `}
+                   </div>
+                   
+                   <div class="ad-actions">
+                       <button class="btn-info" onclick="previewAd(${index})" title="ดูตัวอย่าง">
+                           👁️ ดู
+                       </button>
+                       <button class="btn-warning" onclick="editAd(${index})" title="แก้ไข">
+                           ✏️ แก้ไข
+                       </button>
+                       <button class="btn-danger" onclick="deleteAd(${index})" title="ลบ">
+                           🗑️ ลบ
+                       </button>
+                   </div>
+               </div>
+           `).join('');
+       }
+
+       function getAdTypeText(type) {
+           switch(type) {
+               case 'text': return 'ข้อความ';
+               case 'image': return 'รูปภาพ';
+               case 'video': return 'วีดีโอ';
+               default: return 'ไม่ทราบ';
+           }
+       }
+
+       function toggleAdForm() {
+           const type = document.getElementById('ad-type').value;
+           document.getElementById('text-form').style.display = type === 'text' ? 'block' : 'none';
+           document.getElementById('file-form').style.display = (type === 'image' || type === 'video') ? 'block' : 'none';
+           
+           const fileInput = document.getElementById('ad-file');
+           if (type === 'image') {
+               fileInput.accept = 'image/*';
+           } else if (type === 'video') {
+               fileInput.accept = 'video/*';
+           }
+       }
+
+       function previewFile() {
+           const fileInput = document.getElementById('ad-file');
+           const preview = document.getElementById('file-preview');
+           const file = fileInput.files[0];
+           
+           if (file) {
+               if (file.size > 10 * 1024 * 1024) {
+                   showError('ไฟล์มีขนาดใหญ่เกินไป (จำกัด 10MB)');
+                   fileInput.value = '';
+                   preview.innerHTML = '';
+                   return;
+               }
+               
+               const reader = new FileReader();
+               reader.onload = function(e) {
+                   if (file.type.startsWith('image/')) {
+                       preview.innerHTML = `<img src="${e.target.result}" class="file-preview" alt="Preview">`;
+                   } else if (file.type.startsWith('video/')) {
+                       preview.innerHTML = `<video src="${e.target.result}" class="video-preview" controls muted></video>`;
+                   }
+               };
+               reader.readAsDataURL(file);
+           }
+       }
+
+       function addAdvertisement() {
+           const type = document.getElementById('ad-type').value;
+           const duration = parseInt(document.getElementById('ad-duration').value) * 1000;
+           
+           if (!duration || duration < 5000) {
+               showError('ระยะเวลาแสดงต้องมากกว่า 5 วินาที');
+               return;
+           }
+           
+           let adData = { 
+               type, 
+               duration,
+               id: Date.now()
+           };
+           
+           if (type === 'text') {
+               const content = document.getElementById('ad-content').value.trim();
+               const background = document.getElementById('ad-background').value.trim();
+               
+               if (!content) {
+                   showError('กรุณาใส่เนื้อหาโฆษณา');
+                   return;
+               }
+               
+               adData.content = content;
+               adData.background = background || 'linear-gradient(45deg, #ff6b6b, #4ecdc4)';
+               
+               advertisements.push(adData);
+               saveAdvertisements();
+               resetForm();
+               renderAdList();
+               showSuccess('เพิ่มโฆษณาข้อความสำเร็จ!');
+               
+           } else if (type === 'image' || type === 'video') {
+               const fileInput = document.getElementById('ad-file');
+               
+               if (!fileInput.files[0]) {
+                   showError(`กรุณาเลือก${type === 'image' ? 'รูปภาพ' : 'วีดีโอ'}`);
+                   return;
+               }
+               
+               const file = fileInput.files[0];
+               
+               if (type === 'image' && !file.type.startsWith('image/')) {
+                   showError('กรุณาเลือกไฟล์รูปภาพ');
+                   return;
+               }
+               
+               if (type === 'video' && !file.type.startsWith('video/')) {
+                   showError('กรุณาเลือกไฟล์วีดีโอ');
+                   return;
+               }
+               
+               const reader = new FileReader();
+               reader.onload = function(e) {
+                   adData.src = e.target.result;
+                   adData.fileName = file.name;
+                   adData.fileSize = Math.round(file.size / 1024) + ' KB';
+                   
+                   advertisements.push(adData);
+                   saveAdvertisements();
+                   resetForm();
+                   renderAdList();
+                   showSuccess(`เพิ่มโฆษณา${type === 'image' ? 'รูปภาพ' : 'วีดีโอ'}สำเร็จ!`);
+               };
+               
+               reader.onerror = function() {
+                   showError('เกิดข้อผิดพลาดในการอ่านไฟล์');
+               };
+               
+               reader.readAsDataURL(file);
+           }
+       }
+
+       function addTestAd() {
+           const testAd = {
+               type: 'text',
+               content: '🧪 โฆษณาทดสอบ<br>📅 สร้างเมื่อ: ' + new Date().toLocaleString('th-TH') + '<br>✨ ระบบทำงานสำเร็จ!',
+               background: 'linear-gradient(45deg, #e74c3c, #f39c12)',
+               duration: 10000,
+               id: Date.now()
+           };
+           
+           advertisements.push(testAd);
+           saveAdvertisements();
+           renderAdList();
+           showSuccess('เพิ่มโฆษณาทดสอบสำเร็จ!');
+       }
+
+       function deleteAd(index) {
+           if (confirm('ต้องการลบโฆษณานี้หรือไม่?')) {
+               advertisements.splice(index, 1);
+               saveAdvertisements();
+               renderAdList();
+               showSuccess('ลบโฆษณาเรียบร้อยแล้ว!');
+               broadcastUpdate();
+           }
+       }
+
+       function editAd(index) {
+           const ad = advertisements[index];
+           
+           document.getElementById('ad-type').value = ad.type;
+           document.getElementById('ad-duration').value = ad.duration / 1000;
+           
+           toggleAdForm();
+           
+           if (ad.type === 'text') {
+               document.getElementById('ad-content').value = ad.content;
+               document.getElementById('ad-background').value = ad.background;
+           }
+           
+           advertisements.splice(index, 1);
+           saveAdvertisements();
+           renderAdList();
+           
+           showSuccess('ข้อมูลโฆษณาถูกโหลดในฟอร์มแล้ว กรุณาแก้ไขและกดเพิ่มโฆษณา');
+       }
+
+       function previewAd(index) {
+           const ad = advertisements[index];
+           
+           const popup = document.createElement('div');
+           popup.style.cssText = `
+               position: fixed;
+               top: 0;
+               left: 0;
+               width: 100%;
+               height: 100%;
+               background: rgba(0,0,0,0.8);
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               z-index: 10000;
+               backdrop-filter: blur(5px);
+           `;
+           
+           const content = document.createElement('div');
+           content.style.cssText = `
+               background: white;
+               border-radius: 15px;
+               padding: 20px;
+               max-width: 80%;
+               max-height: 80%;
+               overflow: auto;
+               position: relative;
+           `;
+           
+           if (ad.type === 'text') {
+               content.innerHTML = `
+                   <div style="text-align: center; margin-bottom: 20px;">
+                       <h3>👁️ ตัวอย่างโฆษณาข้อความ</h3>
+                   </div>
+                   <div style="
+                       background: ${ad.background};
+                       color: white;
+                       padding: 40px;
+                       border-radius: 10px;
+                       text-align: center;
+                       font-size: 1.5rem;
+                       font-weight: 600;
+                       line-height: 1.4;
+                       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+                       min-height: 200px;
+                       display: flex;
+                       align-items: center;
+                       justify-content: center;
+                   ">${ad.content}</div>
+                   <button onclick="this.parentElement.parentElement.remove()" style="
+                       position: absolute;
+                       top: 10px;
+                       right: 15px;
+                       background: none;
+                       border: none;
+                       font-size: 1.5rem;
+                       cursor: pointer;
+                       color: #999;
+                   ">✖️</button>
+               `;
+           } else if (ad.type === 'image') {
+               content.innerHTML = `
+                   <div style="text-align: center; margin-bottom: 20px;">
+                       <h3>👁️ ตัวอย่างโฆษณารูปภาพ</h3>
+                   </div>
+                   <img src="${ad.src}" style="
+                       width: 100%;
+                       max-height: 500px;
+                       object-fit: contain;
+                       border-radius: 10px;
+                   " alt="Ad Preview">
+                   <button onclick="this.parentElement.parentElement.remove()" style="
+                       position: absolute;
+                       top: 10px;
+                       right: 15px;
+                       background: rgba(0,0,0,0.5);
+                       border: none;
+                       color: white;
+                       font-size: 1.5rem;
+                       cursor: pointer;
+                       border-radius: 50%;
+                       width: 35px;
+                       height: 35px;
+                   ">✖️</button>
+               `;
+           } else if (ad.type === 'video') {
+               content.innerHTML = `
+                   <div style="text-align: center; margin-bottom: 20px;">
+                       <h3>👁️ ตัวอย่างโฆษณาวีดีโอ</h3>
+                   </div>
+                   <video src="${ad.src}" style="
+                       width: 100%;
+                       max-height: 500px;
+                       border-radius: 10px;
+                   " controls autoplay muted></video>
+                   <button onclick="this.parentElement.parentElement.remove()" style="
+                       position: absolute;
+                       top: 10px;
+                       right: 15px;
+                       background: rgba(0,0,0,0.5);
+                       border: none;
+                       color: white;
+                       font-size: 1.5rem;
+                       cursor: pointer;
+                       border-radius: 50%;
+                       width: 35px;
+                       height: 35px;
+                   ">✖️</button>
+               `;
+           }
+           
+           popup.appendChild(content);
+           document.body.appendChild(popup);
+           
+           popup.addEventListener('click', (e) => {
+               if (e.target === popup) {
+                   popup.remove();
+               }
+           });
+       }
+
+       function saveAdvertisements() {
+           try {
+               const dataToSave = JSON.stringify(advertisements);
+               localStorage.setItem('vipart_advertisements', dataToSave);
+               broadcastUpdate();
+               return true;
+           } catch (error) {
+               console.error('Error saving ads:', error);
+               showError('เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + error.message);
+               return false;
+           }
+       }
+
+       function resetForm() {
+           document.getElementById('ad-content').value = '';
+           document.getElementById('ad-background').value = 'linear-gradient(45deg, #ff6b6b, #4ecdc4)';
+           document.getElementById('ad-file').value = '';
+           document.getElementById('ad-duration').value = '15';
+           document.getElementById('file-preview').innerHTML = '';
+           document.getElementById('ad-type').value = 'text';
+           toggleAdForm();
+       }
+
+       // System Settings
+       function loadSystemSettings() {
+           try {
+               const settings = JSON.parse(localStorage.getItem('vipart_settings') || '{}');
+               
+               if (settings.updateInterval) {
+                   document.getElementById('update-interval').value = settings.updateInterval;
+               }
+               if (settings.adInterval) {
+                   document.getElementById('ad-interval').value = settings.adInterval;
+               }
+               
+           } catch (error) {
+               console.error('Error loading system settings:', error);
+           }
+       }
+
+       function saveSystemSettings() {
+           const updateInterval = parseInt(document.getElementById('update-interval').value);
+           const adInterval = parseInt(document.getElementById('ad-interval').value);
+           
+           if (updateInterval < 1 || updateInterval > 60) {
                showError('ระยะเวลาอัพเดท AQI ต้องอยู่ระหว่าง 1-60 นาที');
                return;
            }
            
-           if (settings.adInterval < 5 || settings.adInterval > 60) {
+           if (adInterval < 5 || adInterval > 60) {
                showError('ระยะเวลาหมุนเวียนโฆษณาต้องอยู่ระหว่าง 5-60 วินาที');
                return;
            }
            
            try {
+               const settings = JSON.parse(localStorage.getItem('vipart_settings') || '{}');
+               settings.updateInterval = updateInterval;
+               settings.adInterval = adInterval;
+               
                localStorage.setItem('vipart_settings', JSON.stringify(settings));
-               showSuccess('บันทึกการตั้งค่าเรียบร้อยแล้ว!');
                broadcastUpdate();
+               updateApiStatusDashboard();
+               showSuccess('บันทึกการตั้งค่าระบบสำเร็จ!');
+               
            } catch (error) {
-               console.error('Error saving settings:', error);
                showError('เกิดข้อผิดพลาดในการบันทึกการตั้งค่า');
            }
        }
 
-       // ตั้งค่าการแสดงผล
        function setOrientation(mode) {
            try {
                localStorage.setItem('vipart_orientation', mode);
@@ -804,19 +1376,38 @@
            }
        }
 
-       // รีเซ็ตฟอร์ม
-       function resetForm() {
-           document.getElementById('ad-content').value = '';
-           document.getElementById('ad-background').value = 'linear-gradient(45deg, #ff6b6b, #4ecdc4)';
-           document.getElementById('ad-file').value = '';
-           document.getElementById('ad-duration').value = '15';
-           document.getElementById('file-preview').innerHTML = '';
-           document.getElementById('ad-type').value = 'text';
-           toggleAdForm();
+       function clearAllAds() {
+           if (confirm('ต้องการลบโฆษณาทั้งหมดหรือไม่? การดำเนินการนี้ไม่สามารถย้อนกลับได้!')) {
+               advertisements = [];
+               localStorage.removeItem('vipart_advertisements');
+               renderAdList();
+               broadcastUpdate();
+               showSuccess('ลบโฆษณาทั้งหมดเรียบร้อยแล้ว!');
+           }
        }
 
-       // แสดงข้อความสำเร็จ
-       function showSuccess(message = 'บันทึกข้อมูลเรียบร้อยแล้ว!') {
+       function clearAllSettings() {
+           if (confirm('ต้องการรีเซ็ตการตั้งค่าทั้งหมดหรือไม่? การดำเนินการนี้ไม่สามารถย้อนกลับได้!')) {
+               localStorage.removeItem('vipart_settings');
+               localStorage.removeItem('vipart_location');
+               localStorage.removeItem('vipart_orientation');
+               
+               // รีเซ็ตฟอร์ม
+               document.getElementById('api-key').value = '';
+               document.getElementById('city').value = '';
+               document.getElementById('state').value = '';
+               document.getElementById('country').value = '';
+               document.getElementById('update-interval').value = '10';
+               document.getElementById('ad-interval').value = '15';
+               
+               updateApiStatusDashboard();
+               broadcastUpdate();
+               showSuccess('รีเซ็ตการตั้งค่าทั้งหมดเรียบร้อยแล้ว!');
+           }
+       }
+
+       // Utility Functions
+       function showSuccess(message) {
            const successEl = document.getElementById('successMessage');
            successEl.textContent = '✅ ' + message;
            successEl.style.display = 'block';
@@ -826,7 +1417,6 @@
            }, 5000);
        }
 
-       // แสดงข้อความผิดพลาด
        function showError(message) {
            const errorEl = document.getElementById('errorMessage');
            errorEl.textContent = '❌ ' + message;
@@ -835,6 +1425,35 @@
            setTimeout(() => {
                errorEl.style.display = 'none';
            }, 5000);
+       }
+
+       function broadcastUpdate() {
+           try {
+               // ใช้ localStorage event เพื่อแจ้งหน้าอื่น
+               localStorage.setItem('vipart_update_trigger', Date.now().toString());
+               
+               // ใช้ postMessage สำหรับ same-origin
+               if (window.opener) {
+                   window.opener.postMessage({
+                       type: 'vipart_update',
+                       ads: advertisements,
+                       timestamp: Date.now()
+                   }, '*');
+               }
+               
+               // ใช้ BroadcastChannel ถ้าใช้งานได้
+               if (typeof BroadcastChannel !== 'undefined') {
+                   const channel = new BroadcastChannel('vipart_updates');
+                   channel.postMessage({
+                       type: 'settings_updated',
+                       timestamp: Date.now()
+                   });
+                   channel.close();
+               }
+               
+           } catch (error) {
+               console.error('Error broadcasting update:', error);
+           }
        }
 
        // Event Listeners
@@ -853,30 +1472,20 @@
                    document.getElementById('password').focus();
                }
            });
-       });
-
-       // ตรวจสอบการอัพเดทจากหน้าอื่น
-       window.addEventListener('storage', (e) => {
-           if (e.key === 'vipart_update_trigger') {
-               loadAdvertisements();
-           }
-       });
-
-       // Auto-save เมื่อพิมพ์
-       document.addEventListener('input', (e) => {
-           if (e.target.matches('#ad-content, #ad-background')) {
-               // Auto-save draft (optional)
-               const draft = {
-                   content: document.getElementById('ad-content').value,
-                   background: document.getElementById('ad-background').value,
-                   timestamp: Date.now()
-               };
-               localStorage.setItem('vipart_draft', JSON.stringify(draft));
-           }
-       });
-
-       // โหลด draft
-       function loadDraft() {
+           
+           // Auto-save เมื่อพิมพ์
+           document.addEventListener('input', (e) => {
+               if (e.target.matches('#ad-content, #ad-background')) {
+                   const draft = {
+                       content: document.getElementById('ad-content').value,
+                       background: document.getElementById('ad-background').value,
+                       timestamp: Date.now()
+                   };
+                   localStorage.setItem('vipart_draft', JSON.stringify(draft));
+               }
+           });
+           
+           // โหลด draft
            try {
                const draft = JSON.parse(localStorage.getItem('vipart_draft') || '{}');
                if (draft.content && (Date.now() - draft.timestamp) < 3600000) { // 1 ชั่วโมง
@@ -886,12 +1495,106 @@
            } catch (error) {
                console.error('Error loading draft:', error);
            }
-       }
+       });
+
+       // ตรวจสอบการอัพเดทจากหน้าอื่น
+       window.addEventListener('storage', (e) => {
+           if (e.key === 'vipart_update_trigger') {
+               loadAllData();
+           }
+       });
 
        // Clear draft เมื่อเพิ่มโฆษณาสำเร็จ
        function clearDraft() {
            localStorage.removeItem('vipart_draft');
        }
+
+       // Keyboard shortcuts
+       document.addEventListener('keydown', (e) => {
+           if (e.ctrlKey || e.metaKey) {
+               switch(e.key) {
+                   case 's':
+                       e.preventDefault();
+                       if (document.getElementById('tab-api').classList.contains('active')) {
+                           saveApiSettings();
+                       } else if (document.getElementById('tab-settings').classList.contains('active')) {
+                           saveSystemSettings();
+                       }
+                       break;
+                   case 't':
+                       e.preventDefault();
+                       if (document.getElementById('tab-api').classList.contains('active')) {
+                           testApiConnection();
+                       } else if (document.getElementById('tab-ads').classList.contains('active')) {
+                           addTestAd();
+                       }
+                       break;
+               }
+           }
+       });
+
+       // Debug functions สำหรับ console
+       window.adminDebug = {
+           getAds: () => advertisements,
+           getSettings: () => {
+               return {
+                   settings: JSON.parse(localStorage.getItem('vipart_settings') || '{}'),
+                   location: JSON.parse(localStorage.getItem('vipart_location') || '{}'),
+                   orientation: localStorage.getItem('vipart_orientation')
+               };
+           },
+           clearAll: () => {
+               localStorage.clear();
+               location.reload();
+           },
+           exportData: () => {
+               const data = {
+                   advertisements: advertisements,
+                   settings: JSON.parse(localStorage.getItem('vipart_settings') || '{}'),
+                   location: JSON.parse(localStorage.getItem('vipart_location') || '{}'),
+                   orientation: localStorage.getItem('vipart_orientation'),
+                   exportDate: new Date().toISOString()
+               };
+               
+               const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+               const url = URL.createObjectURL(blob);
+               const a = document.createElement('a');
+               a.href = url;
+               a.download = `vipart-backup-${new Date().toISOString().split('T')[0]}.json`;
+               a.click();
+               URL.revokeObjectURL(url);
+               
+               console.log('📁 ส่งออกข้อมูลสำเร็จ');
+           },
+           importData: (data) => {
+               try {
+                   if (data.advertisements) {
+                       advertisements = data.advertisements;
+                       localStorage.setItem('vipart_advertisements', JSON.stringify(advertisements));
+                   }
+                   if (data.settings) {
+                       localStorage.setItem('vipart_settings', JSON.stringify(data.settings));
+                   }
+                   if (data.location) {
+                       localStorage.setItem('vipart_location', JSON.stringify(data.location));
+                   }
+                   if (data.orientation) {
+                       localStorage.setItem('vipart_orientation', data.orientation);
+                   }
+                   
+                   loadAllData();
+                   console.log('📁 นำเข้าข้อมูลสำเร็จ');
+                   showSuccess('นำเข้าข้อมูลสำเร็จ!');
+               } catch (error) {
+                   console.error('❌ Error importing data:', error);
+                   showError('เกิดข้อผิดพลาดในการนำเข้าข้อมูล');
+               }
+           }
+       };
+
+       console.log('📋 Admin Panel โหลดเสร็จแล้ว');
+       console.log('⌨️ Keyboard shortcuts: Ctrl+S=Save, Ctrl+T=Test');
+       console.log('🛠️ Debug: window.adminDebug');
    </script>
 </body>
 </html>
