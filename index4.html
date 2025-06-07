@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Quality - Digital Signage Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Kanit', Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        /* === ANIMATED BACKGROUND === */
+        .bg-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+            animation: backgroundMove 20s ease-in-out infinite;
+        }
+        
+        @keyframes backgroundMove {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            display: flex;
+            gap: 30px;
+            padding: 30px;
+            transition: all 0.5s ease;
+        }
+        
+        .container.landscape { flex-direction: row; }
+        .container.portrait { flex-direction: column; }
+        
+        /* === AIR QUALITY CARD === */
+        .air-quality-card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.1),
+                0 8px 25px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .air-quality-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A, #CDDC39);
+            border-radius: 30px 30px 0 0;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+        
+        .location-info {
+            flex: 1;
+        }
+        
+        .location-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .location-subtitle {
+            font-size: 1rem;
+            color: #7f8c8d;
+            font-weight: 400;
+        }
+        
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+        
+        /* === AQI MAIN DISPLAY === */
+        .aqi-main {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .aqi-circle {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            position: relative;
+            background: conic-gradient(from 0deg, #4CAF50 0deg, #8BC34A 60deg, #CDDC39 120deg, #FFC107 180deg, #FF9800 240deg, #F44336 300deg, #9C27B0 360deg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .aqi-inner {
+            width: 160px;
+            height: 160px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .aqi-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #2c3e50;
+            line-height: 1;
+            margin-bottom: 5px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .aqi-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+        
+        .aqi-status {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+        
+        .aqi-description {
+            font-size: 1.1rem;
+            color: #34495e;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.4;
+        }
+        
+        /* === POLLUTANT INFO === */
+        .pollutant-info {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.2);
+        }
+        
+        .pollutant-icon {
+            font-size: 2rem;
+            opacity: 0.9;
+        }
+        
+        .pollutant-text {
+            flex: 1;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        /* === WEATHER GRID === */
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .weather-item {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 18px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .weather-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .weather-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .weather-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .weather-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+        
+        /* === ADVERTISEMENT SECTION === */
+        .advertisement-section {
+            flex: 1.3;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .ad-header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .ad-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .ad-counter {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+        
+        .ad-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 
+                0 25px 60px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 400px;
+        }
+        
+        .ad-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .ad-text {
+            position: relative;
+            z-index: 10;
+            font-size: 2.2rem;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #2c3e50;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .ad-image, .ad-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+        
+        /* === STATUS INDICATORS === */
+        .connection-status {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(46, 204, 113, 0.95);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 1000;
+            animation: fadeInSlide 0.5s ease;
+        }
+        
+        @keyframes fadeInSlide {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .mode-indicator {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .mode-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* === PREMIUM EFFECTS === */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .container { 
+                flex-direction: column !important; 
+                padding: 20px;
+                gap: 20px;
+            }
+            
+            .air-quality-card {
+                padding: 30px;
+            }
+            
+            .aqi-circle {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .aqi-inner {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .aqi-number {
+                font-size: 2.5rem;
+            }
+            
+            .weather-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .ad-text {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* === COLOR THEMES === */
+        .aqi-good .aqi-circle { 
+            background: conic-gradient(from 0deg, #4CAF50 0deg, #8BC34A 360deg);
+        }
+        .aqi-good .aqi-status { color: #27ae60; }
+        
+        .aqi-moderate .aqi-circle { 
+            background: conic-gradient(from 0deg, #FFC107 0deg, #FFB300 360deg);
+        }
+        .aqi-moderate .aqi-status { color: #f39c12; }
+        
+        .aqi-unhealthy .aqi-circle { 
+            background: conic-gradient(from 0deg, #FF5722 0deg, #E91E63 360deg);
+        }
+        .aqi-unhealthy .aqi-status { color: #e74c3c; }
+        
+        /* === LOADING STATES === */
+        .loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: loadingBounce 1.4s infinite ease-in-out both;
+        }
+        
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes loadingBounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <!-- Status -->
+    <div class="connection-status" id="connectionStatus">
+        🌐 เชื่อมต่อสำเร็จ
+    </div>
+    
+    <div class="mode-indicator" id="modeIndicator">
+        📺 แนวนอน (Landscape)
+    </div>
+    
+    <!-- Main Container -->
+    <div class="container landscape floating" id="container">
+        <!-- Air Quality Card -->
+        <div class="air-quality-card aqi-moderate">
+            <!-- Header -->
+            <div class="card-header">
+                <div class="location-info">
+                    <div class="location-title" id="locationTitle">Air quality in รัชเทวี</div>
+                    <div class="location-subtitle" id="locationSubtitle">
+                        กรุงเทพมหานคร, ประเทศไทย • อัพเดทล่าสุด <span id="updateTime">กำลังโหลด...</span>
+                    </div>
+                </div>
+                <div class="live-indicator">
+                    <div class="live-dot"></div>
+                    LIVE
+                </div>
+            </div>
+            
+            <!-- AQI Main Display -->
+            <div class="aqi-main">
+                <div class="aqi-circle">
+                    <div class="aqi-inner">
+                        <div class="aqi-number" id="aqiNumber">56</div>
+                        <div class="aqi-label">US AQI</div>
+                    </div>
+                </div>
+                
+                <div class="aqi-status" id="aqiStatus">ปานกลาง</div>
+                <div class="aqi-description" id="aqiDescription">
+                    😐 เหมาะสำหรับกิจกรรมทั่วไป
+                </div>
+            </div>
+            
+            <!-- Pollutant Info -->
+            <div class="pollutant-info">
+                <div class="pollutant-icon">🌫️</div>
+                <div class="pollutant-text">
+                    <strong>สารมลพิษหลัก:</strong> PM2.5 | <strong id="pm25Value">23</strong> μg/m³
+                </div>
+            </div>
+            
+            <!-- Weather Grid -->
+            <div class="weather-grid">
+                <div class="weather-item">
+                    <span class="weather-icon">🌡️</span>
+                    <div class="weather-value" id="temperature">35°</div>
+                    <div class="weather-label">อุณหภูมิ</div>
+                </div>
+                <div class="weather-item">
+                    <span class="weather-icon">💨</span>
+                    <div class="weather-value" id="windSpeed">4.12</div>
+                    <div class="weather-label">ลม km/h</div>
+                </div>
+                <div class="weather-item">
+                    <span class="weather-icon">💧</span>
+                    <div class="weather-value" id="humidity">57%</div>
+                    <div class="weather-label">ความชื้น</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Advertisement Section -->
+        <div class="advertisement-section">
+            <!-- Ad Header -->
+            <div class="ad-header">
+                <div class="ad-title">
+                    📢 ข้อมูลและประกาศ
+                </div>
+                <div class="ad-counter" id="adCounter">1/2</div>
+            </div>
+            
+            <!-- Ad Content -->
+            <div class="ad-content" id="adContent">
+                <div class="ad-text">
+                    <div class="loading">
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                    </div>
+                    <br>กำลังโหลดข้อมูล...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === ตัวแปรระบบ ===
+        let advertisements = [];
+        let currentAdIndex = 0;
+        let adTimer = null;
+        let currentLayout = 'landscape';
+        
+        // === เริ่มต้นระบบ ===
+        function init() {
+            console.log('🚀 Starting Premium Digital Signage');
+            loadSettings();
+            loadAdvertisements();
+            startSystem();
+            setupControls();
+        }
+        
+        function loadSettings() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('vipart_settings') || '{}');
+                const location = JSON.parse(localStorage.getItem('vipart_location') || '{}');
+                
+                console.log('⚙️ Settings loaded');
+            } catch (error) {
+                console.error('❌ Settings error:', error);
+            }
+        }
+        
+        function loadAdvertisements() {
+            try {
+                const stored = localStorage.getItem('vipart_advertisements');
+                advertisements = stored ? JSON.parse(stored) : getDefaultAds();
+                
+                if (advertisements.length === 0) {
+                    advertisements = getDefaultAds();
+                }
+                
+                console.log('📢 Loaded ads:', advertisements.length);
+            } catch (error) {
+                console.error('❌ Ads error:', error);
+                advertisements = getDefaultAds();
+            }
+        }
+        
+        function getDefaultAds() {
+            return [
+                {
+                    type: 'text',
+                    content: '<strong>🏢 ระบบป้ายประกาศดิจิทัล</strong><br><br>✨ <strong>สำหรับลิฟท์และเคาน์เตอร์</strong><br><br>📊 ข้อมูลคุณภาพอากาศแบบเรียลไทม์<br><br>🎯 โฆษณาและประกาศอัจฉริยะ',
+                    background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                    duration: 20000
+                },
+                {
+                    type: 'text',
+                    content: '<strong>🏠 ยินดีต้อนรับสู่อาคาร</strong><br><br>📞 <strong>เจ้าหน้าที่:</strong> 02-xxx-xxxx<br><br>🕐 <strong>เวลาทำการ:</strong> 08:00 - 20:00<br><br>🚗 ที่จอดรถชั้น B1-B3',
+                    background: 'linear-gradient(135deg, #11998e, #38ef7d)',
+                    duration: 18000
+                }
+            ];
+        }
+        
+        function startSystem() {
+            // แสดงข้อมูล demo
+            updateAirQualityDisplay({
+                aqi: 56,
+                status: 'Moderate',
+                pm25: 23,
+                temperature: 35,
+                windSpeed: 4.12,
+                humidity: 57,
+                location: 'รัชเทวี'
+            });
+            
+            // เริ่มการแสดงโฆษณา
+            startAdRotation();
+            
+            // อัพเดทเวลา
+            updateTime();
+            setInterval(updateTime, 60000);
+        }
+        
+        function updateAirQualityDisplay(data) {
+            try {
+                document.getElementById('aqiNumber').textContent = data.aqi;
+                document.getElementById('aqiStatus').textContent = getAQIStatusText(data.aqi);
+                document.getElementById('aqiDescription').textContent = getAQIDescription(data.aqi);
+                document.getElementById('pm25Value').textContent = data.pm25;
+                document.getElementById('temperature').textContent = data.temperature + '°';
+                document.getElementById('windSpeed').textContent = data.windSpeed;
+                document.getElementById('humidity').textContent = data.humidity + '%';
+                document.getElementById('locationTitle').textContent = 'Air quality in ' + data.location;
+                
+                // อัพเดทสีตาม AQI
+                const card = document.querySelector('.air-quality-card');
+                card.className = 'air-quality-card ' + getAQIClass(data.aqi);
+                
+            } catch (error) {
+                console.error('❌ Update display error:', error);
+            }
+        }
+        
+        function getAQIStatusText(aqi) {
+            if (aqi <= 50) return 'ดีเยี่ยม';
+            if (aqi <= 100) return 'ปานกลาง';
+            if (aqi <= 150) return 'ไม่ดีสำหรับผู้แพ้ง่าย';
+            if (aqi <= 200) return 'ไม่ดี';
+            return 'อันตราย';
+        }
+        
+        function getAQIDescription(aqi) {
+            if (aqi <= 50) return '😊 เหมาะสำหรับกิจกรรมกลางแจ้ง';
+            if (aqi <= 100) return '😐 เหมาะสำหรับกิจกรรมทั่วไป';
+            if (aqi <= 150) return '😷 ระวังสำหรับผู้มีปัญหาระบบหายใจ';
+            if (aqi <= 200) return '⚠️ หลีกเลี่ยงกิจกรรมกลางแจ้งนาน';
+            return '☠️ ควรอยู่ในที่ร่ม';
+        }
+        
+        function getAQIClass(aqi) {
+            if (aqi <= 50) return 'aqi-good';
+            if (aqi <= 100) return 'aqi-moderate';
+            return 'aqi-unhealthy';
+        }
+        
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('th-TH', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('updateTime').textContent = timeString;
+        }
+        
+        // === Advertisement System ===
+        function startAdRotation() {
+            if (advertisements.length === 0) return;
+            
+            displayCurrentAd();
+            
+            if (adTimer) clearInterval(adTimer);
+            adTimer = setInterval(() => {
+                nextAd();
+            }, 15000);
+        }
+        
+        function nextAd() {
+            currentAdIndex = (currentAdIndex + 1) % advertisements.length;
+            displayCurrentAd();
+        }
+        
+        function prevAd() {
+            currentAdIndex = currentAdIndex > 0 ? currentAdIndex - 1 : advertisements.length - 1;
+            displayCurrentAd();
+        }
+        
+        function displayCurrentAd() {
+            if (advertisements.length === 0) return;
+            
+            const ad = advertisements[currentAdIndex];
+            const adContent = document.getElementById('adContent');
+            const adCounter = document.getElementById('adCounter');
+            
+            adCounter.textContent = `${currentAdIndex + 1}/${advertisements.length}`;
+            
+            // Smooth transition
+            adContent.style.opacity = '0.7';
+            adContent.style.transform = 'scale(0.98)';
+            
+            setTimeout(() => {
+                if (ad.type === 'text') {
+                    adContent.innerHTML = `<div class="ad-text">${ad.content}</div>`;
+                } else if (ad.type === 'image') {
+                    adContent.innerHTML = `<img src="${ad.src}" class="ad-image" alt="Advertisement">`;
+                } else if (ad.type === 'video') {
+                    adContent.innerHTML = `<video src="${ad.src}" class="ad-video" autoplay muted loop></video>`;
+                }
+                
+                adContent.style.opacity = '1';
+                adContent.style.transform = 'scale(1)';
+            }, 300);
+        }
+        
+        // === Layout Controls ===
+        function toggleLayout() {
+            const container = document.getElementById('container');
+            const indicator = document.getElementById('modeIndicator');
+            
+            if (currentLayout === 'landscape') {
+                container.className = 'container portrait floating';
+                currentLayout = 'portrait';
+                indicator.textContent = '📱 แนวตั้ง (Portrait)';
+            } else {
+                container.className = 'container landscape floating';
+                currentLayout = 'landscape';
+                indicator.textContent = '📺 แนวนอน (Landscape)';
+            }
+            
+            showModeIndicator();
+        }
+        
+        function showModeIndicator() {
+           const indicator = document.getElementById('modeIndicator');
+           indicator.classList.add('show');
+           
+           setTimeout(() => {
+               indicator.classList.remove('show');
+           }, 3000);
+       }
+       
+       // === Controls Setup ===
+       function setupControls() {
+           document.addEventListener('keydown', function(e) {
+               console.log('Key pressed:', e.keyCode);
+               
+               switch(e.keyCode) {
+                   case 37: // Left Arrow
+                       e.preventDefault();
+                       prevAd();
+                       showModeIndicator();
+                       break;
+                   case 39: // Right Arrow
+                       e.preventDefault();
+                       nextAd();
+                       showModeIndicator();
+                       break;
+                   case 38: // Up Arrow
+                   case 40: // Down Arrow
+                       e.preventDefault();
+                       toggleLayout();
+                       break;
+                   case 13: // Enter
+                       e.preventDefault();
+                       refreshData();
+                       break;
+                   case 32: // Space
+                       e.preventDefault();
+                       toggleAdRotation();
+                       break;
+                   // Samsung TV Remote
+                   case 49: // 1
+                       setLayout('landscape');
+                       break;
+                   case 50: // 2
+                       setLayout('portrait');
+                       break;
+               }
+           });
+       }
+       
+       function setLayout(layout) {
+           const container = document.getElementById('container');
+           const indicator = document.getElementById('modeIndicator');
+           
+           if (layout === 'landscape') {
+               container.className = 'container landscape floating';
+               currentLayout = 'landscape';
+               indicator.textContent = '📺 แนวนอน (Landscape)';
+           } else if (layout === 'portrait') {
+               container.className = 'container portrait floating';
+               currentLayout = 'portrait';
+               indicator.textContent = '📱 แนวตั้ง (Portrait)';
+           }
+           
+           showModeIndicator();
+       }
+       
+       function toggleAdRotation() {
+           const indicator = document.getElementById('modeIndicator');
+           
+           if (adTimer) {
+               clearInterval(adTimer);
+               adTimer = null;
+               indicator.textContent = '⏸️ หยุดโฆษณา';
+           } else {
+               startAdRotation();
+               indicator.textContent = '▶️ เริ่มโฆษณา';
+           }
+           
+           showModeIndicator();
+       }
+       
+       function refreshData() {
+           const indicator = document.getElementById('modeIndicator');
+           indicator.textContent = '🔄 รีเฟรชข้อมูล';
+           showModeIndicator();
+           
+           // Simulate data refresh with slight variation
+           const baseAqi = 56;
+           const variation = Math.floor(Math.random() * 10) - 5;
+           const newAqi = Math.max(0, baseAqi + variation);
+           
+           updateAirQualityDisplay({
+               aqi: newAqi,
+               status: 'Moderate',
+               pm25: 23 + Math.floor(Math.random() * 6) - 3,
+               temperature: 35 + Math.floor(Math.random() * 4) - 2,
+               windSpeed: (4.12 + (Math.random() * 2) - 1).toFixed(2),
+               humidity: 57 + Math.floor(Math.random() * 6) - 3,
+               location: 'รัชเทวี'
+           });
+           
+           updateTime();
+       }
+       
+       // === Storage Event Listener ===
+       window.addEventListener('storage', function(e) {
+           if (e.key === 'vipart_advertisements') {
+               loadAdvertisements();
+               startAdRotation();
+               console.log('📡 Ads updated from admin');
+           }
+       });
+       
+       // === Initialize ===
+       window.addEventListener('load', function() {
+           setTimeout(init, 500);
+       });
+       
+       console.log('✨ Premium Digital Signage Loaded');
+       console.log('🎮 Controls: ← → (ads), ↑ ↓ (layout), Enter (refresh), Space (pause)');
+   </script>
+</body>
+</html>
