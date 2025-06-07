@@ -400,33 +400,6 @@
             display: block;
         }
 
-        /* === QUICK INSERT BUTTONS === */
-        .quick-insert {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin: 1rem 0;
-        }
-
-        .quick-btn {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius);
-            font-family: inherit;
-            font-size: 0.875rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .quick-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
         /* === RICH TEXT EDITOR === */
         .editor-container {
             margin: 1rem 0;
@@ -458,6 +431,33 @@
             min-height: 200px;
             padding: 1.5rem;
             line-height: 1.6;
+        }
+
+        /* === QUICK INSERT BUTTONS === */
+        .quick-insert {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .quick-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         /* === BACKGROUND COLOR PICKER === */
@@ -495,170 +495,6 @@
             color: white;
             font-weight: bold;
             text-shadow: 0 0 4px rgba(0,0,0,0.5);
-        }
-
-        /* === ADVERTISEMENT LIST === */
-        .ad-grid {
-            display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        }
-
-        .ad-item {
-            background: var(--surface-color);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .ad-item:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .ad-preview {
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            text-align: center;
-            padding: 1rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .ad-item-body {
-            padding: 1rem;
-        }
-
-        .ad-item-title {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .ad-item-meta {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-        }
-
-        .ad-item-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .ad-item-actions .btn {
-            flex: 1;
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-        }
-
-        /* === PREVIEW SECTION === */
-        .preview-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .preview-display {
-            background: var(--primary-gradient);
-            border-radius: var(--border-radius);
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .preview-text {
-            color: white;
-            text-align: center;
-            font-weight: 700;
-            font-size: 1.5rem;
-            line-height: 1.5;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            padding: 2rem;
-        }
-
-        .preview-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            background: var(--surface-color);
-            padding: 1rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .preview-counter {
-            background: var(--primary-gradient);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-        }
-
-        /* === SAMPLE GALLERY === */
-        .sample-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .sample-item {
-            aspect-ratio: 16/9;
-            border-radius: var(--border-radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            padding: 1rem;
-        }
-
-        .sample-item:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        /* === STATUS INDICATORS === */
-        .status-indicator {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            background: var(--success-color);
-            color: white;
-            padding: 0.75rem 1rem;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            box-shadow: var(--shadow-lg);
-            z-index: 9999;
-            transition: var(--transition);
-        }
-
-        .status-indicator.error {
-            background: var(--error-color);
-        }
-
-        .status-indicator.warning {
-            background: var(--warning-color);
-        }
-
-        .status-indicator.info {
-            background: var(--info-color);
         }
 
         /* === ALERTS === */
@@ -713,9 +549,31 @@
             }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        /* === STATUS INDICATORS === */
+        .status-indicator {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--success-color);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            box-shadow: var(--shadow-lg);
+            z-index: 9999;
+            transition: var(--transition);
+        }
+
+        .status-indicator.error {
+            background: var(--error-color);
+        }
+
+        .status-indicator.warning {
+            background: var(--warning-color);
+        }
+
+        .status-indicator.info {
+            background: var(--info-color);
         }
 
         /* === RESPONSIVE === */
@@ -758,19 +616,6 @@
 
             .grid-cols-2 {
                 grid-template-columns: repeat(1, minmax(0, 1fr));
-            }
-
-            .ad-item-actions {
-                flex-direction: column;
-            }
-
-            .tab-list {
-                flex-wrap: wrap;
-            }
-
-            .preview-controls {
-                flex-direction: column;
-                gap: 0.75rem;
             }
 
             .quick-insert {
@@ -916,143 +761,141 @@
                                 <div style="font-size: 2rem; margin-bottom: 0.5rem;">📢</div>
                                 <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color);" id="totalAds">0</div>
                                 <div style="color: var(--text-secondary);">โฆษณาทั้งหมด</div>
-                           </div>
-                       </div>
-                       <div class="card">
-                           <div class="card-body text-center">
-                               <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔄</div>
-                               <div style="font-size: 1.5rem; font-weight: 700; color: var(--success-color);" id="syncCount">0</div>
-                               <div style="color: var(--text-secondary);">Sync สำเร็จ</div>
-                           </div>
-                       </div>
-                       <div class="card">
-                           <div class="card-body text-center">
-                               <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌐</div>
-                               <div style="font-size: 1.5rem; font-weight: 700; color: var(--info-color);" id="apiStatus">ออฟไลน์</div>
-                               <div style="color: var(--text-secondary);">สถานะ API</div>
-                           </div>
-                       </div>
-                       <div class="card">
-                           <div class="card-body text-center">
-                               <div style="font-size: 2rem; margin-bottom: 0.5rem;">⏰</div>
-                               <div style="font-size: 1rem; font-weight: 700; color: var(--warning-color);" id="lastUpdate">ไม่เคย</div>
-                               <div style="color: var(--text-secondary);">อัพเดทล่าสุด</div>
-                           </div>
-                       </div>
-                   </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔄</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--success-color);" id="syncCount">0</div>
+                                <div style="color: var(--text-secondary);">Sync สำเร็จ</div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌐</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--info-color);" id="apiStatus">ออฟไลน์</div>
+                                <div style="color: var(--text-secondary);">สถานะ API</div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">⏰</div>
+                                <div style="font-size: 1rem; font-weight: 700; color: var(--warning-color);" id="lastUpdate">ไม่เคย</div>
+                                <div style="color: var(--text-secondary);">อัพเดทล่าสุด</div>
+                            </div>
+                        </div>
+                    </div>
 
-                   <div class="grid grid-cols-2">
-                       <div class="card">
-                           <div class="card-header">
-                               <h3 class="card-title">📊 ภาพรวมระบบ</h3>
-                           </div>
-                           <div class="card-body">
-                               <div class="mb-2">
-                                   <div class="flex justify-between mb-1">
-                                       <span>📱 ประสิทธิภาพระบบ</span>
-                                       <span>95%</span>
-                                   </div>
-                                   <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px;">
-                                       <div style="width: 95%; height: 100%; background: var(--success-color); border-radius: 4px;"></div>
-                                   </div>
-                               </div>
-                               <div class="mb-2">
-                                   <div class="flex justify-between mb-1">
-                                       <span>💾 การใช้งานหน่วยความจำ</span>
-                                       <span>67%</span>
-                                   </div>
-                                   <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px;">
-                                       <div style="width: 67%; height: 100%; background: var(--warning-color); border-radius: 4px;"></div>
-                                   </div>
-                               </div>
-                               <div>
-                                   <div class="flex justify-between mb-1">
-                                       <span>🔄 อัตราการ Sync</span>
-                                       <span>89%</span>
-                                   </div>
-                                   <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px;">
-                                       <div style="width: 89%; height: 100%; background: var(--info-color); border-radius: 4px;"></div>
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
+                    <div class="grid grid-cols-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">📊 ภาพรวมระบบ</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <div class="flex justify-between mb-1">
+                                        <span>📱 ประสิทธิภาพระบบ</span>
+                                        <span>95%</span>
+                                    </div>
+                                    <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px;">
+                                        <div style="width: 95%; height: 100%; background: var(--success-color); border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="flex justify-between mb-1">
+                                        <span>💾 การใช้งานหน่วยความจำ</span>
+                                        <span>67%</span>
+                                    </div>
+                                    <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px;">
+                                        <div style="width: 67%; height: 100%; background: var(--warning-color); border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span>🔄 อัตราการ Sync</span>
+                                        <span>89%</span>
+                                    </div>
+                                    <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px;">
+                                        <div style="width: 89%; height: 100%; background: var(--info-color); border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                       <div class="card">
-                           <div class="card-header">
-                               <h3 class="card-title">⚡ การดำเนินการด่วน</h3>
-                           </div>
-                           <div class="card-body">
-                               <div class="flex flex-col gap-2">
-                                   <button class="btn btn-primary" onclick="switchTab('ads')">
-                                       ➕ เพิ่มโฆษณาใหม่
-                                   </button>
-                                   <button class="btn btn-success" onclick="testSync()">
-                                       🔄 ทดสอบ Sync
-                                   </button>
-                                   <button class="btn btn-info" onclick="openMainPage()">
-                                       👁️ ดูหน้าแสดงผล
-                                   </button>
-                                   <button class="btn btn-warning" onclick="exportData()">
-                                       📤 ส่งออกข้อมูล
-                                   </button>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">⚡ การดำเนินการด่วน</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="flex flex-col gap-2">
+                                    <button class="btn btn-primary" onclick="switchTab('ads')">
+                                        ➕ เพิ่มโฆษณาใหม่
+                                    </button>
+                                    <button class="btn btn-success" onclick="testSync()">
+                                        🔄 ทดสอบ Sync
+                                    </button>
+                                    <button class="btn btn-info" onclick="openMainPage()">
+                                        👁️ ดูหน้าแสดงผล
+                                    </button>
+                                    <button class="btn btn-warning" onclick="exportData()">
+                                        📤 ส่งออกข้อมูล
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API Configuration Tab -->
+                <div id="tab-api" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">🔑 IQAir API Configuration</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label" for="apiKey">🗝️ IQAir API Key</label>
+                                <input type="password" id="apiKey" class="form-input" placeholder="กรุณาใส่ API Key จาก IQAir Dashboard">
+                               <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                                   📋 รับ API Key ฟรี: <a href="https://dashboard.iqair.com/" target="_blank" style="color: var(--primary-color);">https://dashboard.iqair.com/</a>
                                </div>
                            </div>
-                       </div>
-                   </div>
-               </div>
 
-               <!-- API Configuration Tab -->
-               <div id="tab-api" class="tab-content">
-                   <div class="card">
-                       <div class="card-header">
-                           <h3 class="card-title">🔑 IQAir API Configuration</h3>
-                       </div>
-                       <div class="card-body">
-                           <div class="grid grid-cols-1">
+                           <div class="grid grid-cols-3 gap-2">
                                <div class="form-group">
-                                   <label class="form-label" for="apiKey">🗝️ IQAir API Key</label>
-                                   <input type="password" id="apiKey" class="form-input" placeholder="กรุณาใส่ API Key จาก IQAir Dashboard">
-                                   <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">
-                                       📋 รับ API Key ฟรี: <a href="https://dashboard.iqair.com/" target="_blank" style="color: var(--primary-color);">https://dashboard.iqair.com/</a>
-                                   </div>
+                                   <label class="form-label" for="city">🏙️ เมือง</label>
+                                   <input type="text" id="city" class="form-input" placeholder="เช่น Bangkok" value="Bangkok">
                                </div>
-
-                               <div class="grid grid-cols-3 gap-2">
-                                   <div class="form-group">
-                                       <label class="form-label" for="city">🏙️ เมือง</label>
-                                       <input type="text" id="city" class="form-input" placeholder="เช่น Bangkok" value="Bangkok">
-                                   </div>
-                                   <div class="form-group">
-                                       <label class="form-label" for="state">🏛️ จังหวัด</label>
-                                       <input type="text" id="state" class="form-input" placeholder="เช่น Bangkok" value="Bangkok">
-                                   </div>
-                                   <div class="form-group">
-                                       <label class="form-label" for="country">🌍 ประเทศ</label>
-                                       <select id="country" class="form-input">
-                                           <option value="Thailand">Thailand</option>
-                                           <option value="Singapore">Singapore</option>
-                                           <option value="Malaysia">Malaysia</option>
-                                           <option value="Vietnam">Vietnam</option>
-                                           <option value="Philippines">Philippines</option>
-                                           <option value="Indonesia">Indonesia</option>
-                                       </select>
-                                   </div>
+                               <div class="form-group">
+                                   <label class="form-label" for="state">🏛️ จังหวัด</label>
+                                   <input type="text" id="state" class="form-input" placeholder="เช่น Bangkok" value="Bangkok">
                                </div>
-
-                               <div class="flex gap-2">
-                                   <button class="btn btn-primary" onclick="testApi()">
-                                       🧪 ทดสอบการเชื่อมต่อ
-                                   </button>
-                                   <button class="btn btn-success" onclick="saveApiConfig()">
-                                       💾 บันทึกการตั้งค่า
-                                   </button>
-                                   <button class="btn btn-secondary" onclick="toggleApiKeyVisibility()">
-                                       👁️ แสดง/ซ่อน API Key
-                                   </button>
+                               <div class="form-group">
+                                   <label class="form-label" for="country">🌍 ประเทศ</label>
+                                   <select id="country" class="form-input">
+                                       <option value="Thailand">Thailand</option>
+                                       <option value="Singapore">Singapore</option>
+                                       <option value="Malaysia">Malaysia</option>
+                                       <option value="Vietnam">Vietnam</option>
+                                       <option value="Philippines">Philippines</option>
+                                       <option value="Indonesia">Indonesia</option>
+                                   </select>
                                </div>
-
-                               <div class="alert" id="apiTestResult"></div>
                            </div>
+
+                           <div class="flex gap-2">
+                               <button class="btn btn-primary" onclick="testApi()">
+                                   🧪 ทดสอบการเชื่อมต่อ
+                               </button>
+                               <button class="btn btn-success" onclick="saveApiConfig()">
+                                   💾 บันทึกการตั้งค่า
+                               </button>
+                               <button class="btn btn-secondary" onclick="toggleApiKeyVisibility()">
+                                   👁️ แสดง/ซ่อน API Key
+                               </button>
+                           </div>
+
+                           <div class="alert" id="apiTestResult"></div>
                        </div>
                    </div>
                </div>
@@ -1110,7 +953,7 @@
                                </div>
                            </div>
 
-                           <!-- File Form -->
+                           <!-- File Upload Form -->
                            <div id="fileForm" class="hidden">
                                <div class="form-group">
                                    <label class="form-label" for="adFile">📁 อัพโหลดไฟล์</label>
@@ -1149,59 +992,6 @@
                        </div>
                    </div>
 
-                   <!-- Sample Gallery -->
-                   <div class="card mb-3">
-                       <div class="card-header">
-                           <h3 class="card-title">🎨 เท็มเพลตโฆษณาสำเร็จรูป</h3>
-                       </div>
-                       <div class="card-body">
-                           <div class="sample-gallery">
-                               <div class="sample-item" style="background: linear-gradient(45deg, #11998e, #38ef7d)" onclick="useSampleTemplate('business')">
-                                   <div>
-                                       <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🏢</div>
-                                       <div><strong>ธุรกิจ</strong></div>
-                                       <div style="font-size: 0.875rem; opacity: 0.9;">ชื่อร้าน + เบอร์โทร</div>
-                                   </div>
-                               </div>
-                               <div class="sample-item" style="background: linear-gradient(45deg, #f093fb, #f5576c)" onclick="useSampleTemplate('promotion')">
-                                   <div>
-                                       <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎉</div>
-                                       <div><strong>โปรโมชั่น</strong></div>
-                                       <div style="font-size: 0.875rem; opacity: 0.9;">ลดราคา + จำกัดเวลา</div>
-                                   </div>
-                               </div>
-                               <div class="sample-item" style="background: linear-gradient(45deg, #667eea, #764ba2)" onclick="useSampleTemplate('announcement')">
-                                   <div>
-                                       <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📢</div>
-                                       <div><strong>ประกาศ</strong></div>
-                                       <div style="font-size: 0.875rem; opacity: 0.9;">ข้อมูลสำคัญ</div>
-                                   </div>
-                               </div>
-                               <div class="sample-item" style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4)" onclick="useSampleTemplate('food')">
-                                   <div>
-                                       <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🍕</div>
-                                       <div><strong>ร้านอาหาร</strong></div>
-                                       <div style="font-size: 0.875rem; opacity: 0.9;">เมนู + เวลาเปิด</div>
-                                   </div>
-                               </div>
-                               <div class="sample-item" style="background: linear-gradient(45deg, #a8edea, #fed6e3)" onclick="useSampleTemplate('service')">
-                                   <div>
-                                       <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔧</div>
-                                       <div><strong>บริการ</strong></div>
-                                       <div style="font-size: 0.875rem; opacity: 0.9;">ซ่อมแซม + ติดตั้ง</div>
-                                   </div>
-                               </div>
-                               <div class="sample-item" style="background: linear-gradient(45deg, #ffecd2, #fcb69f)" onclick="useSampleTemplate('contact')">
-                                   <div>
-                                       <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📞</div>
-                                       <div><strong>ติดต่อ</strong></div>
-                                       <div style="font-size: 0.875rem; opacity: 0.9;">ช่องทางต่างๆ</div>
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-
                    <!-- Advertisement List -->
                    <div class="card">
                        <div class="card-header flex justify-between items-center">
@@ -1214,7 +1004,7 @@
                            </div>
                        </div>
                        <div class="card-body">
-                           <div class="ad-grid" id="adGrid">
+                           <div class="grid" id="adGrid">
                                <!-- Advertisement items will be rendered here -->
                            </div>
                        </div>
@@ -1228,17 +1018,15 @@
                            <h3 class="card-title">👁️ ตัวอย่างโฆษณาปัจจุบัน</h3>
                        </div>
                        <div class="card-body">
-                           <div class="preview-container">
-                               <div class="preview-display" id="previewDisplay">
-                                   <div class="preview-text">
-                                       🌟 ยินดีต้อนรับสู่ระบบ<br>
-                                       📊 Digital Signage Pro v3.0<br>
-                                       ⚡ ข้อมูลคุณภาพอากาศแบบเรียลไทม์
-                                   </div>
+                           <div style="max-width: 600px; margin: 0 auto;">
+                               <div id="previewDisplay" style="background: linear-gradient(45deg, #667eea, #764ba2); border-radius: 15px; min-height: 250px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; color: white; font-size: 1.5rem; font-weight: 700; text-align: center; padding: 2rem;">
+                                   🌟 ยินดีต้อนรับสู่ระบบ<br>
+                                   📊 Digital Signage Pro v3.0<br>
+                                   ⚡ ข้อมูลคุณภาพอากาศแบบเรียลไทม์
                                </div>
-                               <div class="preview-controls">
+                               <div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
                                    <button class="btn btn-secondary" onclick="prevPreview()">◀️ ก่อนหน้า</button>
-                                   <span class="preview-counter" id="previewCounter">1/3</span>
+                                   <span id="previewCounter" style="background: rgba(102, 126, 234, 0.1); padding: 10px 20px; border-radius: 10px; font-weight: 600; color: var(--primary-color);">1/3</span>
                                    <button class="btn btn-secondary" onclick="nextPreview()">▶️ ถัดไป</button>
                                </div>
                            </div>
@@ -1274,7 +1062,7 @@
                <div id="tab-sync" class="tab-content">
                    <div class="card">
                        <div class="card-header">
-                           <h3 class="card-title">☁️ Google Sheets Integration</h3>
+                           <h3 class="card-title">📊 Google Sheets Integration</h3>
                        </div>
                        <div class="card-body">
                            <div class="form-group">
@@ -1308,7 +1096,7 @@
 
                    <div class="card">
                        <div class="card-header">
-                           <h3 class="card-title">🌐 Cloud Storage Sync</h3>
+                           <h3 class="card-title">☁️ Cloud Storage Sync</h3>
                        </div>
                        <div class="card-body">
                            <div class="form-group">
@@ -1363,605 +1151,1108 @@
                                    <option value="100">100 MB - สูง (อาจช้า)</option>
                                </select>
                                <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">
-                                ไฟล์ใหญ่ = คุณภาพสูง แต่อาจโหลดช้าในอุปกรณ์บางรุ่น
-                            </div>
-                        </div>
+                                   ไฟล์ใหญ่ = คุณภาพสูง แต่อาจโหลดช้าในอุปกรณ์บางรุ่น
+                               </div>
+                           </div>
 
-                        <button class="btn btn-success" onclick="saveSystemSettings()">💾 บันทึกการตั้งค่า</button>
-                    </div>
-                </div>
+                           <button class="btn btn-success" onclick="saveSystemSettings()">💾 บันทึกการตั้งค่า</button>
+                       </div>
+                   </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">💾 จัดการข้อมูล</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="flex gap-2 mb-3">
-                            <button class="btn btn-success" onclick="exportAllData()">📤 ส่งออกทั้งหมด</button>
-                            <button class="btn btn-info" onclick="importAllData()">📥 นำเข้าทั้งหมด</button>
-                            <button class="btn btn-warning" onclick="resetAllSettings()">🔄 รีเซ็ต</button>
-                            <button class="btn btn-error" onclick="clearAllData()">🗑️ ลบทั้งหมด</button>
-                            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleImportFile(event)">
-                        </div>
+                   <div class="card">
+                       <div class="card-header">
+                           <h3 class="card-title">💾 จัดการข้อมูล</h3>
+                       </div>
+                       <div class="card-body">
+                           <div class="flex gap-2 mb-3">
+                               <button class="btn btn-success" onclick="exportAllData()">📤 ส่งออกทั้งหมด</button>
+                               <button class="btn btn-info" onclick="importAllData()">📥 นำเข้าทั้งหมด</button>
+                               <button class="btn btn-warning" onclick="resetAllSettings()">🔄 รีเซ็ต</button>
+                               <button class="btn btn-error" onclick="clearAllData()">🗑️ ลบทั้งหมด</button>
+                               <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleImportFile(event)">
+                           </div>
 
-                        <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; padding: 1.5rem;">
-                            <h4 style="color: #065f46; margin-bottom: 1rem;">ℹ️ ข้อมูลระบบ</h4>
-                            <div class="grid grid-cols-2 gap-2" style="color: #065f46;">
-                                <div><strong>📱 เวอร์ชัน:</strong> v3.0</div>
-                                <div><strong>🛠️ สร้างเมื่อ:</strong> 7 มิ.ย. 2568</div>
-                                <div><strong>🎯 เหมาะสำหรับ:</strong> ลิฟท์ & เคาน์เตอร์</div>
-                                <div><strong>📺 รองรับ:</strong> Samsung TV</div>
-                                <div><strong>🌐 API:</strong> IQAir Real-time</div>
-                                <div><strong>☁️ Sync:</strong> Google Sheets + Cloud</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-</div>
+                           <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; padding: 1.5rem;">
+                               <h4 style="color: #065f46; margin-bottom: 1rem;">ℹ️ ข้อมูลระบบ</h4>
+                               <div class="grid grid-cols-2 gap-2" style="color: #065f46;">
+                                   <div><strong>📱 เวอร์ชัน:</strong> v3.0</div>
+                                   <div><strong>🛠️ สร้างเมื่อ:</strong> 7 มิ.ย. 2568</div>
+                                   <div><strong>🎯 เหมาะสำหรับ:</strong> ลิฟท์ & เคาน์เตอร์</div>
+                                   <div><strong>📺 รองรับ:</strong> Samsung TV</div>
+                                   <div><strong>🌐 API:</strong> IQAir Real-time</div>
+                                   <div><strong>☁️ Sync:</strong> Google Sheets + Cloud</div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </main>
+   </div>
 
-<!-- JavaScript -->
-<script>
-    // === GLOBAL VARIABLES ===
-    let isLoggedIn = false;
-    let advertisements = [];
-    let currentPreviewIndex = 0;
-    let richEditor = null;
-    let currentAdBackground = 'linear-gradient(45deg, #667eea, #764ba2)';
-    let syncCounter = 0;
-    
-    const ADMIN_USER = 'admin';
-    const ADMIN_PASS = 'vipart2025';
-    const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+   <!-- JavaScript -->
+   <script>
+       // === GLOBAL VARIABLES ===
+       let isLoggedIn = false;
+       let advertisements = [];
+       let currentPreviewIndex = 0;
+       let richEditor = null;
+       let currentAdBackground = 'linear-gradient(45deg, #667eea, #764ba2)';
+       let syncCounter = 0;
+       
+       const ADMIN_USER = 'admin';
+       const ADMIN_PASS = 'vipart2025';
+       const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
-    // Quick text templates
-    const quickTextTemplates = {
-        business: '🏢 <strong>ชื่อธุรกิจของคุณ</strong><br><br>📞 <strong>โทร:</strong> 02-xxx-xxxx<br><br>🏪 <strong>ที่ตั้ง:</strong> ชั้น G<br><br>⏰ <strong>เปิด:</strong> 08:00 - 20:00',
-        promotion: '🎉 <strong>โปรโมชั่นพิเศษ!</strong><br><br>💰 <strong>ลดราคา 50%</strong><br><br>🛍️ สินค้าเลือกสรร<br><br>⏰ <strong>สิ้นสุด:</strong> 31 ธ.ค. 2568',
-        contact: '📞 <strong>ศูนย์ข้อมูล</strong><br><br>👨‍💼 <strong>เจ้าหน้าที่ประจำ</strong><br><br>📧 info@building.com<br><br>📱 <strong>LINE:</strong> @building',
-        food: '🍕 <strong>ร้านอาหารอร่อย</strong><br><br>🍜 <strong>เมนูพิเศษวันนี้</strong><br><br>📱 <strong>สั่งผ่าน LINE:</strong> @food<br><br>🚚 ส่งฟรีในอาคาร',
-        service: '🔧 <strong>ศูนย์บริการช่าง</strong><br><br>⚡ <strong>ซ่อมไฟฟ้า ประปา</strong><br><br>📞 <strong>โทร:</strong> 02-xxx-xxxx<br><br>⏰ 08:00 - 18:00 น.',
-        announcement: '📢 <strong>ประกาศสำคัญ</strong><br><br>🚧 <strong>ปิดซ่อมลิฟท์</strong><br><br>📅 <strong>วันที่:</strong> 15-16 มิ.ย.<br><br>🙏 ขออภัยในความไม่สะดวก'
-    };
+       // Quick text templates
+       const quickTextTemplates = {
+           business: '🏢 <strong>ชื่อธุรกิจของคุณ</strong><br><br>📞 <strong>โทร:</strong> 02-xxx-xxxx<br><br>🏪 <strong>ที่ตั้ง:</strong> ชั้น G<br><br>⏰ <strong>เปิด:</strong> 08:00 - 20:00',
+           promotion: '🎉 <strong>โปรโมชั่นพิเศษ!</strong><br><br>💰 <strong>ลดราคา 50%</strong><br><br>🛍️ สินค้าเลือกสรร<br><br>⏰ <strong>สิ้นสุด:</strong> 31 ธ.ค. 2568',
+           contact: '📞 <strong>ศูนย์ข้อมูล</strong><br><br>👨‍💼 <strong>เจ้าหน้าที่ประจำ</strong><br><br>📧 info@building.com<br><br>📱 <strong>LINE:</strong> @building',
+           food: '🍕 <strong>ร้านอาหารอร่อย</strong><br><br>🍜 <strong>เมนูพิเศษวันนี้</strong><br><br>📱 <strong>สั่งผ่าน LINE:</strong> @food<br><br>🚚 ส่งฟรีในอาคาร',
+           service: '🔧 <strong>ศูนย์บริการช่าง</strong><br><br>⚡ <strong>ซ่อมไฟฟ้า ประปา</strong><br><br>📞 <strong>โทร:</strong> 02-xxx-xxxx<br><br>⏰ 08:00 - 18:00 น.',
+           announcement: '📢 <strong>ประกาศสำคัญ</strong><br><br>🚧 <strong>ปิดซ่อมลิฟท์</strong><br><br>📅 <strong>วันที่:</strong> 15-16 มิ.ย.<br><br>🙏 ขออภัยในความไม่สะดวก'
+       };
 
-    const sampleTemplates = {
-        business: {
-            content: '🏢 <strong>ร้านสะดวกซื้อ 24 ชม.</strong><br><br>📞 <strong>โทร:</strong> 02-xxx-xxxx<br><br>🏪 <strong>ที่ตั้ง:</strong> ชั้น G<br><br>⏰ เปิดตลอด 24 ชั่วโมง',
-            background: 'linear-gradient(45deg, #11998e, #38ef7d)'
-        },
-        promotion: {
-            content: '🎉 <strong>โปรโมชั่นพิเศษ!</strong><br><br>💰 <strong>ลดราคา 50%</strong><br><br>🛍️ สินค้าเลือกสรร<br><br>⏰ สิ้นสุด 31 ธ.ค. 2568',
-            background: 'linear-gradient(45deg, #f093fb, #f5576c)'
-        },
-        announcement: {
-            content: '📢 <strong>ประกาศสำคัญ</strong><br><br>🚧 <strong>ปิดซ่อมลิฟท์</strong><br><br>📅 วันที่ 15-16 มิ.ย.<br><br>🙏 ขออภัยในความไม่สะดวก',
-            background: 'linear-gradient(45deg, #667eea, #764ba2)'
-        },
-        food: {
-            content: '🍕 <strong>ร้านอาหารอร่อย</strong><br><br>🍜 <strong>เมนูพิเศษวันนี้</strong><br><br>📱 สั่งผ่าน LINE: @food<br><br>🚚 ส่งฟรีในอาคาร',
-            background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)'
-        },
-        service: {
-            content: '🔧 <strong>ศูนย์บริการช่าง</strong><br><br>⚡ <strong>ซ่อมไฟฟ้า ประปา</strong><br><br>📞 โทร: 02-xxx-xxxx<br><br>⏰ 08:00 - 18:00 น.',
-            background: 'linear-gradient(45deg, #a8edea, #fed6e3)'
-        },
-        contact: {
-            content: '📞 <strong>ศูนย์ข้อมูล</strong><br><br>👨‍💼 <strong>เจ้าหน้าที่ประจำ</strong><br><br>📧 info@building.com<br><br>📱 LINE: @building',
-            background: 'linear-gradient(45deg, #ffecd2, #fcb69f)'
-        }
-    };
+       // === 🌐 GOOGLE SHEETS & CLOUD SYNC IMPLEMENTATION ===
+       
+       // ตัวแปรสำหรับ Google Sheets & Cloud Sync
+       let sheetsConfig = {
+           url: '',
+           sheetId: '',
+           lastSync: null,
+           autoSyncInterval: 5 * 60 * 1000, // 5 นาที
+           autoSyncTimer: null,
+           isConnected: false
+       };
 
-    // === INITIALIZATION ===
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 Digital Signage Pro v3.0 Admin Panel เริ่มต้น');
-        checkLogin();
-        setupEventListeners();
-    });
+       let cloudConfig = {
+           url: '',
+           apiKey: '',
+           lastSync: null,
+           retryCount: 0,
+           maxRetries: 3,
+           isConnected: false
+       };
 
-    function checkLogin() {
-        try {
-            const savedLogin = localStorage.getItem('vipart_admin_login');
-            const loginTime = localStorage.getItem('vipart_login_time');
-            
-            if (savedLogin === 'true' && loginTime) {
-                const sessionTime = 24 * 60 * 60 * 1000; // 24 ชั่วโมง
-                if (Date.now() - parseInt(loginTime) < sessionTime) {
-                    isLoggedIn = true;
-                    showAdminPanel();
-                    initSystem();
-                    return;
-                }
-            }
-            showLoginForm();
-        } catch (error) {
-            console.error('❌ Check login error:', error);
-            showLoginForm();
-        }
-    }
+       // สีพื้นหลังที่รองรับสำหรับ Google Sheets
+       const colorMappings = {
+           'blue': 'linear-gradient(45deg, #667eea, #764ba2)',
+           'green': 'linear-gradient(45deg, #11998e, #38ef7d)',
+           'pink': 'linear-gradient(45deg, #f093fb, #f5576c)',
+           'orange': 'linear-gradient(45deg, #ffecd2, #fcb69f)',
+           'purple': 'linear-gradient(45deg, #a8edea, #fed6e3)',
+           'yellow': 'linear-gradient(45deg, #fff720, #3cd500)',
+           'red': 'linear-gradient(45deg, #ff512f, #dd2476)',
+           'dark': 'linear-gradient(45deg, #1e1e1e, #434343)',
+           'gradient1': 'linear-gradient(45deg, #667eea, #764ba2)',
+           'gradient2': 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
+           'gradient3': 'linear-gradient(45deg, #c3ec52, #0ba360)'
+       };
 
-    function setupEventListeners() {
-        // Login form submit
-        document.getElementById('loginForm').addEventListener('submit', handleLogin);
-        
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
-                    case 's':
-                        e.preventDefault();
-                        saveCurrentTab();
-                        break;
-                    case 'r':
-                        e.preventDefault();
-                        testSync();
-                        break;
-                    case 'p':
-                        e.preventDefault();
-                        openMainPage();
-                        break;
-                }
-            }
-        });
-    }
+       // === 📊 GOOGLE SHEETS FUNCTIONS ===
 
-    // === LOGIN SYSTEM ===
-    function handleLogin(event) {
-        event.preventDefault();
-        
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value.trim();
-        
-        if (username === ADMIN_USER && password === ADMIN_PASS) {
-            isLoggedIn = true;
-            localStorage.setItem('vipart_admin_login', 'true');
-            localStorage.setItem('vipart_login_time', Date.now().toString());
-            
-            showAdminPanel();
-            initSystem();
-            showAlert('success', '🎉 เข้าสู่ระบบสำเร็จ!');
-        } else {
-            showAlert('error', '❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-        }
-    }
+       function setupGoogleSheets() {
+           try {
+               const sheetsUrl = document.getElementById('sheetsUrl').value.trim();
+               
+               if (!sheetsUrl) {
+                   showSheetsStatus('error', '❌ กรุณาใส่ Google Sheets URL');
+                   return;
+               }
 
-    function handleLogout() {
-        if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
-            isLoggedIn = false;
-            localStorage.removeItem('vipart_admin_login');
-            localStorage.removeItem('vipart_login_time');
-            showLoginForm();
-            showAlert('success', '👋 ออกจากระบบเรียบร้อยแล้ว');
-        }
-    }
+               showSheetsStatus('info', '🔄 กำลังตั้งค่า Google Sheets...');
+               
+               // ดึง Sheet ID จาก URL
+               const sheetId = extractSheetId(sheetsUrl);
+               if (!sheetId) {
+                   showSheetsStatus('error', '❌ URL ไม่ถูกต้อง - ตรวจสอบ Google Sheets URL');
+                   return;
+               }
 
-    function showLoginForm() {
-        document.getElementById('loginContainer').style.display = 'flex';
-        document.getElementById('adminLayout').classList.remove('show');
-    }
+               // บันทึกการตั้งค่า
+               sheetsConfig.url = sheetsUrl;
+               sheetsConfig.sheetId = sheetId;
+               sheetsConfig.isConnected = true;
+               
+               try {
+                   localStorage.setItem('vipart_sheets_config', JSON.stringify(sheetsConfig));
+               } catch (e) {
+                   console.warn('⚠️ บันทึกการตั้งค่า Sheets ไม่สำเร็จ');
+               }
 
-    function showAdminPanel() {
-        document.getElementById('loginContainer').style.display = 'none';
-        document.getElementById('adminLayout').classList.add('show');
-    }
+               showSheetsStatus('success', `✅ เชื่อมต่อ Google Sheets สำเร็จ!<br>📊 Sheet ID: ${sheetId.substring(0, 20)}...`);
+               
+               // เริ่ม Auto Sync
+               startAutoSync();
+               
+               console.log('📊 Google Sheets ตั้งค่าเสร็จ:', sheetsConfig);
+               showAlert('success', '📊 Google Sheets Integration พร้อมใช้งาน!');
+               
+           } catch (error) {
+               console.error('❌ Setup Google Sheets error:', error);
+               showSheetsStatus('error', '❌ เกิดข้อผิดพลาด: ' + error.message);
+           }
+       }
 
-    // === SYSTEM INITIALIZATION ===
-    function initSystem() {
-        console.log('🎯 เริ่มต้นระบบ Admin Panel v3.0');
-        
-        loadSettings();
-        loadAdvertisements();
-        initRichTextEditor();
-        updateDashboard();
-        updatePreview();
-        
-        console.log('✅ ระบบพร้อมใช้งาน');
-        updateStatusIndicator('success', '✅ ระบบพร้อม');
-    }
+       function extractSheetId(url) {
+           try {
+               // รองรับ URL หลายรูปแบบ
+               const patterns = [
+                   /\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/,
+                   /\/spreadsheets\/d\/([^\/]+)/,
+                   /spreadsheets\/d\/([^\/\?]+)/
+               ];
+               
+               for (const pattern of patterns) {
+                   const match = url.match(pattern);
+                   if (match) {
+                       return match[1];
+                   }
+               }
+               
+               return null;
+           } catch (error) {
+               console.error('❌ Extract sheet ID error:', error);
+               return null;
+           }
+       }
 
-    function loadSettings() {
-        try {
-            const settings = JSON.parse(localStorage.getItem('vipart_settings') || '{}');
-            const location = JSON.parse(localStorage.getItem('vipart_location') || '{}');
-            
-            // Load API settings
-            if (settings.apiKey) {
-                document.getElementById('apiKey').value = settings.apiKey;
-            }
-            if (location.city) {
-                document.getElementById('city').value = location.city;
-                document.getElementById('state').value = location.state || '';
-                document.getElementById('country').value = location.country || 'Thailand';
-            }
-            
-            // Load system settings
-            if (settings.updateInterval) {
-                document.getElementById('updateInterval').value = settings.updateInterval;
-            }
-            if (settings.adInterval) {
-                document.getElementById('adInterval').value = settings.adInterval;
-            }
-            
-            console.log('⚙️ โหลดการตั้งค่าสำเร็จ');
-        } catch (error) {
-            console.error('❌ Load settings error:', error);
-        }
-    }
+       async function syncFromSheets() {
+           try {
+               if (!sheetsConfig.sheetId) {
+                   showSheetsStatus('error', '❌ กรุณาตั้งค่า Google Sheets ก่อน');
+                   return;
+               }
 
-    function loadAdvertisements() {
-        try {
-            const stored = localStorage.getItem('vipart_advertisements');
-            advertisements = stored ? JSON.parse(stored) : getDefaultAds();
-            
-            if (advertisements.length === 0) {
-                advertisements = getDefaultAds();
-                saveAdvertisements();
-            }
-            
-            renderAdList();
-            console.log('📢 โหลดโฆษณา:', advertisements.length, 'รายการ');
-        } catch (error) {
-            console.error('❌ Load ads error:', error);
-            advertisements = getDefaultAds();
-            saveAdvertisements();
-            renderAdList();
-        }
-    }
+               showSheetsStatus('info', '🔄 กำลัง Sync ข้อมูลจาก Google Sheets...');
+               
+               const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetsConfig.sheetId}/export?format=csv&range=A1:D100`;
+               
+               // ลองใช้ CORS proxies
+               const proxies = [
+                   'https://api.allorigins.win/raw?url=',
+                   'https://corsproxy.io/?',
+                   ''
+               ];
+               
+               let csvData = null;
+               
+               for (const proxy of proxies) {
+                   try {
+                       const fullUrl = proxy ? proxy + encodeURIComponent(csvUrl) : csvUrl;
+                       
+                       const response = await fetch(fullUrl, {
+                           method: 'GET',
+                           headers: { 'Accept': 'text/csv' },
+                           signal: AbortSignal.timeout(15000)
+                       });
+                       
+                       if (response.ok) {
+                           csvData = await response.text();
+                           console.log('✅ CSV data fetched via:', proxy || 'Direct');
+                           break;
+                       }
+                   } catch (error) {
+                       console.warn('⚠️ Proxy failed:', proxy || 'Direct', error.message);
+                   }
+               }
+               
+               if (!csvData) {
+                   throw new Error('ไม่สามารถดาวน์โหลดข้อมูลจาก Google Sheets ได้');
+               }
+               
+               // แปลง CSV เป็น JSON
+               const newAds = parseCsvToAds(csvData);
+               
+               if (newAds.length === 0) {
+                   showSheetsStatus('warning', '⚠️ ไม่พบข้อมูลโฆษณาใน Google Sheets');
+                   return;
+               }
+               
+               // ยืนยันการอัพเดท
+               const confirmed = confirm(`📥 พบโฆษณา ${newAds.length} รายการใน Google Sheets\n\nต้องการอัพเดทและแทนที่โฆษณาปัจจุบัน (${advertisements.length} รายการ) หรือไม่?`);
+               
+               if (confirmed) {
+                   advertisements = newAds;
+                   saveAdvertisements();
+                   renderAdList();
+                   updateDashboard();
+                   updatePreview();
+                   notifyMainPage();
+                   
+                   sheetsConfig.lastSync = new Date().toISOString();
+                   try {
+                       localStorage.setItem('vipart_sheets_config', JSON.stringify(sheetsConfig));
+                   } catch (e) {
+                       console.warn('⚠️ บันทึก sync time ไม่สำเร็จ');
+                   }
+                   
+                   showSheetsStatus('success', `✅ Sync สำเร็จ! อัพเดท ${newAds.length} รายการ<br>⏰ เวลา: ${new Date().toLocaleString('th-TH')}`);
+                   showAlert('success', `📊 Sync จาก Google Sheets สำเร็จ! (${newAds.length} รายการ)`);
+               } else {
+                   showSheetsStatus('info', '❌ ยกเลิกการ Sync');
+               }
+               
+           } catch (error) {
+               console.error('❌ Sync from Sheets error:', error);
+               showSheetsStatus('error', '❌ Sync ไม่สำเร็จ: ' + error.message);
+               showAlert('error', 'Sync จาก Google Sheets ไม่สำเร็จ');
+           }
+       }
 
-    function getDefaultAds() {
-        const now = Date.now();
-        return [
-            {
-                type: 'text',
-                content: '🌟 <strong>ยินดีต้อนรับสู่ระบบ</strong><br><br>📊 Digital Signage Pro v3.0<br><br>⚡ ข้อมูลคุณภาพอากาศแบบเรียลไทม์<br><br>🎯 Admin Panel ใหม่',
-                background: 'linear-gradient(45deg, #667eea, #764ba2)',
-                duration: 20000,
-                id: now + 1
-            },
-            {
-                type: 'text',
-                content: '🏢 <strong>ชื่อธุรกิจของคุณ</strong><br><br>📞 <strong>โทร:</strong> 02-xxx-xxxx<br><br>🌟 บริการคุณภาพระดับพรีเมียม<br><br>💎 ราคาเริ่มต้น 999 บาท',
-                background: 'linear-gradient(45deg, #11998e, #38ef7d)',
-                duration: 18000,
-                id: now + 2
-            },
-            {
-                type: 'text',
-                content: '🍕 <strong>ร้านอาหาร ชั้น G</strong><br><br>⏰ <strong>เปิด:</strong> 08:00 - 22:00<br><br>🎉 ส่วนลด 20% ทุกวันจันทร์<br><br>📱 สั่งผ่าน Food Delivery',
-                background: 'linear-gradient(45deg, #f093fb, #f5576c)',
-                duration: 16000,
-                id: now + 3
-            }
-        ];
-    }
+       function parseCsvToAds(csvData) {
+           try {
+               const lines = csvData.split('\n').filter(line => line.trim());
+               const ads = [];
+               
+               // ข้าม header row (บรรทัดแรก)
+               for (let i = 1; i < lines.length; i++) {
+                   const line = lines[i].trim();
+                   if (!line) continue;
+                   
+                   // แปลง CSV row เป็น array (รองรับ comma ใน quotes)
+                   const columns = parseCSVRow(line);
+                   
+                   if (columns.length >= 4) {
+                       const [title, content, color, duration] = columns;
+                       
+                       // ตรวจสอบข้อมูล
+                       if (title && content && color && duration) {
+                           const ad = {
+                               type: 'text',
+                               content: processSheetContent(content),
+                               background: getColorGradient(color.toLowerCase()),
+                               duration: parseInt(duration) * 1000,
+                               id: Date.now() + i,
+                               source: 'google_sheets',
+                               title: title.trim()
+                           };
+                           
+                           // ตรวจสอบระยะเวลา
+                           if (ad.duration >= 5000 && ad.duration <= 300000) {
+                               ads.push(ad);
+                               console.log(`📊 Parsed ad: ${title}`);
+                           } else {
+                               console.warn(`⚠️ ข้าม ad "${title}" - ระยะเวลาไม่ถูกต้อง: ${duration}s`);
+                           }
+                       }
+                   }
+               }
+               
+               console.log(`📊 Parsed ${ads.length} ads from Google Sheets`);
+               return ads;
+               
+           } catch (error) {
+               console.error('❌ Parse CSV error:', error);
+               throw new Error('ไม่สามารถแปลงข้อมูล CSV ได้');
+           }
+       }
 
-    // === RICH TEXT EDITOR ===
-    function initRichTextEditor() {
-        try {
-            const toolbarOptions = [
-                ['bold', 'italic', 'underline', 'strike'],
-                ['blockquote', 'code-block'],
-                [{ 'header': 1 }, { 'header': 2 }],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
-                [{ 'indent': '-1'}, { 'indent': '+1' }],
-                [{ 'size': ['small', false, 'large', 'huge'] }],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'align': [] }],
-                ['clean']
-            ];
+       function parseCSVRow(row) {
+           const result = [];
+           let current = '';
+           let inQuotes = false;
+           
+           for (let i = 0; i < row.length; i++) {
+               const char = row[i];
+               
+               if (char === '"') {
+                   inQuotes = !inQuotes;
+               } else if (char === ',' && !inQuotes) {
+                   result.push(current.trim());
+                   current = '';
+               } else {
+                   current += char;
+               }
+           }
+           
+           result.push(current.trim());
+           return result;
+       }
 
-            richEditor = new Quill('#richEditor', {
-                theme: 'snow',
-                modules: {
-                    toolbar: toolbarOptions
-                },
-                placeholder: 'พิมพ์เนื้อหาโฆษณาของคุณที่นี่...\n\n💡 เคล็ดลับ:\n- ใช้ปุ่ม Quick Insert เพื่อเพิ่มเท็มเพลตเร็ว\n- เลือกสีพื้นหลังด้านล่าง\n- ใส่อีโมจิ 😊 ให้น่าสนใจ'
-            });
+       function processSheetContent(content) {
+           try {
+               // แปลง <br> tags และ line breaks
+               let processed = content
+                   .replace(/\\n/g, '<br>')
+                   .replace(/\n/g, '<br>')
+                   .replace(/<br>/g, '</p><p>')
+                   .trim();
+               
+               // ห่อด้วย p tags
+               if (!processed.startsWith('<p>')) {
+                   processed = '<p>' + processed + '</p>';
+               }
+               
+               // แทนที่ multiple <p></p> ด้วย <br>
+               processed = processed
+                   .replace(/<\/p><p>/g, '<br>')
+                   .replace(/<p><\/p>/g, '<br>');
+               
+               return processed;
+           } catch (error) {
+               console.error('❌ Process content error:', error);
+               return content;
+           }
+       }
 
-            // Auto-save draft
-            richEditor.on('text-change', function() {
-                try {
-                    localStorage.setItem('vipart_draft_content', richEditor.root.innerHTML);
-                } catch (e) {
-                    console.warn('⚠️ Auto-save ไม่สำเร็จ');
-                }
-            });
+       function getColorGradient(color) {
+           return colorMappings[color] || colorMappings['blue'];
+       }
 
-            // Load draft
-            try {
-                const draftContent = localStorage.getItem('vipart_draft_content');
-                if (draftContent) {
-                    richEditor.root.innerHTML = draftContent;
-                }
-            } catch (e) {
-                console.warn('⚠️ โหลด draft ไม่สำเร็จ');
-            }
+       async function testGoogleSheets() {
+           try {
+               const sheetsUrl = document.getElementById('sheetsUrl').value.trim();
+               
+               if (!sheetsUrl) {
+                   showSheetsStatus('error', '❌ กรุณาใส่ Google Sheets URL');
+                   return;
+               }
+               
+               showSheetsStatus('info', '🧪 กำลังทดสอบการเชื่อมต่อ...');
+               
+               const sheetId = extractSheetId(sheetsUrl);
+               if (!sheetId) {
+                   showSheetsStatus('error', '❌ URL ไม่ถูกต้อง');
+                   return;
+               }
+               
+               const testUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&range=A1:D5`;
+               
+               const proxies = [
+                   'https://api.allorigins.win/raw?url=',
+                   'https://corsproxy.io/?',
+                   ''
+               ];
+               
+               let testResult = null;
+               let workingProxy = '';
+               
+               for (const proxy of proxies) {
+                   try {
+                       const fullUrl = proxy ? proxy + encodeURIComponent(testUrl) : testUrl;
+                       
+                       const response = await fetch(fullUrl, {
+                           method: 'GET',
+                           headers: { 'Accept': 'text/csv' },
+                           signal: AbortSignal.timeout(10000)
+                       });
+                       
+                       if (response.ok) {
+                           testResult = await response.text();
+                           workingProxy = proxy || 'Direct';
+                           break;
+                       }
+                   } catch (error) {
+                       console.warn('⚠️ Test proxy failed:', proxy || 'Direct');
+                   }
+               }
+               
+               if (testResult) {
+                   const lines = testResult.split('\n').filter(line => line.trim());
+                   const dataRows = lines.length - 1; // ไม่นับ header
+                   
+                   showSheetsStatus('success', `✅ การเชื่อมต่อสำเร็จ!<br>📊 พบข้อมูล ${dataRows} แถว<br>🌐 ผ่าน: ${workingProxy}<br>📋 Sample: ${lines[0]?.substring(0, 50)}...`);
+                   showAlert('success', '🧪 ทดสอบ Google Sheets สำเร็จ!');
+               } else {
+                   throw new Error('ไม่สามารถเข้าถึง Google Sheets ได้');
+               }
+               
+           } catch (error) {
+               console.error('❌ Test Google Sheets error:', error);
+               showSheetsStatus('error', '❌ ทดสอบไม่สำเร็จ: ' + error.message + '<br><br>💡 ตรวจสอบ:<br>1. Share settings: "Anyone with the link can view"<br>2. URL ถูกต้อง<br>3. เชื่อมต่ออินเทอร์เน็ต');
+               showAlert('error', 'ทดสอบ Google Sheets ไม่สำเร็จ');
+           }
+       }
 
-            console.log('✅ Rich Text Editor พร้อมใช้งาน');
-        } catch (error) {
-            console.error('❌ Rich Text Editor init error:', error);
-            showAlert('error', 'ไม่สามารถโหลด Rich Text Editor ได้');
-        }
-    }
+       function startAutoSync() {
+           try {
+               if (sheetsConfig.autoSyncTimer) {
+                   clearInterval(sheetsConfig.autoSyncTimer);
+               }
+               
+               if (sheetsConfig.isConnected) {
+                   sheetsConfig.autoSyncTimer = setInterval(() => {
+                       console.log('🔄 Auto sync จาก Google Sheets...');
+                       syncFromSheets();
+                   }, sheetsConfig.autoSyncInterval);
+                   
+                   console.log(`⏰ Auto sync เริ่มต้น - ทุก ${sheetsConfig.autoSyncInterval / 60000} นาที`);
+                   showAlert('success', `⏰ Auto Sync เปิดใช้งาน - ทุก ${sheetsConfig.autoSyncInterval / 60000} นาที`);
+               }
+           } catch (error) {
+               console.error('❌ Start auto sync error:', error);
+           }
+       }
 
-    // === TAB SYSTEM ===
-    function switchTab(tabName) {
-        try {
-            // Update sidebar navigation
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+       function showSheetsStatus(type, message) {
+           try {
+               const statusElement = document.getElementById('sheetsStatus');
+               if (statusElement) {
+                   statusElement.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'error' : type === 'warning' ? 'warning' : 'info'} show`;
+                   statusElement.innerHTML = message;
+               }
+           } catch (error) {
+               console.error('❌ Show sheets status error:', error);
+           }
+       }
 
-            // Update tab content
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.getElementById(`tab-${tabName}`).classList.add('active');
+       // === ☁️ CLOUD SYNC FUNCTIONS ===
 
-            // Update page title
-            const titles = {
-                dashboard: '📊 แดชบอร์ด',
-                api: '🔑 API Configuration',
-                ads: '📢 จัดการโฆษณา',
-                preview: '👁️ ดูตัวอย่าง',
-                sync: '☁️ Cloud Sync',
-                settings: '⚙️ การตั้งค่า'
-            };
-            document.getElementById('pageTitle').textContent = titles[tabName] || 'Admin Panel';
+       function setupCloudSync() {
+           try {
+               const cloudUrl = document.getElementById('cloudUrl').value.trim();
+               
+               if (!cloudUrl) {
+                   showCloudStatus('error', '❌ กรุณาใส่ Cloud Storage URL');
+                   return;
+               }
+               
+               showCloudStatus('info', '🔄 กำลังตั้งค่า Cloud Sync...');
+               
+               // ตรวจสอบ URL format
+               if (!isValidUrl(cloudUrl)) {
+                   showCloudStatus('error', '❌ URL ไม่ถูกต้อง');
+                   return;
+               }
+               
+               cloudConfig.url = cloudUrl;
+               cloudConfig.isConnected = true;
+               
+               try {
+                   localStorage.setItem('vipart_cloud_config', JSON.stringify(cloudConfig));
+               } catch (e) {
+                   console.warn('⚠️ บันทึกการตั้งค่า Cloud ไม่สำเร็จ');
+               }
+               
+               showCloudStatus('success', '✅ เชื่อมต่อ Cloud Storage สำเร็จ!<br>🌐 Endpoint: ' + cloudUrl.substring(0, 50) + '...');
+               showAlert('success', '☁️ Cloud Sync Integration พร้อมใช้งาน!');
+               
+               console.log('☁️ Cloud Storage ตั้งค่าเสร็จ:', cloudConfig);
+               
+           } catch (error) {
+               console.error('❌ Setup Cloud Sync error:', error);
+               showCloudStatus('error', '❌ เกิดข้อผิดพลาด: ' + error.message);
+           }
+       }
 
-            // Tab-specific actions
-            if (tabName === 'ads') {
-                renderAdList();
-            } else if (tabName === 'preview') {
-                updatePreview();
-            } else if (tabName === 'dashboard') {
-                updateDashboard();
-            }
+       async function syncToCloud() {
+           try {
+               if (!cloudConfig.url) {
+                   showCloudStatus('error', '❌ กรุณาตั้งค่า Cloud Storage ก่อน');
+                   return;
+               }
+               
+               showCloudStatus('info', '☁️ กำลัง Sync ข้อมูลไป Cloud...');
+               
+               const dataToSync = {
+                   advertisements: advertisements,
+                   settings: JSON.parse(localStorage.getItem('vipart_settings') || '{}'),
+                   location: JSON.parse(localStorage.getItem('vipart_location') || '{}'),
+                   syncTime: new Date().toISOString(),
+                   version: '3.0',
+                   source: 'admin_panel'
+               };
+               
+               const response = await fetch(cloudConfig.url, {
+                   method: 'POST',
+                   headers: {
+                       'Content-Type': 'application/json'
+                   },
+                   body: JSON.stringify(dataToSync),
+                   signal: AbortSignal.timeout(30000)
+               });
+               
+               if (response.ok) {
+                   cloudConfig.lastSync = new Date().toISOString();
+                   try {
+                       localStorage.setItem('vipart_cloud_config', JSON.stringify(cloudConfig));
+                   } catch (e) {
+                       console.warn('⚠️ บันทึก sync time ไม่สำเร็จ');
+                   }
+                   
+                   showCloudStatus('success', `✅ Sync ไป Cloud สำเร็จ!<br>⏰ เวลา: ${new Date().toLocaleString('th-TH')}`);
+                   showAlert('success', '☁️ Sync ไป Cloud สำเร็จ!');
+               } else {
+                   throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+               }
+               
+           } catch (error) {
+               console.error('❌ Sync to cloud error:', error);
+               showCloudStatus('error', '❌ Sync ไป Cloud ไม่สำเร็จ: ' + error.message);
+               showAlert('error', 'Sync ไป Cloud ไม่สำเร็จ');
+           }
+       }
 
-            console.log('📂 เปลี่ยนไปแท็บ:', tabName);
-        } catch (error) {
-            console.error('❌ Switch tab error:', error);
-        }
-    }
+       async function syncFromCloud() {
+           try {
+               if (!cloudConfig.url) {
+                   showCloudStatus('error', '❌ กรุณาตั้งค่า Cloud Storage ก่อน');
+                   return;
+               }
+               
+               showCloudStatus('info', '📥 กำลัง Sync ข้อมูลจาก Cloud...');
+               
+               const response = await fetch(cloudConfig.url, {
+                   method: 'GET',
+                   headers: {
+                       'Accept': 'application/json'
+                   },
+                   signal: AbortSignal.timeout(30000)
+               });
+               
+               if (response.ok) {
+                   const cloudData = await response.json();
+                   
+                   if (cloudData.advertisements && Array.isArray(cloudData.advertisements)) {
+                       const confirmed = confirm(`📥 พบโฆษณา ${cloudData.advertisements.length} รายการใน Cloud\n\nต้องการอัพเดทและแทนที่โฆษณาปัจจุบัน (${advertisements.length} รายการ) หรือไม่?`);
+                       
+                       if (confirmed) {
+                           advertisements = cloudData.advertisements;
+                           saveAdvertisements();
+                           renderAdList();
+                           updateDashboard();
+                           updatePreview();
+                           notifyMainPage();
+                           
+                           cloudConfig.lastSync = new Date().toISOString();
+                           try {
+                               localStorage.setItem('vipart_cloud_config', JSON.stringify(cloudConfig));
+                           } catch (e) {
+                               console.warn('⚠️ บันทึก sync time ไม่สำเร็จ');
+                           }
+                           
+                           showCloudStatus('success', `✅ Sync จาก Cloud สำเร็จ! อัพเดท ${cloudData.advertisements.length} รายการ<br>⏰ เวลา: ${new Date().toLocaleString('th-TH')}`);
+                           showAlert('success', `📥 Sync จาก Cloud สำเร็จ! (${cloudData.advertisements.length} รายการ)`);
+                       } else {
+                           showCloudStatus('info', '❌ ยกเลิกการ Sync');
+                       }
+                   } else {
+                       throw new Error('ข้อมูลจาก Cloud ไม่ถูกต้อง');
+                   }
+               } else {
+                   throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+               }
+               
+           } catch (error) {
+               console.error('❌ Sync from cloud error:', error);
+               showCloudStatus('error', '❌ Sync จาก Cloud ไม่สำเร็จ: ' + error.message);
+               showAlert('error', 'Sync จาก Cloud ไม่สำเร็จ');
+           }
+       }
 
-    // === ADVERTISEMENT MANAGEMENT ===
-    function changeAdType() {
-        const type = document.getElementById('adType').value;
-        document.getElementById('textForm').classList.toggle('hidden', type !== 'text');
-        document.getElementById('fileForm').classList.toggle('hidden', type === 'text');
-        
-        const fileInput = document.getElementById('adFile');
-        if (type === 'image') {
-            fileInput.accept = 'image/*';
-        } else if (type === 'video') {
-            fileInput.accept = 'video/*';
-        }
-    }
+       function showCloudStatus(type, message) {
+           try {
+               const statusElement = document.getElementById('cloudStatus');
+               if (statusElement) {
+                   statusElement.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'error' : type === 'warning' ? 'warning' : 'info'} show`;
+                   statusElement.innerHTML = message;
+               }
+           } catch (error) {
+               console.error('❌ Show cloud status error:', error);
+           }
+       }
 
-    function insertQuickText(type) {
-        if (!richEditor || !quickTextTemplates[type]) return;
-        
-        try {
-            const template = quickTextTemplates[type];
-            const range = richEditor.getSelection();
-            const index = range ? range.index : richEditor.getLength();
-            
-            richEditor.clipboard.dangerouslyPasteHTML(index, template);
-            showAlert('success', `✅ เพิ่มเท็มเพลต "${type}" สำเร็จ!`);
-        } catch (error) {
-            console.error('❌ Insert quick text error:', error);
-            showAlert('error', 'เกิดข้อผิดพลาดในการเพิ่มเท็มเพลต');
-        }
-    }
+       function isValidUrl(string) {
+           try {
+               new URL(string);
+               return true;
+           } catch (_) {
+               return false;
+           }
+       }
 
-    function setAdBackground(gradient, element) {
-        currentAdBackground = gradient;
-        
-        document.querySelectorAll('.bg-color').forEach(el => el.classList.remove('active'));
-        element.classList.add('active');
-        
-        console.log('🎨 เปลี่ยนสีพื้นหลัง:', gradient);
-    }
+       // === INITIALIZATION ===
+       document.addEventListener('DOMContentLoaded', function() {
+           console.log('🚀 Digital Signage Pro v3.0 Admin Panel เริ่มต้น');
+           checkLogin();
+           setupEventListeners();
+       });
 
-    function useSampleTemplate(type) {
-        const template = sampleTemplates[type];
-        if (template && richEditor) {
-            richEditor.root.innerHTML = template.content;
-            currentAdBackground = template.background;
-            
-            // Update background picker
-            document.querySelectorAll('.bg-color').forEach(el => {
-                el.classList.remove('active');
-                if (el.style.background === template.background) {
-                    el.classList.add('active');
-                }
-            });
-            
-            showAlert('success', `✅ ใช้เท็มเพลต "${type}" สำเร็จ!`);
-            switchTab('ads');
-        }
-    }
+       function checkLogin() {
+           try {
+               const savedLogin = localStorage.getItem('vipart_admin_login');
+               const loginTime = localStorage.getItem('vipart_login_time');
+               
+               if (savedLogin === 'true' && loginTime) {
+                   const sessionTime = 24 * 60 * 60 * 1000; // 24 ชั่วโมง
+                   if (Date.now() - parseInt(loginTime) < sessionTime) {
+                       isLoggedIn = true;
+                       showAdminPanel();
+                       initSystem();
+                       return;
+                   }
+               }
+               showLoginForm();
+           } catch (error) {
+               console.error('❌ Check login error:', error);
+               showLoginForm();
+           }
+       }
 
-    function previewFile() {
-        try {
-            const fileInput = document.getElementById('adFile');
-            const preview = document.getElementById('filePreview');
-            const file = fileInput.files[0];
-            
-            if (file) {
-                if (file.size > MAX_FILE_SIZE) {
-                    const maxSizeMB = Math.round(MAX_FILE_SIZE / (1024 * 1024));
-                    showAlert('error', `ไฟล์มีขนาดใหญ่เกินไป (จำกัด ${maxSizeMB}MB)`);
-                    fileInput.value = '';
-                    preview.innerHTML = '';
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
-                    
-                    if (file.type.startsWith('image/')) {
-                        preview.innerHTML = `
-                            <img src="${e.target.result}" style="max-width: 200px; max-height: 150px; margin-top: 10px; border-radius: 10px;" alt="Preview">
-                            <div style="margin-top: 10px; font-size: 0.875rem; color: var(--text-secondary);">
-                                📁 ${file.name}<br>
-                                📏 ${fileSizeMB} MB
-                            </div>
-                        `;
-                    } else if (file.type.startsWith('video/')) {
-                        preview.innerHTML = `
-                            <video src="${e.target.result}" style="max-width: 200px; max-height: 150px; margin-top: 10px; border-radius: 10px;" controls muted preload="metadata"></video>
-                            <div style="margin-top: 10px; font-size: 0.875rem; color: var(--text-secondary);">
-                                📁 ${file.name}<br>
-                                📏 ${fileSizeMB} MB
-                            </div>
-                        `;
-                    }
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.innerHTML = '';
-            }
-        } catch (error) {
-            console.error('❌ Preview file error:', error);
-        }
-    }
+       function setupEventListeners() {
+           // Login form submit
+           document.getElementById('loginForm').addEventListener('submit', handleLogin);
+           
+           // Keyboard shortcuts
+           document.addEventListener('keydown', function(e) {
+               if (e.ctrlKey || e.metaKey) {
+                   switch(e.key) {
+                       case 's':
+                           e.preventDefault();
+                           saveCurrentTab();
+                           break;
+                       case 'r':
+                           e.preventDefault();
+                           testSync();
+                           break;
+                       case 'p':
+                           e.preventDefault();
+                           openMainPage();
+                           break;
+                   }
+               }
+           });
+       }
 
-    function addNewAd() {
-        try {
-            const type = document.getElementById('adType').value;
-            const duration = parseInt(document.getElementById('adDuration').value) * 1000;
-            
-            if (!duration || duration < 5000) {
-                showAlert('error', 'ระยะเวลาแสดงต้องมากกว่า 5 วินาที');
-                return;
-            }
-            
-            let adData = {
-                type,
-                duration,
-                id: Date.now()
-            };
-            
-            if (type === 'text') {
-                if (!richEditor) {
-                    showAlert('error', 'Rich Text Editor ไม่พร้อมใช้งาน');
-                    return;
-                }
-                
-                const content = richEditor.root.innerHTML;
-                if (!content.trim() || content === '<p><br></p>') {
-                    showAlert('error', 'กรุณาใส่เนื้อหาโฆษณา');
-                    return;
-                }
-                
-                adData.content = content;
-                adData.background = currentAdBackground;
-                
-                advertisements.push(adData);
-                saveAdvertisements();
-                resetAdForm();
-                renderAdList();
-                updateDashboard();
-                updatePreview();
-                notifyMainPage();
-                showAlert('success', '✅ เพิ่มโฆษณาข้อความสำเร็จ!');
-                
-            } else {
-                const fileInput = document.getElementById('adFile');
-                
-                if (!fileInput.files[0]) {
-                    showAlert('error', `กรุณาเลือก${type === 'image' ? 'รูปภาพ' : 'วีดีโอ'}`);
-                    return;
-                }
-                
-                const file = fileInput.files[0];
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    adData.src = e.target.result;
-                    adData.fileName = file.name;
-                    adData.fileSize = Math.round(file.size / 1024) + ' KB';
-                    
-                    advertisements.push(adData);
-                    saveAdvertisements();
-                    resetAdForm();
-                    renderAdList();
-                    updateDashboard();
-                    updatePreview();
-                    notifyMainPage();
-                    showAlert('success', `✅ เพิ่มโฆษณา${type === 'image' ? 'รูปภาพ' : 'วีดีโอ'}สำเร็จ!`);
-                };
-                
-                reader.readAsDataURL(file);
-            }
-        } catch (error) {
-            console.error('❌ Add ad error:', error);
-            showAlert('error', 'เกิดข้อผิดพลาดในการเพิ่มโฆษณา');
-        }
-    }
+       // === LOGIN SYSTEM ===
+       function handleLogin(event) {
+           event.preventDefault();
+           
+           const username = document.getElementById('username').value.trim();
+           const password = document.getElementById('password').value.trim();
+           
+           if (username === ADMIN_USER && password === ADMIN_PASS) {
+               isLoggedIn = true;
+               localStorage.setItem('vipart_admin_login', 'true');
+               localStorage.setItem('vipart_login_time', Date.now().toString());
+               
+               showAdminPanel();
+               initSystem();
+               showAlert('success', '🎉 เข้าสู่ระบบสำเร็จ!');
+           } else {
+               showAlert('error', '❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+           }
+       }
 
-    function addSampleAd() {
-        const sampleAd = {
-            type: 'text',
-            content: `🧪 <strong>โฆษณาทดสอบ v3.0</strong><br><br>📅 สร้างเมื่อ: ${new Date().toLocaleString('th-TH')}<br><br>✨ <strong>ระบบทำงานสำเร็จ!</strong><br><br>🎯 พร้อมใช้งานจริง<br><br>🔄 Sync Counter: ${syncCounter + 1}`,
-            background: 'linear-gradient(45deg, #e74c3c, #f39c12)',
-            duration: 15000,
-            id: Date.now()
-        };
-        
-        advertisements.push(sampleAd);
-        saveAdvertisements();
-        renderAdList();
-        updateDashboard();
-        updatePreview();
-        notifyMainPage();
-        showAlert('success', '🧪 เพิ่มโฆษณาทดสอบสำเร็จ!');
-    }
+       function handleLogout() {
+           if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+               isLoggedIn = false;
+               localStorage.removeItem('vipart_admin_login');
+               localStorage.removeItem('vipart_login_time');
+               showLoginForm();
+               showAlert('success', '👋 ออกจากระบบเรียบร้อยแล้ว');
+           }
+       }
 
-    function resetAdForm() {
-        try {
-            if (richEditor) {
-                richEditor.setContents([]);
-            }
-            document.getElementById('adFile').value = '';
-            document.getElementById('adDuration').value = '15';
-            document.getElementById('filePreview').innerHTML = '';
-            document.getElementById('adType').value = 'text';
-            changeAdType();
-            
-            currentAdBackground = 'linear-gradient(45deg, #667eea, #764ba2)';
-            document.querySelectorAll('.bg-color').forEach(el => el.classList.remove('active'));
-            document.querySelector('.bg-color').classList.add('active');
-            
-            try {
-                localStorage.removeItem('vipart_draft_content');
-            } catch (e) {
-                console.warn('⚠️ ลบ draft ไม่สำเร็จ');
-            }
-        } catch (error) {
-            console.error('❌ Reset form error:', error);
-        }
-    }
+       function showLoginForm() {
+           document.getElementById('loginContainer').style.display = 'flex';
+           document.getElementById('adminLayout').classList.remove('show');
+       }
 
-    function renderAdList() {
-        try {
-            const adGrid = document.getElementById('adGrid');
-            const adCount = document.getElementById('adCount');
-            
-            if (adCount) {
-                adCount.textContent = advertisements.length;
-            }
-            
-            if (advertisements.length === 0) {
-                adGrid.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; color: var(--text-secondary); padding: 3rem;">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
-                        <h3 style="margin-bottom: 0.5rem;">ยังไม่มีโฆษณา</h3>
+       function showAdminPanel() {
+           document.getElementById('loginContainer').style.display = 'none';
+           document.getElementById('adminLayout').classList.add('show');
+       }
+
+       // === SYSTEM INITIALIZATION ===
+       function initSystem() {
+           console.log('🎯 เริ่มต้นระบบ Admin Panel v3.0');
+           
+           loadSettings();
+           loadAdvertisements();
+           initRichTextEditor();
+           updateDashboard();
+           updatePreview();
+           
+           console.log('✅ ระบบพร้อมใช้งาน');
+           updateStatusIndicator('success', '✅ ระบบพร้อม');
+       }
+
+       function loadSettings() {
+           try {
+               const settings = JSON.parse(localStorage.getItem('vipart_settings') || '{}');
+               const location = JSON.parse(localStorage.getItem('vipart_location') || '{}');
+               
+               // Load API settings
+               if (settings.apiKey) {
+                   document.getElementById('apiKey').value = settings.apiKey;
+               }
+               if (location.city) {
+                   document.getElementById('city').value = location.city;
+                   document.getElementById('state').value = location.state || '';
+                   document.getElementById('country').value = location.country || 'Thailand';
+               }
+               
+               // Load system settings
+               if (settings.updateInterval) {
+                   document.getElementById('updateInterval').value = settings.updateInterval;
+               }
+               if (settings.adInterval) {
+                   document.getElementById('adInterval').value = settings.adInterval;
+               }
+               
+               console.log('⚙️ โหลดการตั้งค่าสำเร็จ');
+           } catch (error) {
+               console.error('❌ Load settings error:', error);
+           }
+       }
+
+       function loadAdvertisements() {
+           try {
+               const stored = localStorage.getItem('vipart_advertisements');
+               advertisements = stored ? JSON.parse(stored) : getDefaultAds();
+               
+               if (advertisements.length === 0) {
+                   advertisements = getDefaultAds();
+                   saveAdvertisements();
+               }
+               
+               renderAdList();
+               console.log('📢 โหลดโฆษณา:', advertisements.length, 'รายการ');
+           } catch (error) {
+               console.error('❌ Load ads error:', error);
+               advertisements = getDefaultAds();
+               saveAdvertisements();
+               renderAdList();
+           }
+       }
+
+       function getDefaultAds() {
+           const now = Date.now();
+           return [
+               {
+                   type: 'text',
+                   content: '🌟 <strong>ยินดีต้อนรับสู่ระบบ</strong><br><br>📊 Digital Signage Pro v3.0<br><br>⚡ ข้อมูลคุณภาพอากาศแบบเรียลไทม์<br><br>🎯 Admin Panel ใหม่',
+                   background: 'linear-gradient(45deg, #667eea, #764ba2)',
+                   duration: 20000,
+                   id: now + 1
+               },
+               {
+                   type: 'text',
+                   content: '🏢 <strong>ชื่อธุรกิจของคุณ</strong><br><br>📞 <strong>โทร:</strong> 02-xxx-xxxx<br><br>🌟 บริการคุณภาพระดับพรีเมียม<br><br>💎 ราคาเริ่มต้น 999 บาท',
+                   background: 'linear-gradient(45deg, #11998e, #38ef7d)',
+                   duration: 18000,
+                   id: now + 2
+               },
+               {
+                   type: 'text',
+                   content: '🍕 <strong>ร้านอาหาร ชั้น G</strong><br><br>⏰ <strong>เปิด:</strong> 08:00 - 22:00<br><br>🎉 ส่วนลด 20% ทุกวันจันทร์<br><br>📱 สั่งผ่าน Food Delivery',
+                   background: 'linear-gradient(45deg, #f093fb, #f5576c)',
+                   duration: 16000,
+                   id: now + 3
+               }
+           ];
+       }
+
+       // === RICH TEXT EDITOR ===
+       function initRichTextEditor() {
+           try {
+               const toolbarOptions = [
+                   ['bold', 'italic', 'underline', 'strike'],
+                   ['blockquote', 'code-block'],
+                   [{ 'header': 1 }, { 'header': 2 }],
+                   [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                   [{ 'script': 'sub'}, { 'script': 'super' }],
+                   [{ 'indent': '-1'}, { 'indent': '+1' }],
+                   [{ 'size': ['small', false, 'large', 'huge'] }],
+                   [{ 'color': [] }, { 'background': [] }],
+                   [{ 'align': [] }],
+                   ['clean']
+               ];
+
+               richEditor = new Quill('#richEditor', {
+                   theme: 'snow',
+                   modules: {
+                       toolbar: toolbarOptions
+                   },
+                   placeholder: 'พิมพ์เนื้อหาโฆษณาของคุณที่นี่...\n\n💡 เคล็ดลับ:\n- ใช้ปุ่ม Quick Insert เพื่อเพิ่มเท็มเพลตเร็ว\n- เลือกสีพื้นหลังด้านล่าง\n- ใส่อีโมจิ 😊 ให้น่าสนใจ'
+               });
+
+               // Auto-save draft
+               richEditor.on('text-change', function() {
+                   try {
+                       localStorage.setItem('vipart_draft_content', richEditor.root.innerHTML);
+                   } catch (e) {
+                       console.warn('⚠️ Auto-save ไม่สำเร็จ');
+                   }
+               });
+
+               // Load draft
+               try {
+                   const draftContent = localStorage.getItem('vipart_draft_content');
+                   if (draftContent) {
+                       richEditor.root.innerHTML = draftContent;
+                   }
+               } catch (e) {
+                   console.warn('⚠️ โหลด draft ไม่สำเร็จ');
+               }
+
+               console.log('✅ Rich Text Editor พร้อมใช้งาน');
+           } catch (error) {
+               console.error('❌ Rich Text Editor init error:', error);
+               showAlert('error', 'ไม่สามารถโหลด Rich Text Editor ได้');
+           }
+       }
+
+       // === TAB SYSTEM ===
+       function switchTab(tabName) {
+           try {
+               // Update sidebar navigation
+               document.querySelectorAll('.nav-link').forEach(link => {
+                   link.classList.remove('active');
+               });
+               document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+               // Update tab content
+               document.querySelectorAll('.tab-content').forEach(content => {
+                   content.classList.remove('active');
+               });
+               document.getElementById(`tab-${tabName}`).classList.add('active');
+
+               // Update page title
+               const titles = {
+                   dashboard: '📊 แดชบอร์ด',
+                   api: '🔑 API Configuration',
+                   ads: '📢 จัดการโฆษณา',
+                   preview: '👁️ ดูตัวอย่าง',
+                   sync: '☁️ Cloud Sync',
+                   settings: '⚙️ การตั้งค่า'
+               };
+               document.getElementById('pageTitle').textContent = titles[tabName] || 'Admin Panel';
+
+               // Tab-specific actions
+               if (tabName === 'ads') {
+                   renderAdList();
+               } else if (tabName === 'preview') {
+                   updatePreview();
+               } else if (tabName === 'dashboard') {
+                   updateDashboard();
+               }
+
+               console.log('📂 เปลี่ยนไปแท็บ:', tabName);
+           } catch (error) {
+               console.error('❌ Switch tab error:', error);
+           }
+       }
+
+       // === ADVERTISEMENT MANAGEMENT ===
+       function changeAdType() {
+           const type = document.getElementById('adType').value;
+           document.getElementById('textForm').classList.toggle('hidden', type !== 'text');
+           document.getElementById('fileForm').classList.toggle('hidden', type === 'text');
+           
+           const fileInput = document.getElementById('adFile');
+           if (type === 'image') {
+               fileInput.accept = 'image/*';
+           } else if (type === 'video') {
+               fileInput.accept = 'video/*';
+           }
+       }
+
+       function insertQuickText(type) {
+           if (!richEditor || !quickTextTemplates[type]) return;
+           
+           try {
+               const template = quickTextTemplates[type];
+               const range = richEditor.getSelection();
+               const index = range ? range.index : richEditor.getLength();
+               
+               richEditor.clipboard.dangerouslyPasteHTML(index, template);
+               showAlert('success', `✅ เพิ่มเท็มเพลต "${type}" สำเร็จ!`);
+           } catch (error) {
+               console.error('❌ Insert quick text error:', error);
+               showAlert('error', 'เกิดข้อผิดพลาดในการเพิ่มเท็มเพลต');
+           }
+       }
+
+       function setAdBackground(gradient, element) {
+           currentAdBackground = gradient;
+           
+           document.querySelectorAll('.bg-color').forEach(el => el.classList.remove('active'));
+           element.classList.add('active');
+           
+           console.log('🎨 เปลี่ยนสีพื้นหลัง:', gradient);
+       }
+
+       function previewFile() {
+           try {
+               const fileInput = document.getElementById('adFile');
+               const preview = document.getElementById('filePreview');
+               const file = fileInput.files[0];
+               
+               if (file) {
+                   if (file.size > MAX_FILE_SIZE) {
+                       const maxSizeMB = Math.round(MAX_FILE_SIZE / (1024 * 1024));
+                       showAlert('error', `ไฟล์มีขนาดใหญ่เกินไป (จำกัด ${maxSizeMB}MB)`);
+                       fileInput.value = '';
+                       preview.innerHTML = '';
+                       return;
+                   }
+                   
+                   const reader = new FileReader();
+                   reader.onload = function(e) {
+                       const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
+                       
+                       if (file.type.startsWith('image/')) {
+                           preview.innerHTML = `
+                               <img src="${e.target.result}" style="max-width: 200px; max-height: 150px; margin-top: 10px; border-radius: 10px;" alt="Preview">
+                               <div style="margin-top: 10px; font-size: 0.875rem; color: var(--text-secondary);">
+                                   📁 ${file.name}<br>
+                                   📏 ${fileSizeMB} MB
+                               </div>
+                           `;
+                       } else if (file.type.startsWith('video/')) {
+                           preview.innerHTML = `
+                               <video src="${e.target.result}" style="max-width: 200px; max-height: 150px; margin-top: 10px; border-radius: 10px;" controls muted preload="metadata"></video>
+                               <div style="margin-top: 10px; font-size: 0.875rem; color: var(--text-secondary);">
+                                   📁 ${file.name}<br>
+                                   📏 ${fileSizeMB} MB
+                               </div>
+                           `;
+                       }
+                   };
+                   reader.readAsDataURL(file);
+               } else {
+                   preview.innerHTML = '';
+               }
+           } catch (error) {
+               console.error('❌ Preview file error:', error);
+           }
+       }
+
+       function addNewAd() {
+           try {
+               const type = document.getElementById('adType').value;
+               const duration = parseInt(document.getElementById('adDuration').value) * 1000;
+               
+               if (!duration || duration < 5000) {
+                   showAlert('error', 'ระยะเวลาแสดงต้องมากกว่า 5 วินาที');
+                   return;
+               }
+               
+               let adData = {
+                   type,
+                   duration,
+                   id: Date.now()
+               };
+               
+               if (type === 'text') {
+                   if (!richEditor) {
+                       showAlert('error', 'Rich Text Editor ไม่พร้อมใช้งาน');
+                       return;
+                   }
+                   
+                   const content = richEditor.root.innerHTML;
+                   if (!content.trim() || content === '<p><br></p>') {
+                       showAlert('error', 'กรุณาใส่เนื้อหาโฆษณา');
+                       return;
+                   }
+                   
+                   adData.content = content;
+                   adData.background = currentAdBackground;
+                   
+                   advertisements.push(adData);
+                   saveAdvertisements();
+                   resetAdForm();
+                   renderAdList();
+                   updateDashboard();
+                   updatePreview();
+                   notifyMainPage();
+                   showAlert('success', '✅ เพิ่มโฆษณาข้อความสำเร็จ!');
+                   
+               } else {
+                   const fileInput = document.getElementById('adFile');
+                   
+                   if (!fileInput.files[0]) {
+                       showAlert('error', `กรุณาเลือก${type === 'image' ? 'รูปภาพ' : 'วีดีโอ'}`);
+                       return;
+                   }
+                   
+                   const file = fileInput.files[0];
+                   const reader = new FileReader();
+                   
+                   reader.onload = function(e) {
+                       adData.src = e.target.result;
+                       adData.fileName = file.name;
+                       adData.fileSize = Math.round(file.size / 1024) + ' KB';
+                       
+                       advertisements.push(adData);
+                       saveAdvertisements();
+                       resetAdForm();
+                       renderAdList();
+                       updateDashboard();
+                       updatePreview();
+                       notifyMainPage();
+                       showAlert('success', `✅ เพิ่มโฆษณา${type === 'image' ? 'รูปภาพ' : 'วีดีโอ'}สำเร็จ!`);
+                   };
+                   
+                   reader.readAsDataURL(file);
+               }
+           } catch (error) {
+               console.error('❌ Add ad error:', error);
+               showAlert('error', 'เกิดข้อผิดพลาดในการเพิ่มโฆษณา');
+           }
+       }
+
+       function addSampleAd() {
+           const sampleAd = {
+               type: 'text',
+               content: `🧪 <strong>โฆษณาทดสอบ v3.0</strong><br><br>📅 สร้างเมื่อ: ${new Date().toLocaleString('th-TH')}<br><br>✨ <strong>ระบบทำงานสำเร็จ!</strong><br><br>🎯 พร้อมใช้งานจริง<br><br>🔄 Sync Counter: ${syncCounter + 1}`,
+               background: 'linear-gradient(45deg, #e74c3c, #f39c12)',
+               duration: 15000,
+               id: Date.now()
+           };
+           
+           advertisements.push(sampleAd);
+           saveAdvertisements();
+           renderAdList();
+           updateDashboard();
+           updatePreview();
+           notifyMainPage();
+           showAlert('success', '🧪 เพิ่มโฆษณาทดสอบสำเร็จ!');
+       }
+
+       function resetAdForm() {
+           try {
+               if (richEditor) {
+                   richEditor.setContents([]);
+               }
+               document.getElementById('adFile').value = '';
+               document.getElementById('adDuration').value = '15';
+               document.getElementById('filePreview').innerHTML = '';
+               document.getElementById('adType').value = 'text';
+               changeAdType();
+               
+               currentAdBackground = 'linear-gradient(45deg, #667eea, #764ba2)';
+               document.querySelectorAll('.bg-color').forEach(el => el.classList.remove('active'));
+               document.querySelector('.bg-color').classList.add('active');
+               
+               try {
+                   localStorage.removeItem('vipart_draft_content');
+               } catch (e) {
+                   console.warn('⚠️ ลบ draft ไม่สำเร็จ');
+               }
+           } catch (error) {
+               console.error('❌ Reset form error:', error);
+           }
+       }
+
+       function renderAdList() {
+           try {
+               const adGrid = document.getElementById('adGrid');
+               const adCount = document.getElementById('adCount');
+               
+               if (adCount) {
+                   adCount.textContent = advertisements.length;
+               }
+               
+               if (advertisements.length === 0) {
+                   adGrid.innerHTML = `
+                       <div style="grid-column: 1 / -1; text-align: center; color: var(--text-secondary); padding: 3rem;">
+                           <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
+                           <h3 style="margin-bottom: 0.5rem;">ยังไม่มีโฆษณา</h3>
                            <p>เริ่มต้นด้วยการเพิ่มโฆษณาแรกของคุณ</p>
                        </div>
                    `;
@@ -1969,27 +2260,27 @@
                }
                
                adGrid.innerHTML = advertisements.map((ad, index) => `
-                   <div class="ad-item">
-                       <div class="ad-preview" style="background: ${ad.background || 'linear-gradient(45deg, #667eea, #764ba2)'};">
+                   <div class="card" style="overflow: hidden;">
+                       <div style="background: ${ad.background || 'linear-gradient(45deg, #667eea, #764ba2)'}; padding: 1rem; color: white; min-height: 120px; display: flex; align-items: center; justify-content: center;">
                            ${ad.type === 'text' ? `
-                               <div style="font-size: 1rem; line-height: 1.4;">${ad.content}</div>
+                               <div style="font-size: 0.9rem; line-height: 1.4; text-align: center;">${ad.content}</div>
                            ` : ad.type === 'image' ? `
-                               <img src="${ad.src}" style="max-width: 100%; max-height: 100%; object-fit: cover;" alt="Ad Preview">
+                               <img src="${ad.src}" style="max-width: 100%; max-height: 100px; object-fit: cover;" alt="Ad Preview">
                            ` : `
-                               <video src="${ad.src}" style="max-width: 100%; max-height: 100%; object-fit: cover;" muted></video>
+                               <video src="${ad.src}" style="max-width: 100%; max-height: 100px; object-fit: cover;" muted></video>
                            `}
                        </div>
-                       <div class="ad-item-body">
-                           <div class="ad-item-title">โฆษณาที่ ${index + 1}</div>
-                           <div class="ad-item-meta">
+                       <div class="card-body">
+                           <div style="font-weight: 600; margin-bottom: 0.5rem;">โฆษณาที่ ${index + 1}</div>
+                           <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
                                ประเภท: ${getAdTypeLabel(ad.type)} | ระยะเวลา: ${ad.duration/1000} วินาที
-                               ${ad.fileSize ? `| ขนาด: ${ad.fileSize}` : ''}
+                               ${ad.fileSize ? `<br>ขนาด: ${ad.fileSize}` : ''}
                            </div>
-                           <div class="ad-item-actions">
-                               <button class="btn btn-info" onclick="previewAd(${index})">👁️ ดู</button>
-                               <button class="btn btn-warning" onclick="editAd(${index})">✏️ แก้ไข</button>
-                               <button class="btn btn-success" onclick="duplicateAd(${index})">📋 คัดลอก</button>
-                               <button class="btn btn-error" onclick="deleteAd(${index})">🗑️ ลบ</button>
+                           <div class="flex gap-1" style="flex-wrap: wrap;">
+                               <button class="btn btn-info" onclick="previewAd(${index})" style="padding: 0.5rem; font-size: 0.8rem;">👁️ ดู</button>
+                               <button class="btn btn-warning" onclick="editAd(${index})" style="padding: 0.5rem; font-size: 0.8rem;">✏️ แก้ไข</button>
+                               <button class="btn btn-success" onclick="duplicateAd(${index})" style="padding: 0.5rem; font-size: 0.8rem;">📋 คัดลอก</button>
+                               <button class="btn btn-error" onclick="deleteAd(${index})" style="padding: 0.5rem; font-size: 0.8rem;">🗑️ ลบ</button>
                            </div>
                        </div>
                    </div>
@@ -2114,7 +2405,7 @@
            try {
                if (advertisements.length === 0) {
                    document.getElementById('previewDisplay').innerHTML = 
-                       '<div class="preview-text">ยังไม่มีโฆษณา<br>กรุณาเพิ่มโฆษณาในแท็บ "จัดการโฆษณา"</div>';
+                       '<div style="text-align: center; padding: 2rem;">ยังไม่มีโฆษณา<br>กรุณาเพิ่มโฆษณาในแท็บ "จัดการโฆษณา"</div>';
                    document.getElementById('previewCounter').textContent = '0/0';
                    return;
                }
@@ -2134,7 +2425,7 @@
                setTimeout(() => {
                    if (ad.type === 'text') {
                        previewDisplay.style.background = ad.background || 'linear-gradient(45deg, #667eea, #764ba2)';
-                       previewDisplay.innerHTML = `<div class="preview-text">${ad.content}</div>`;
+                       previewDisplay.innerHTML = `<div style="text-align: center; padding: 2rem; font-size: 1.5rem; font-weight: 700; line-height: 1.5;">${ad.content}</div>`;
                    } else if (ad.type === 'image') {
                        previewDisplay.style.background = '#000';
                        previewDisplay.innerHTML = `<img src="${ad.src}" style="max-width: 100%; max-height: 100%; object-fit: contain;" alt="Ad Preview">`;
@@ -2203,7 +2494,7 @@
                    return;
                }
                
-               showAlert('info', '🔄 กำลังทดสอบการเชื่อมต่อ API...');
+               showApiResult('info', '🔄 กำลังทดสอบการเชื่อมต่อ API...');
                
                const url = `https://api.airvisual.com/v2/city?city=${encodeURIComponent(city)}&state=${encodeURIComponent(state || city)}&country=${encodeURIComponent(country)}&key=${apiKey}`;
                
@@ -2219,7 +2510,7 @@
                            const { current, city, state, country } = data.data;
                            const { pollution, weather } = current;
                            
-                           showAlert('success', `
+                           showApiResult('success', `
                                ✅ การเชื่อมต่อสำเร็จ!<br><br>
                                📍 สถานที่: ${city}, ${state}, ${country}<br>
                                🌬️ AQI: ${pollution.aqius}<br>
@@ -2243,12 +2534,22 @@
                        } else {
                            errorMsg += 'ตรวจสอบการเชื่อมต่ออินเทอร์เน็ต';
                        }
-                       showAlert('error', errorMsg);
+                       showApiResult('error', errorMsg);
                    });
                    
            } catch (error) {
                console.error('❌ Test API error:', error);
-               showAlert('error', 'เกิดข้อผิดพลาดในการทดสอบ');
+               showApiResult('error', 'เกิดข้อผิดพลาดในการทดสอบ');
+           }
+       }
+
+       function showApiResult(type, message) {
+           try {
+               const resultDiv = document.getElementById('apiTestResult');
+               resultDiv.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'error' : 'info'} show`;
+               resultDiv.innerHTML = message;
+           } catch (error) {
+               console.error('❌ Show API result error:', error);
            }
        }
 
@@ -2295,6 +2596,89 @@
                apiKeyInput.type = 'text';
            } else {
                apiKeyInput.type = 'password';
+           }
+       }
+
+       // === UTILITY FUNCTIONS ===
+       function notifyMainPage() {
+           try {
+               syncCounter++;
+               console.log(`📡 ส่งสัญญาณอัพเดทไปหน้าหลัก (ครั้งที่ ${syncCounter})`);
+               
+               const timestamp = Date.now().toString();
+               
+               try {
+                   localStorage.setItem('vipart_force_reload', timestamp);
+                   localStorage.setItem('vipart_last_update', timestamp);
+               } catch (e) {
+                   console.warn('⚠️ localStorage sync ไม่สำเร็จ');
+               }
+               
+               try {
+                   if (typeof BroadcastChannel !== 'undefined') {
+                       const channel = new BroadcastChannel('vipart_updates');
+                       channel.postMessage({
+                           type: 'admin_update',
+                           action: 'force_reload',
+                           advertisements: advertisements,
+                           timestamp: Date.now(),
+                           syncCounter: syncCounter,
+                           source: 'admin_panel_v3.0'
+                       });
+                       channel.close();
+                   }
+               } catch (e) {
+                   console.warn('⚠️ BroadcastChannel sync ไม่สำเร็จ');
+               }
+               
+               updateStatusIndicator('success', `✅ Sync #${syncCounter}`);
+               updateDashboard();
+               
+               console.log(`📡 ส่งสัญญาณครบทุกช่องทางแล้ว (Sync #${syncCounter})`);
+               
+           } catch (error) {
+               console.error('❌ Notify main page error:', error);
+               updateStatusIndicator('error', '❌ Sync Error');
+           }
+       }
+
+       function testSync() {
+           try {
+               notifyMainPage();
+               showAlert('success', '🧪 ส่งสัญญาณทดสอบแล้ว! ตรวจสอบหน้าแสดงผล');
+           } catch (error) {
+               console.error('❌ Test sync error:', error);
+               showAlert('error', 'เกิดข้อผิดพลาดในการทดสอบ');
+           }
+       }
+
+       function openMainPage() {
+           const mainPageUrl = window.location.href.replace('admin.html', 'index.html');
+           window.open(mainPageUrl, '_blank');
+       }
+
+       function openMainPageFullscreen() {
+           const mainPageUrl = window.location.href.replace('admin.html', 'index.html');
+           window.open(mainPageUrl, '_blank', 'fullscreen=yes,scrollbars=no,menubar=no,toolbar=no,location=no,status=no');
+       }
+       function copyMainPageUrl() {
+           try {
+               const mainPageUrl = window.location.href.replace('admin.html', 'index.html');
+               navigator.clipboard.writeText(mainPageUrl).then(() => {
+                   showAlert('success', '📋 คัดลอก URL เรียบร้อย!');
+               }).catch(() => {
+                   // Fallback for older browsers
+                   const textarea = document.createElement('textarea');
+                   textarea.value = mainPageUrl;
+                   document.body.appendChild(textarea);
+                   textarea.select();
+                   document.execCommand('copy');
+                   document.body.removeChild(textarea);
+                   showAlert('success', '📋 คัดลอก URL เรียบร้อย!');
+               });
+           } catch (error) {
+               console.error('❌ Copy URL error:', error);
+               showAlert('error', 'ไม่สามารถคัดลอก URL ได้');
            }
        }
 
@@ -2425,6 +2809,10 @@
            }
        }
 
+       function importAllData() {
+           document.getElementById('importFile').click();
+       }
+
        function clearAllAds() {
            if (confirm('🗑️ ต้องการลบโฆษณาทั้งหมดหรือไม่?')) {
                advertisements = [];
@@ -2437,6 +2825,29 @@
            }
        }
 
+       function resetAllSettings() {
+           if (confirm('🔄 ต้องการรีเซ็ตการตั้งค่าทั้งหมดหรือไม่?')) {
+               const defaultSettings = {
+                   updateInterval: 10,
+                   adInterval: 15
+               };
+               
+               const defaultLocation = {
+                   city: 'Bangkok',
+                   state: 'Bangkok',
+                   country: 'Thailand'
+               };
+               
+               localStorage.setItem('vipart_settings', JSON.stringify(defaultSettings));
+               localStorage.setItem('vipart_location', JSON.stringify(defaultLocation));
+               
+               loadSettings();
+               updateDashboard();
+               notifyMainPage();
+               showAlert('success', '🔄 รีเซ็ตการตั้งค่าเรียบร้อยแล้ว!');
+           }
+       }
+
        function clearAllData() {
            if (confirm('🗑️ ต้องการลบข้อมูลทั้งหมดหรือไม่?\n\nการดำเนินการนี้ไม่สามารถย้อนกลับได้!')) {
                if (confirm('⚠️ ยืนยันอีกครั้ง - ลบข้อมูลทั้งหมด?')) {
@@ -2444,6 +2855,8 @@
                    localStorage.removeItem('vipart_settings');
                    localStorage.removeItem('vipart_location');
                    localStorage.removeItem('vipart_draft_content');
+                   localStorage.removeItem('vipart_sheets_config');
+                   localStorage.removeItem('vipart_cloud_config');
                    
                    advertisements = [];
                    syncCounter = 0;
@@ -2453,6 +2866,8 @@
                    document.getElementById('city').value = 'Bangkok';
                    document.getElementById('state').value = 'Bangkok';
                    document.getElementById('country').value = 'Thailand';
+                   document.getElementById('sheetsUrl').value = '';
+                   document.getElementById('cloudUrl').value = '';
                    resetAdForm();
                    
                    renderAdList();
@@ -2464,108 +2879,93 @@
            }
        }
 
-       // === SYNC SYSTEM ===
-       function notifyMainPage() {
+       function exportData() {
+           exportAllData();
+       }
+
+       function previewCurrentAd() {
            try {
-               syncCounter++;
-               console.log(`📡 ส่งสัญญาณอัพเดทไปหน้าหลัก (ครั้งที่ ${syncCounter})`);
+               const type = document.getElementById('adType').value;
                
-               const timestamp = Date.now().toString();
-               
-               // localStorage sync
-               localStorage.setItem('vipart_force_reload', timestamp);
-               localStorage.setItem('vipart_last_update', timestamp);
-               
-               // BroadcastChannel sync
-               try {
-                   if (typeof BroadcastChannel !== 'undefined') {
-                       const channel = new BroadcastChannel('vipart_updates');
-                       channel.postMessage({
-                           type: 'admin_update',
-                           action: 'force_reload',
-                           advertisements: advertisements,
-                           timestamp: Date.now(),
-                           syncCounter: syncCounter,
-                           source: 'admin_panel_v3.0'
-                       });
-                       channel.close();
+               if (type === 'text') {
+                   if (!richEditor) {
+                       showAlert('error', 'Rich Text Editor ไม่พร้อมใช้งาน');
+                       return;
                    }
-               } catch (e) {
-                   console.warn('⚠️ BroadcastChannel sync ไม่สำเร็จ');
+                   
+                   const content = richEditor.root.innerHTML;
+                   if (!content.trim() || content === '<p><br></p>') {
+                       showAlert('error', 'กรุณาใส่เนื้อหาโฆษณา');
+                       return;
+                   }
+                   
+                   // แสดงตัวอย่างในหน้า preview
+                   const tempAd = {
+                       type: 'text',
+                       content: content,
+                       background: currentAdBackground,
+                       duration: 15000,
+                       id: 'preview'
+                   };
+                   
+                   const originalAd = advertisements[currentPreviewIndex];
+                   advertisements[currentPreviewIndex] = tempAd;
+                   updatePreview();
+                   advertisements[currentPreviewIndex] = originalAd;
+                   
+                   switchTab('preview');
+                   showAlert('success', '👁️ แสดงตัวอย่างโฆษณาปัจจุบัน');
+                   
+               } else {
+                   showAlert('warning', 'ตัวอย่างรองรับเฉพาะโฆษณาข้อความ');
                }
-               
-               updateStatusIndicator('success', `✅ Sync #${syncCounter}`);
-               updateDashboard();
-               
-               console.log(`📡 ส่งสัญญาณครบทุกช่องทางแล้ว (Sync #${syncCounter})`);
-               
            } catch (error) {
-               console.error('❌ Notify main page error:', error);
-               updateStatusIndicator('error', '❌ Sync Error');
+               console.error('❌ Preview current ad error:', error);
            }
        }
 
-       function testSync() {
-           try {
-               notifyMainPage();
-               showAlert('success', '🧪 ส่งสัญญาณทดสอบแล้ว! ตรวจสอบหน้าแสดงผล');
-           } catch (error) {
-               console.error('❌ Test sync error:', error);
-               showAlert('error', 'เกิดข้อผิดพลาดในการทดสอบ');
+       function saveCurrentTab() {
+           // Save based on current active tab
+           const activeTab = document.querySelector('.nav-link.active')?.dataset.tab;
+           switch (activeTab) {
+               case 'api':
+                   saveApiConfig();
+                   break;
+               case 'ads':
+                   addNewAd();
+                   break;
+               case 'settings':
+                   saveSystemSettings();
+                   break;
+               default:
+                   testSync();
            }
        }
 
-       // === MAIN PAGE FUNCTIONS ===
-       function openMainPage() {
-           const mainPageUrl = window.location.href.replace('admin.html', 'index.html');
-           window.open(mainPageUrl, '_blank');
-       }
-
-       function openMainPageFullscreen() {
-           const mainPageUrl = window.location.href.replace('admin.html', 'index.html');
-           window.open(mainPageUrl, '_blank', 'fullscreen=yes,scrollbars=no,menubar=no,toolbar=no,location=no,status=no');
-       }
-
-       function copyMainPageUrl() {
-           try {
-               const mainPageUrl = window.location.href.replace('admin.html', 'index.html');
-               navigator.clipboard.writeText(mainPageUrl).then(() => {
-                   showAlert('success', '📋 คัดลอก URL เรียบร้อย!');
-               }).catch(() => {
-                   // Fallback for older browsers
-                   const textarea = document.createElement('textarea');
-                   textarea.value = mainPageUrl;
-                   document.body.appendChild(textarea);
-                   textarea.select();
-                   document.execCommand('copy');
-                   document.body.removeChild(textarea);
-                   showAlert('success', '📋 คัดลอก URL เรียบร้อย!');
-               });
-           } catch (error) {
-               console.error('❌ Copy URL error:', error);
-               showAlert('error', 'ไม่สามารถคัดลอก URL ได้');
-           }
-       }
-
-       // === UTILITY FUNCTIONS ===
        function showAlert(type, message) {
            try {
                console.log(`${type === 'success' ? '✅' : '❌'} Alert:`, message);
                
+               // Create alert element
                const alertElement = document.createElement('div');
                alertElement.className = `alert alert-${type} show`;
                alertElement.innerHTML = message;
+               alertElement.style.position = 'fixed';
+               alertElement.style.top = '2rem';
+               alertElement.style.left = '50%';
+               alertElement.style.transform = 'translateX(-50%)';
+               alertElement.style.zIndex = '10000';
+               alertElement.style.minWidth = '300px';
+               alertElement.style.maxWidth = '500px';
                
-               // Insert after page title
-               const contentArea = document.querySelector('.content-area');
-               contentArea.insertBefore(alertElement, contentArea.firstChild);
+               document.body.appendChild(alertElement);
                
                // Auto-remove
                setTimeout(() => {
                    if (alertElement.parentNode) {
                        alertElement.parentNode.removeChild(alertElement);
                    }
-               }, type === 'success' ? 5000 : 8000);
+               }, type === 'success' ? 4000 : 6000);
                
            } catch (error) {
                console.error('❌ Show alert error:', error);
@@ -2588,54 +2988,133 @@
            }
        }
 
-       function saveCurrentTab() {
-           // Save based on current active tab
-           const activeTab = document.querySelector('.nav-link.active')?.dataset.tab;
-           switch (activeTab) {
-               case 'api':
-                   saveApiConfig();
-                   break;
-               case 'ads':
-                   addNewAd();
-                   break;
-               case 'settings':
-                   saveSystemSettings();
-                   break;
-               default:
-                   testSync();
+       // === EVENT LISTENERS ===
+       
+       // Enhanced Keyboard shortcuts
+       document.addEventListener('keydown', function(e) {
+           try {
+               if (e.ctrlKey || e.metaKey) {
+                   switch(e.key) {
+                       case 's':
+                           e.preventDefault();
+                           saveCurrentTab();
+                           break;
+                       case 'r':
+                           e.preventDefault();
+                           testSync();
+                           break;
+                       case 'p':
+                           e.preventDefault();
+                           openMainPage();
+                           break;
+                       case 't':
+                           e.preventDefault();
+                           addSampleAd();
+                           break;
+                   }
+               }
+               
+               if (e.altKey) {
+                   switch(e.key) {
+                       case '1':
+                           e.preventDefault();
+                           switchTab('dashboard');
+                           break;
+                       case '2':
+                           e.preventDefault();
+                           switchTab('api');
+                           break;
+                       case '3':
+                           e.preventDefault();
+                           switchTab('ads');
+                           break;
+                       case '4':
+                           e.preventDefault();
+                           switchTab('preview');
+                           break;
+                       case '5':
+                           e.preventDefault();
+                           switchTab('sync');
+                           break;
+                       case '6':
+                           e.preventDefault();
+                           switchTab('settings');
+                           break;
+                   }
+               }
+           } catch (error) {
+               console.error('❌ Keyboard shortcut error:', error);
+           }
+       });
+
+       // Window events
+       window.addEventListener('beforeunload', function() {
+           try {
+               if (sheetsConfig.autoSyncTimer) {
+                   clearInterval(sheetsConfig.autoSyncTimer);
+               }
+               localStorage.setItem('vipart_admin_closed', Date.now().toString());
+           } catch (error) {
+               console.error('❌ Before unload error:', error);
+           }
+       });
+
+       window.addEventListener('online', function() {
+           updateStatusIndicator('success', '🌐 Online');
+       });
+
+       window.addEventListener('offline', function() {
+           updateStatusIndicator('error', '📵 Offline');
+       });
+
+       // Load saved Google Sheets and Cloud config on init
+       function loadSyncConfigs() {
+           try {
+               const savedSheetsConfig = localStorage.getItem('vipart_sheets_config');
+               if (savedSheetsConfig) {
+                   sheetsConfig = { ...sheetsConfig, ...JSON.parse(savedSheetsConfig) };
+                   if (document.getElementById('sheetsUrl')) {
+                       document.getElementById('sheetsUrl').value = sheetsConfig.url || '';
+                   }
+               }
+               
+               const savedCloudConfig = localStorage.getItem('vipart_cloud_config');
+               if (savedCloudConfig) {
+                   cloudConfig = { ...cloudConfig, ...JSON.parse(savedCloudConfig) };
+                   if (document.getElementById('cloudUrl')) {
+                       document.getElementById('cloudUrl').value = cloudConfig.url || '';
+                   }
+               }
+               
+               console.log('📊 โหลด Sync configs สำเร็จ');
+           } catch (error) {
+               console.error('❌ Load sync configs error:', error);
            }
        }
 
-       // === CLOUD SYNC FUNCTIONS (Placeholder) ===
-       function setupGoogleSheets() {
-           showAlert('info', 'Google Sheets Sync - ฟีเจอร์นี้กำลังพัฒนา');
+       // Enhanced system initialization
+       function initSystem() {
+           console.log('🎯 เริ่มต้นระบบ Admin Panel v3.0');
+           
+           loadSettings();
+           loadAdvertisements();
+           loadSyncConfigs();
+           initRichTextEditor();
+           updateDashboard();
+           updatePreview();
+           
+           console.log('✅ ระบบพร้อมใช้งาน');
+           updateStatusIndicator('success', '✅ ระบบพร้อม');
        }
 
-       function syncFromSheets() {
-           showAlert('info', 'Sync from Sheets - ฟีเจอร์นี้กำลังพัฒนา');
-       }
-
-       function testGoogleSheets() {
-           showAlert('info', 'Test Google Sheets - ฟีเจอร์นี้กำลังพัฒนา');
-       }
-
-       function setupCloudSync() {
-           showAlert('info', 'Cloud Sync Setup - ฟีเจอร์นี้กำลังพัฒนา');
-       }
-
-       function syncToCloud() {
-           showAlert('info', 'Sync to Cloud - ฟีเจอร์นี้กำลังพัฒนา');
-       }
-
-       function syncFromCloud() {
-           showAlert('info', 'Sync from Cloud - ฟีเจอร์นี้กำลังพัฒนา');
-       }
-
-       console.log('🎯 Digital Signage Pro v3.0 Admin Panel พร้อมใช้งาน!');
+       console.log('🎉 Digital Signage Pro v3.0 Admin Panel โหลดเสร็จแล้ว');
        console.log('⌨️ Keyboard shortcuts:');
        console.log('   Ctrl+S = Save current tab');
+       console.log('   Ctrl+T = Add test ad');
        console.log('   Ctrl+R = Test Sync');
-       console.log('   Ctrl+P = Open main page');
+       console.log('   Ctrl+P = Preview main page');
+       console.log('   Alt+1-6 = Switch tabs');
+       console.log('🌐 Google Sheets & Cloud Sync ready!');
    </script>
 </body>
 </html>
