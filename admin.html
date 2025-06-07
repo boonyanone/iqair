@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Air Quality Digital Signage Pro v2.0</title>
+    <title>Admin Panel - Digital Signage Pro v2.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- Quill Rich Text Editor -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -343,7 +343,7 @@
             min-width: 100px;
         }
         
-        /* Preview Modal */
+        /* ⭐ Preview Modal */
         .modal {
             display: none;
             position: fixed;
@@ -399,6 +399,76 @@
             line-height: 1.5;
         }
         
+        /* ⭐ Preview Section in Admin */
+        .preview-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #eee;
+        }
+        
+        .preview-section h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .ad-preview-container {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        
+        .admin-ad-preview {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 15px;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+        
+        .admin-ad-preview .ad-text {
+            color: white;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.4rem;
+            line-height: 1.5;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            padding: 30px;
+        }
+        
+        .admin-ad-preview img, .admin-ad-preview video {
+            max-width: 100%;
+            max-height: 220px;
+            border-radius: 10px;
+        }
+        
+        .preview-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .preview-controls button {
+            padding: 10px 20px;
+            font-size: 1rem;
+        }
+        
+        #preview-counter {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1rem;
+        }
+        
         /* Status Dashboard */
         .status-dashboard {
             display: grid;
@@ -431,6 +501,17 @@
         .status-value {
             font-size: 1.4rem;
             font-weight: bold;
+        }
+        
+        /* ⭐ File Size Info */
+        .file-size-info {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #1565c0;
         }
         
         /* Responsive */
@@ -488,7 +569,7 @@
     <!-- Login Form -->
     <div class="login-form" id="loginForm">
         <h1>🔐 ระบบจัดการ</h1>
-        <p style="color: #666; margin-bottom: 30px;">Air Quality Digital Signage Pro v2.0</p>
+        <p style="color: #666; margin-bottom: 30px;">Digital Signage Pro v2.1</p>
         
         <div class="form-group">
             <label for="username">👤 ชื่อผู้ใช้:</label>
@@ -507,7 +588,7 @@
     <!-- Admin Panel -->
     <div class="container admin-panel" id="adminPanel">
         <div class="header">
-            <h1>🛠️ ระบบจัดการป้ายดิจิทัล v2.0</h1>
+            <h1>🛠️ ระบบจัดการป้ายดิจิทัล v2.1</h1>
             <button onclick="doLogout()">🚪 ออกจากระบบ</button>
         </div>
         
@@ -627,15 +708,19 @@
                     <div class="form-group">
                         <label for="ad-file">📁 อัพโหลดไฟล์:</label>
                         <input type="file" id="ad-file" accept="image/*,video/*" onchange="previewAdFile()">
-                        <small style="color: #666; display: block; margin-top: 5px;">ขนาดไฟล์สูงสุด: 10MB</small>
-                        <div id="file-preview" style="margin-top: 10px;"></div>
+                        <div class="file-size-info">
+                            📏 <strong>ขนาดไฟล์สูงสุด: 50MB</strong><br>
+                            🖼️ รองรับรูปภาพ: JPG, PNG, GIF, WebP<br>
+                            🎬 รองรับวีดีโอ: MP4, WebM, MOV, AVI
+                        </div>
+                        <div id="file-preview" style="margin-top: 15px;"></div>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="ad-duration">⏱️ ระยะเวลาแสดง (วินาที):</label>
                     <input type="number" id="ad-duration" value="15" min="5" max="300">
-                    <small style="color: #666; display: block; margin-top: 5px;">แนะนำ: 15-30 วินาที</small>
+                    <small style="color: #666; display: block; margin-top: 5px;">แนะนำ: 15-30 วินาที สำหรับลิฟท์และเคาน์เตอร์</small>
                 </div>
                 
                 <div class="form-row">
@@ -648,43 +733,75 @@
             
             <div class="section">
                 <h2>📋 รายการโฆษณา (<span id="ad-count">0</span> รายการ)</h2>
-                <div style="margin-bottom: 20px;">
-                    <button class="btn-success" onclick="exportAdsData()">📤 ส่งออก</button>
-                    <button class="btn-info" onclick="document.getElementById('import-file').click()">📥 นำเข้า</button>
-                    <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importAdsData(event)">
-                    <button class="btn-warning" onclick="testSyncToMain()">🔄 ทดสอบ Sync</button>
-                    <button class="btn-danger" onclick="clearAdsData()">🗑️ ลบทั้งหมด</button>
-                </div>
-                <div id="ad-list" class="ad-list"></div>
-            </div>
-        </div>
-        
-        <!-- Tab: ดูตัวอย่าง -->
-        <div id="tab-preview" class="tab-content">
-            <div class="section">
-                <h2>🚀 เปิดหน้าแสดงผลจริง</h2>
-                <div class="form-row">
-                    <button onclick="openMainPagePreview()">🖥️ เปิดในแท็บใหม่</button>
-                    <button onclick="openMainPageFullscreen()">📺 เปิดแบบเต็มจอ</button>
-                    <button onclick="copyMainPageUrl()">📋 คัดลอก URL</button>
-                </div>
-                
-                <div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin-top: 20px;">
-                    <h4 style="color: #856404; margin-bottom: 10px;">📱 คำแนะนำการใช้งาน:</h4>
-                    <ul style="margin-left: 20px; line-height: 1.6; color: #856404;">
-                        <li><strong>🖥️ เปิดในแท็บใหม่:</strong> สำหรับดูตัวอย่างทั่วไป</li>
-                        <li><strong>📺 เปิดแบบเต็มจอ:</strong> สำหรับการแสดงผลจริง</li>
-                        <li><strong>📋 คัดลอก URL:</strong> สำหรับส่งให้คนอื่น</li>
-                        <li><strong>🎮 Samsung TV:</strong> ใช้รีโมทกด 1-6 เปลี่ยนโหมด, 7-0 เปลี่ยนธีม</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Tab: การตั้งค่า -->
-        <div id="tab-settings" class="tab-content">
-            <div class="section">
-                <h2>⚙️ การตั้งค่าระบบ</h2>
+               <div style="margin-bottom: 20px;">
+                   <button class="btn-success" onclick="exportAdsData()">📤 ส่งออก</button>
+                   <button class="btn-info" onclick="document.getElementById('import-file').click()">📥 นำเข้า</button>
+                   <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importAdsData(event)">
+                   <button class="btn-warning" onclick="testSyncToMain()">🔄 ทดสอบ Sync</button>
+                   <button class="btn-danger" onclick="clearAdsData()">🗑️ ลบทั้งหมด</button>
+               </div>
+               <div id="ad-list" class="ad-list"></div>
+           </div>
+       </div>
+       
+       <!-- ⭐ Tab: ดูตัวอย่าง -->
+       <div id="tab-preview" class="tab-content">
+           <!-- Preview Section -->
+           <div class="preview-section">
+               <h3>📢 ตัวอย่างโฆษณาปัจจุบัน</h3>
+               <div class="ad-preview-container">
+                   <div class="admin-ad-preview" id="admin-ad-preview">
+                       <div class="ad-text">
+                           🌟 ยินดีต้อนรับสู่ระบบ<br>
+                           📊 Digital Signage Pro v2.1<br>
+                           ⚡ ข้อมูลคุณภาพอากาศแบบเรียลไทม์
+                       </div>
+                   </div>
+                   <div class="preview-controls">
+                       <button onclick="previewPrevAd()">◀️ ก่อนหน้า</button>
+                       <span id="preview-counter">1/3</span>
+                       <button onclick="previewNextAd()">▶️ ถัดไป</button>
+                   </div>
+               </div>
+               
+               <div style="background: #e8f5e8; border: 1px solid #c8e6c8; border-radius: 8px; padding: 15px; margin-top: 20px;">
+                   <h4 style="color: #2e7d32; margin-bottom: 10px;">📱 ตัวอย่างการใช้งาน:</h4>
+                   <ul style="margin-left: 20px; line-height: 1.6; color: #2e7d32;">
+                       <li><strong>🏢 ลิฟท์คอนโด:</strong> แนวตั้ง - แสดงข้อมูลอากาศ + โฆษณาร้านค้า</li>
+                       <li><strong>🏪 เคาน์เตอร์:</strong> แนวนอน - ข้อมูลสุขภาพ + โปรโมชั่น</li>
+                       <li><strong>🏨 ล็อบบี้:</strong> เต็มจอ - สลับระหว่างข้อมูลกับโฆษณา</li>
+                       <li><strong>🏥 ห้องรอ:</strong> ข้อมูลอากาศช่วยวางแผนกิจกรรม</li>
+                   </ul>
+               </div>
+           </div>
+           
+           <div class="section">
+               <h2>🚀 เปิดหน้าแสดงผลจริง</h2>
+               <div class="form-row">
+                   <button onclick="openMainPagePreview()">🖥️ เปิดในแท็บใหม่</button>
+                   <button onclick="openMainPageFullscreen()">📺 เปิดแบบเต็มจอ</button>
+                   <button onclick="copyMainPageUrl()">📋 คัดลอก URL</button>
+                   <button class="btn-info" onclick="openTizenVersion()">📱 เปิด Tizen Version</button>
+               </div>
+               
+               <div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin-top: 20px;">
+                   <h4 style="color: #856404; margin-bottom: 10px;">📱 คำแนะนำการใช้งาน:</h4>
+                   <ul style="margin-left: 20px; line-height: 1.6; color: #856404;">
+                       <li><strong>🖥️ เปิดในแท็บใหม่:</strong> สำหรับดูตัวอย่างทั่วไป</li>
+                       <li><strong>📺 เปิดแบบเต็มจอ:</strong> สำหรับการแสดงผลจริง</li>
+                       <li><strong>📋 คัดลอก URL:</strong> สำหรับส่งให้คนอื่น</li>
+                       <li><strong>📱 Tizen Version:</strong> สำหรับ Samsung Smart TV โดยเฉพาะ</li>
+                       <li><strong>🎮 Remote Control:</strong> ← → เปลี่ยนโฆษณา | ↑ ↓ เปลี่ยนโหมด | Enter รีเฟรช</li>
+                       <li><strong>📱 Layout:</strong> แนวนอน (ลิฟท์) / แนวตั้ง (หน้าเคาน์เตอร์)</li>
+                   </ul>
+               </div>
+           </div>
+       </div>
+       
+       <!-- Tab: การตั้งค่า -->
+       <div id="tab-settings" class="tab-content">
+           <div class="section">
+               <h2>⚙️ การตั้งค่าระบบ</h2>
                <div class="form-group">
                    <label for="update-interval">🕐 ระยะเวลาอัพเดท AQI (นาที):</label>
                    <input type="number" id="update-interval" value="10" min="1" max="60">
@@ -693,8 +810,23 @@
                <div class="form-group">
                    <label for="ad-interval">🔄 ระยะเวลาหมุนเวียนโฆษณา (วินาที):</label>
                    <input type="number" id="ad-interval" value="15" min="5" max="120">
-                   <small style="color: #666; display: block; margin-top: 5px;">แนะนำ: 15-30 วินาที</small>
+                   <small style="color: #666; display: block; margin-top: 5px;">แนะนำ: 15-30 วินาที สำหรับลิฟท์และเคาน์เตอร์</small>
                </div>
+               
+               <!-- ⭐ เพิ่มการตั้งค่าขนาดไฟล์ -->
+               <div class="form-group">
+                   <label for="max-file-size">📁 ขนาดไฟล์สูงสุด (MB):</label>
+                   <select id="max-file-size">
+                       <option value="10">10 MB - เบื้องต้น</option>
+                       <option value="25">25 MB - ปานกลาง</option>
+                       <option value="50" selected>50 MB - แนะนำ</option>
+                       <option value="100">100 MB - สูง (อาจช้า)</option>
+                   </select>
+                   <small style="color: #666; display: block; margin-top: 5px;">
+                       ไฟล์ใหญ่ = คุณภาพสูง แต่อาจโหลดช้าในอุปกรณ์บางรุ่น
+                   </small>
+               </div>
+               
                <button onclick="saveSystemConfig()">💾 บันทึกการตั้งค่า</button>
            </div>
            
@@ -706,6 +838,29 @@
                    <input type="file" id="import-all-file" accept=".json" style="display: none;" onchange="importAllConfig(event)">
                    <button class="btn-warning" onclick="resetAllConfig()">🔄 รีเซ็ต</button>
                    <button class="btn-danger" onclick="clearAllConfig()">🗑️ ลบทั้งหมด</button>
+               </div>
+           </div>
+           
+           <!-- ⭐ เพิ่มข้อมูลเวอร์ชัน -->
+           <div class="section">
+               <h2>ℹ️ ข้อมูลระบบ</h2>
+               <div class="status-dashboard">
+                   <div class="status-card">
+                       <h4>📱 เวอร์ชัน</h4>
+                       <div class="status-value" style="color: #667eea;">v2.1</div>
+                   </div>
+                   <div class="status-card">
+                       <h4>🛠️ สร้างเมื่อ</h4>
+                       <div class="status-value" style="font-size: 1rem;">7 มิ.ย. 2568</div>
+                   </div>
+                   <div class="status-card">
+                       <h4>🎯 เหมาะสำหรับ</h4>
+                       <div class="status-value" style="font-size: 1rem;">ลิฟท์ & เคาน์เตอร์</div>
+                   </div>
+                   <div class="status-card">
+                       <h4>📺 รองรับ</h4>
+                       <div class="status-value" style="font-size: 1rem;">Samsung TV</div>
+                   </div>
                </div>
            </div>
        </div>
@@ -730,6 +885,8 @@
        let syncCounter = 0;
        let richEditor = null;
        let currentAdBackground = 'linear-gradient(45deg, #667eea, #764ba2)';
+       let previewAdIndex = 0;
+       let maxFileSize = 50 * 1024 * 1024; // 50MB default
        
        // ข้อมูลเข้าสู่ระบบ
        const ADMIN_USER = 'admin';
@@ -737,12 +894,12 @@
        
        // ⭐ Rich Text Editor Templates
        const quickTextTemplates = {
-           business: '🏢 ชื่อธุรกิจของคุณ<br>📍 ที่อยู่ธุรกิจ',
-           phone: '📞 โทร: 02-xxx-xxxx<br>📱 มือถือ: 08x-xxx-xxxx',
-           promotion: '🎉 โปรโมชั่นพิเศษ<br>💰 ลดราคาสูงสุด 50%<br>⏰ จำกัดเวลา!',
-           price: '💎 ราคาเริ่มต้น 999 บาท<br>🎯 คุ้มค่าที่สุด',
-           contact: '📧 อีเมล: info@company.com<br>🌐 Line: @company',
-           website: '🌐 เว็บไซต์: www.company.com<br>🛒 สั่งซื้อออนไลน์ได้'
+           business: '🏢 ชื่อธุรกิจของคุณ<br>📍 ชั้น G ห้อง 101<br>⏰ เปิด 08:00 - 20:00',
+           phone: '📞 โทร: 02-xxx-xxxx<br>📱 มือถือ: 08x-xxx-xxxx<br>📠 แฟกซ์: 02-xxx-xxxx',
+           promotion: '🎉 โปรโมชั่นพิเศษ<br>💰 ลดราคาสูงสุด 50%<br>⏰ สิ้นสุด 31 ธ.ค. 2568<br>🛍️ รีบมาช็อปกันเลย!',
+           price: '💎 ราคาเริ่มต้น 999 บาท<br>🎯 คุ้มค่าที่สุด<br>💳 รับบัตรเครดิตทุกประเภท',
+           contact: '📧 อีเมล: info@company.com<br>🌐 Line: @company<br>📱 Facebook: /company',
+           website: '🌐 เว็บไซต์: www.company.com<br>🛒 สั่งซื้อออนไลน์ได้<br>🚚 ส่งฟรีทั่วกรุงเทพ'
        };
 
        // === ระบบเข้าสู่ระบบ ===
@@ -756,7 +913,6 @@
                if (username === ADMIN_USER && password === ADMIN_PASS) {
                    isLoggedIn = true;
                    
-                   // ⭐ แก้ปัญหา localStorage บน hosting
                    try {
                        localStorage.setItem('vipart_admin_login', 'true');
                        localStorage.setItem('vipart_login_time', Date.now().toString());
@@ -833,11 +989,12 @@
        // === เริ่มต้นระบบ ===
        function initSystem() {
            try {
-               console.log('🚀 เริ่มต้นระบบ Admin Panel v2.0');
+               console.log('🚀 เริ่มต้นระบบ Admin Panel v2.1');
                loadAllSettings();
-               loadAdvertisementData();
+               loadAdvertisements();
                initRichTextEditor();
                updateDashboard();
+               updateAdminPreview();
                console.log('✅ ระบบพร้อมใช้งาน');
            } catch (error) {
                console.error('❌ System init error:', error);
@@ -874,7 +1031,6 @@
                    placeholder: 'พิมพ์เนื้อหาโฆษณาของคุณที่นี่...\n\n💡 เคล็ดลับ:\n- ใช้ปุ่ม "Quick Insert" ด้านบนเพื่อเพิ่มเท็มเพลตเร็ว\n- เลือกสีพื้นหลังด้านล่าง\n- กด Bold, Italic เพื่อเน้นข้อความ\n- ใส่อีโมจิ 😊 ให้น่าสนใจ'
                });
 
-               // เมื่อ editor เปลี่ยน ให้ auto-save
                richEditor.on('text-change', function() {
                    try {
                        localStorage.setItem('vipart_draft_content', richEditor.root.innerHTML);
@@ -883,7 +1039,6 @@
                    }
                });
 
-               // โหลด draft content
                try {
                    const draftContent = localStorage.getItem('vipart_draft_content');
                    if (draftContent) {
@@ -921,7 +1076,6 @@
        function setAdBackground(gradient, element) {
            currentAdBackground = gradient;
            
-           // อัพเดท active state
            document.querySelectorAll('.bg-color').forEach(el => el.classList.remove('active'));
            element.classList.add('active');
            
@@ -942,11 +1096,12 @@
                document.getElementById(`tab-${tabName}`).classList.add('active');
                event.target.classList.add('active');
                
-               // โหลดข้อมูลตาม tab
                if (tabName === 'ads') {
                    renderAdList();
                } else if (tabName === 'api') {
                    updateDashboard();
+               } else if (tabName === 'preview') {
+                   updateAdminPreview();
                }
                
                console.log('📂 เปลี่ยนไปแท็บ:', tabName);
@@ -984,6 +1139,11 @@
                if (settings.adInterval) {
                    document.getElementById('ad-interval').value = settings.adInterval;
                }
+               
+               // ⭐ โหลดการตั้งค่าขนาดไฟล์
+               const maxFileSizeMB = (settings.maxFileSize || 50 * 1024 * 1024) / (1024 * 1024);
+               document.getElementById('max-file-size').value = maxFileSizeMB;
+               maxFileSize = settings.maxFileSize || 50 * 1024 * 1024;
                
                console.log('⚙️ โหลดการตั้งค่าสำเร็จ');
            } catch (error) {
@@ -1148,7 +1308,8 @@
                const settings = {
                    apiKey: apiKey,
                    updateInterval: parseInt(document.getElementById('update-interval').value) || 10,
-                   adInterval: parseInt(document.getElementById('ad-interval').value) || 15
+                   adInterval: parseInt(document.getElementById('ad-interval').value) || 15,
+                   maxFileSize: maxFileSize
                };
                
                const location = {
@@ -1157,7 +1318,6 @@
                    country: country
                };
                
-               // ⭐ แก้ปัญหา hosting - ใช้ try-catch
                try {
                    localStorage.setItem('vipart_settings', JSON.stringify(settings));
                    localStorage.setItem('vipart_location', JSON.stringify(location));
@@ -1257,7 +1417,7 @@
        }
 
        // === Advertisement Management ===
-       function loadAdvertisementData() {
+       function loadAdvertisements() {
            try {
                let stored = null;
                
@@ -1289,17 +1449,24 @@
            return [
                {
                    type: 'text',
-                   content: '<p><strong>🌟 ยินดีต้อนรับสู่ระบบ</strong></p><p>📊 Air Quality Digital Signage Pro v2.0</p><p>⚡ ข้อมูลคุณภาพอากาศแบบเรียลไทม์</p><p>🔗 เชื่อมต่อกับ IQAir API</p>',
+                   content: '<p><strong>🏢 โซลูชันระบบป้ายดิจิทัล</strong></p><p>📺 สำหรับลิฟท์และคอนโด</p><p>⚡ ข้อมูลคุณภาพอากาศแบบเรียลไทม์</p><p>🎯 โฆษณาอัจฉริยะ</p>',
                    background: 'linear-gradient(45deg, #667eea, #764ba2)',
                    duration: 20000,
                    id: now + 1
                },
                {
                    type: 'text',
-                   content: '<p><strong>🏢 ชื่อธุรกิจของคุณ</strong></p><p>📞 02-xxx-xxxx</p><p>🌟 บริการคุณภาพระดับพรีเมียม</p><p>💎 ราคาเริ่มต้น 999 บาท</p>',
-                   background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
+                   content: '<p><strong>🏠 คอนโดมิเนียม</strong></p><p>📞 02-xxx-xxxx</p><p>🌟 ยินดีต้อนรับผู้เข้าพัก</p><p>🚀 สิ่งอำนวยความสะดวกครบครัน</p>',
+                   background: 'linear-gradient(45deg, #11998e, #38ef7d)',
                    duration: 18000,
                    id: now + 2
+               },
+               {
+                   type: 'text',
+                   content: '<p><strong>🍕 ร้านอาหาร ชั้น G</strong></p><p>⏰ เปิด 08:00 - 22:00</p><p>🎉 ส่วนลด 20% ทุกวันจันทร์</p><p>📱 สั่งผ่าน Food Delivery</p>',
+                   background: 'linear-gradient(45deg, #f093fb, #f5576c)',
+                   duration: 16000,
+                   id: now + 3
                }
            ];
        }
@@ -1321,6 +1488,7 @@
            }
        }
 
+       // ⭐ ปรับปรุงฟังก์ชัน previewAdFile เพื่อรองรับไฟล์ 50MB
        function previewAdFile() {
            try {
                const fileInput = document.getElementById('ad-file');
@@ -1328,8 +1496,9 @@
                const file = fileInput.files[0];
                
                if (file) {
-                   if (file.size > 10 * 1024 * 1024) {
-                       showAlert('error', 'ไฟล์มีขนาดใหญ่เกินไป (จำกัด 10MB)');
+                   if (file.size > maxFileSize) {
+                       const maxSizeMB = Math.round(maxFileSize / (1024 * 1024));
+                       showAlert('error', `ไฟล์มีขนาดใหญ่เกินไป (จำกัด ${maxSizeMB}MB)`);
                        fileInput.value = '';
                        preview.innerHTML = '';
                        return;
@@ -1337,10 +1506,35 @@
                    
                    const reader = new FileReader();
                    reader.onload = function(e) {
+                       const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
+                       
                        if (file.type.startsWith('image/')) {
-                        preview.innerHTML = `<img src="${e.target.result}" style="max-width: 200px; max-height: 150px; margin-top: 10px; border-radius: 10px;" alt="Preview">`;
+                           preview.innerHTML = `
+                               <img src="${e.target.result}" style="max-width: 200px; max-height: 150px; margin-top: 10px; border-radius: 10px;" alt="Preview">
+                               <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                                   📁 ${file.name}<br>
+                                   📏 ${fileSizeMB} MB
+                               </div>
+                           `;
                        } else if (file.type.startsWith('video/')) {
-                           preview.innerHTML = `<video src="${e.target.result}" style="max-width: 200px; max-height: 150px; margin-top: 10px; border-radius: 10px;" controls muted></video>`;
+                           preview.innerHTML = `
+                               <video src="${e.target.result}" style="max-width: 200px; max-height: 150px; margin-top: 10px; border-radius: 10px;" controls muted preload="metadata"></video>
+                               <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                                   📁 ${file.name}<br>
+                                   📏 ${fileSizeMB} MB<br>
+                                   🎬 ระยะเวลา: <span id="video-duration">กำลังโหลด...</span>
+                               </div>
+                           `;
+                           
+                           // โหลดระยะเวลาวีดีโอ
+                           const video = preview.querySelector('video');
+                           video.addEventListener('loadedmetadata', function() {
+                               const duration = Math.round(video.duration);
+                               const minutes = Math.floor(duration / 60);
+                               const seconds = duration % 60;
+                               document.getElementById('video-duration').textContent = 
+                                   `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                           });
                        }
                    };
                    reader.readAsDataURL(file);
@@ -1388,7 +1582,6 @@
                
                modal.style.display = 'block';
                
-               // ปิด modal เมื่อคลิกนอกพื้นที่
                modal.onclick = function(event) {
                    if (event.target === modal) {
                        closePreviewModal();
@@ -1443,6 +1636,7 @@
                    resetAdForm();
                    renderAdList();
                    updateDashboard();
+                   updateAdminPreview();
                    notifyMainPage();
                    showAlert('success', '✅ เพิ่มโฆษณาข้อความสำเร็จ!');
                    
@@ -1467,6 +1661,7 @@
                        resetAdForm();
                        renderAdList();
                        updateDashboard();
+                       updateAdminPreview();
                        notifyMainPage();
                        showAlert('success', `✅ เพิ่มโฆษณา${type === 'image' ? 'รูปภาพ' : 'วีดีโอ'}สำเร็จ!`);
                    };
@@ -1484,7 +1679,7 @@
            try {
                const testAd = {
                    type: 'text',
-                   content: `<p><strong>🧪 โฆษณาทดสอบระบบ v2.0</strong></p><p>📅 สร้างเมื่อ: ${new Date().toLocaleString('th-TH')}</p><p><em>✨ ระบบทำงานสำเร็จ!</em></p><p>🎯 พร้อมใช้งานจริง</p><p>🔄 Sync Counter: ${syncCounter + 1}</p>`,
+                   content: `<p><strong>🧪 โฆษณาทดสอบระบบ v2.1</strong></p><p>📅 สร้างเมื่อ: ${new Date().toLocaleString('th-TH')}</p><p><em>✨ ระบบทำงานสำเร็จ!</em></p><p>🎯 พร้อมใช้งานจริง</p><p>🔄 Sync Counter: ${syncCounter + 1}</p>`,
                    background: 'linear-gradient(45deg, #e74c3c, #f39c12)',
                    duration: 15000,
                    id: Date.now()
@@ -1494,6 +1689,7 @@
                saveAdsData();
                renderAdList();
                updateDashboard();
+               updateAdminPreview();
                notifyMainPage();
                showAlert('success', '🧪 เพิ่มโฆษณาทดสอบสำเร็จ!');
            } catch (error) {
@@ -1593,7 +1789,6 @@
                    richEditor.root.innerHTML = ad.content;
                    currentAdBackground = ad.background;
                    
-                   // อัพเดท active background
                    document.querySelectorAll('.bg-color').forEach(el => el.classList.remove('active'));
                    document.querySelectorAll('.bg-color').forEach(el => {
                        if (el.style.background === ad.background) {
@@ -1606,6 +1801,7 @@
                saveAdsData();
                renderAdList();
                updateDashboard();
+               updateAdminPreview();
                notifyMainPage();
                
                showAlert('success', '✏️ โหลดข้อมูลโฆษณาในฟอร์มแล้ว กรุณาแก้ไขและกด "เพิ่มโฆษณา"');
@@ -1635,6 +1831,7 @@
                saveAdsData();
                renderAdList();
                updateDashboard();
+               updateAdminPreview();
                notifyMainPage();
                showAlert('success', '📋 คัดลอกโฆษณาสำเร็จ!');
            } catch (error) {
@@ -1649,6 +1846,7 @@
                    saveAdsData();
                    renderAdList();
                    updateDashboard();
+                   updateAdminPreview();
                    notifyMainPage();
                    showAlert('success', '🗑️ ลบโฆษณาเรียบร้อยแล้ว!');
                }
@@ -1668,12 +1866,10 @@
                document.getElementById('ad-type').value = 'text';
                changeAdType();
                
-               // รีเซ็ต background เป็นค่าเริ่มต้น
                currentAdBackground = 'linear-gradient(45deg, #667eea, #764ba2)';
                document.querySelectorAll('.bg-color').forEach(el => el.classList.remove('active'));
                document.querySelector('.bg-color').classList.add('active');
                
-               // ลบ draft
                try {
                    localStorage.removeItem('vipart_draft_content');
                } catch (e) {
@@ -1686,7 +1882,6 @@
 
        function saveAdsData() {
            try {
-               // ⭐ แก้ปัญหา hosting
                try {
                    localStorage.setItem('vipart_advertisements', JSON.stringify(advertisements));
                } catch (e) {
@@ -1706,13 +1901,62 @@
            }
        }
 
+       // ⭐ Preview Functions for Admin
+       function previewNextAd() {
+           if (advertisements.length === 0) return;
+           previewAdIndex = (previewAdIndex + 1) % advertisements.length;
+           updateAdminPreview();
+       }
+
+       function previewPrevAd() {
+           if (advertisements.length === 0) return;
+           previewAdIndex = previewAdIndex > 0 ? previewAdIndex - 1 : advertisements.length - 1;
+           updateAdminPreview();
+       }
+
+       function updateAdminPreview() {
+           try {
+               if (advertisements.length === 0) {
+                   document.getElementById('admin-ad-preview').innerHTML = 
+                       '<div class="ad-text">ยังไม่มีโฆษณา<br>กรุณาเพิ่มโฆษณาในแท็บ "จัดการโฆษณา"</div>';
+                   document.getElementById('preview-counter').textContent = '0/0';
+                   return;
+               }
+               
+               const ad = advertisements[previewAdIndex];
+               const previewElement = document.getElementById('admin-ad-preview');
+               const counterElement = document.getElementById('preview-counter');
+               
+               counterElement.textContent = `${previewAdIndex + 1}/${advertisements.length}`;
+               
+               previewElement.style.opacity = '0.5';
+               
+               setTimeout(() => {
+                   if (ad.type === 'text') {
+                       previewElement.style.background = ad.background || 'linear-gradient(45deg, #667eea, #764ba2)';
+                       previewElement.innerHTML = `<div class="ad-text">${ad.content}</div>`;
+                   } else if (ad.type === 'image') {
+                       previewElement.style.background = '#000';
+                       previewElement.innerHTML = `<img src="${ad.src}" style="max-width: 100%; max-height: 220px; border-radius: 10px;" alt="Ad Preview">`;
+                   } else if (ad.type === 'video') {
+                       previewElement.style.background = '#000';
+                       previewElement.innerHTML = `<video src="${ad.src}" style="max-width: 100%; max-height: 220px; border-radius: 10px;" controls muted preload="metadata"></video>`;
+                   }
+                   
+                   previewElement.style.opacity = '1';
+               }, 300);
+           } catch (error) {
+               console.error('❌ Update admin preview error:', error);
+           }
+       }
+
        // === Data Management ===
        function exportAdsData() {
            try {
                const data = {
                    advertisements: advertisements,
                    exportDate: new Date().toISOString(),
-                   version: '2.0',
+                   version: '2.1',
                    syncCounter: syncCounter
                };
                
@@ -1720,7 +1964,7 @@
                const url = URL.createObjectURL(blob);
                const a = document.createElement('a');
                a.href = url;
-               a.download = `vipart-ads-v2-${new Date().toISOString().split('T')[0]}.json`;
+               a.download = `vipart-ads-v2.1-${new Date().toISOString().split('T')[0]}.json`;
                a.click();
                URL.revokeObjectURL(url);
                
@@ -1747,6 +1991,7 @@
                                saveAdsData();
                                renderAdList();
                                updateDashboard();
+                               updateAdminPreview();
                                notifyMainPage();
                                showAlert('success', `📥 นำเข้าโฆษณา ${advertisements.length} รายการสำเร็จ!`);
                            }
@@ -1772,6 +2017,7 @@
                    saveAdsData();
                    renderAdList();
                    updateDashboard();
+                   updateAdminPreview();
                    notifyMainPage();
                    showAlert('success', '🗑️ ลบโฆษณาทั้งหมดเรียบร้อยแล้ว!');
                }
@@ -1780,11 +2026,62 @@
            }
        }
 
+       // === Preview Functions ===
+       function openMainPagePreview() {
+           try {
+               const mainPageUrl = window.location.href.replace('admin.html', 'index.html');
+               window.open(mainPageUrl, '_blank');
+           } catch (error) {
+               console.error('❌ Open main page error:', error);
+           }
+       }
+
+       function openMainPageFullscreen() {
+           try {
+               const mainPageUrl = window.location.href.replace('admin.html', 'index.html');
+               window.open(mainPageUrl, '_blank', 'fullscreen=yes,scrollbars=no,menubar=no,toolbar=no,location=no,status=no');
+           } catch (error) {
+               console.error('❌ Open fullscreen error:', error);
+           }
+       }
+
+       function copyMainPageUrl() {
+           try {
+               const mainPageUrl = window.location.href.replace('admin.html', 'index.html');
+               navigator.clipboard.writeText(mainPageUrl).then(() => {
+                   showAlert('success', '📋 คัดลอก URL เรียบร้อย!');
+               }).catch(() => {
+                   const textarea = document.createElement('textarea');
+                   textarea.value = mainPageUrl;
+                   document.body.appendChild(textarea);
+                   textarea.select();
+                   document.execCommand('copy');
+                   document.body.removeChild(textarea);
+                   showAlert('success', '📋 คัดลอก URL เรียบร้อย!');
+               });
+           } catch (error) {
+               console.error('❌ Copy URL error:', error);
+               showAlert('error', 'ไม่สามารถคัดลอก URL ได้');
+           }
+       }
+
+       // ⭐ เพิ่มฟังก์ชันเปิด Tizen Version
+       function openTizenVersion() {
+           try {
+               const tizenUrl = window.location.href.replace('admin.html', 'tizen.html');
+               window.open(tizenUrl, '_blank');
+               showAlert('success', '📱 เปิด Tizen Version สำหรับ Samsung TV');
+           } catch (error) {
+               console.error('❌ Open Tizen error:', error);
+           }
+       }
+
        // === System Settings ===
        function saveSystemConfig() {
            try {
                const updateInterval = parseInt(document.getElementById('update-interval').value);
                const adInterval = parseInt(document.getElementById('ad-interval').value);
+               const selectedFileSize = parseInt(document.getElementById('max-file-size').value);
                
                if (updateInterval < 1 || updateInterval > 60) {
                    showAlert('error', 'ระยะเวลาอัพเดท AQI ต้องอยู่ระหว่าง 1-60 นาที');
@@ -1805,6 +2102,8 @@
                
                settings.updateInterval = updateInterval;
                settings.adInterval = adInterval;
+               settings.maxFileSize = selectedFileSize * 1024 * 1024; // Convert MB to bytes
+               maxFileSize = settings.maxFileSize;
                
                try {
                    localStorage.setItem('vipart_settings', JSON.stringify(settings));
@@ -1839,7 +2138,7 @@
                    settings: settings,
                    location: location,
                    exportDate: new Date().toISOString(),
-                   version: '2.0',
+                   version: '2.1',
                    syncCounter: syncCounter
                };
                
@@ -1847,7 +2146,7 @@
                const url = URL.createObjectURL(blob);
                const a = document.createElement('a');
                a.href = url;
-               a.download = `vipart-backup-v2-${new Date().toISOString().split('T')[0]}.json`;
+               a.download = `vipart-backup-v2.1-${new Date().toISOString().split('T')[0]}.json`;
                a.click();
                URL.revokeObjectURL(url);
                
@@ -1888,6 +2187,7 @@
                            loadAllSettings();
                            renderAdList();
                            updateDashboard();
+                           updateAdminPreview();
                            notifyMainPage();
                            showAlert('success', '📥 นำเข้าข้อมูลทั้งหมดสำเร็จ!');
                        }
@@ -1908,7 +2208,8 @@
                if (confirm('🔄 ต้องการรีเซ็ตเป็นค่าเริ่มต้นหรือไม่?')) {
                    const defaultSettings = {
                        updateInterval: 10,
-                       adInterval: 15
+                       adInterval: 15,
+                       maxFileSize: 50 * 1024 * 1024
                    };
                    
                    const defaultLocation = {
@@ -1950,63 +2251,24 @@
                        advertisements = [];
                        syncCounter = 0;
                        
-                       // รีเซ็ตฟอร์ม
                        document.getElementById('api-key').value = '';
                        document.getElementById('city').value = '';
                        document.getElementById('state').value = '';
                        document.getElementById('country').value = 'Thailand';
                        document.getElementById('update-interval').value = '10';
                        document.getElementById('ad-interval').value = '15';
+                       document.getElementById('max-file-size').value = '50';
                        resetAdForm();
                        
                        renderAdList();
                        updateDashboard();
+                       updateAdminPreview();
                        notifyMainPage();
                        showAlert('success', '🗑️ ลบข้อมูลทั้งหมดเรียบร้อยแล้ว!');
                    }
                }
            } catch (error) {
                console.error('❌ Clear all config error:', error);
-           }
-       }
-
-       // === Preview Functions ===
-       function openMainPagePreview() {
-           try {
-               const mainPageUrl = window.location.href.replace('admin.html', 'index.html');
-               window.open(mainPageUrl, '_blank');
-           } catch (error) {
-               console.error('❌ Open main page error:', error);
-           }
-       }
-
-       function openMainPageFullscreen() {
-           try {
-               const mainPageUrl = window.location.href.replace('admin.html', 'index.html');
-               window.open(mainPageUrl, '_blank', 'fullscreen=yes,scrollbars=no,menubar=no,toolbar=no,location=no,status=no');
-           } catch (error) {
-               console.error('❌ Open fullscreen error:', error);
-           }
-       }
-
-       function copyMainPageUrl() {
-           try {
-               const mainPageUrl = window.location.href.replace('admin.html', 'index.html');
-               navigator.clipboard.writeText(mainPageUrl).then(() => {
-                   showAlert('success', '📋 คัดลอก URL เรียบร้อย!');
-               }).catch(() => {
-                   // Fallback สำหรับเบราว์เซอร์เก่า
-                   const textarea = document.createElement('textarea');
-                   textarea.value = mainPageUrl;
-                   document.body.appendChild(textarea);
-                   textarea.select();
-                   document.execCommand('copy');
-                   document.body.removeChild(textarea);
-                   showAlert('success', '📋 คัดลอก URL เรียบร้อย!');
-               });
-           } catch (error) {
-               console.error('❌ Copy URL error:', error);
-               showAlert('error', 'ไม่สามารถคัดลอก URL ได้');
            }
        }
 
@@ -2018,9 +2280,7 @@
                
                const timestamp = Date.now().toString();
                
-               // ⭐ แก้ปัญหา hosting - ใช้หลายวิธี
                try {
-                   // Method 1: localStorage signals
                    localStorage.removeItem('vipart_force_reload');
                    localStorage.removeItem('vipart_last_update');
                    
@@ -2032,7 +2292,6 @@
                    console.warn('⚠️ localStorage sync ไม่สำเร็จ');
                }
                
-               // Method 2: BroadcastChannel
                try {
                    if (typeof BroadcastChannel !== 'undefined') {
                        const channel = new BroadcastChannel('vipart_updates');
@@ -2042,7 +2301,7 @@
                            advertisements: advertisements,
                            timestamp: Date.now(),
                            syncCounter: syncCounter,
-                           source: 'admin_panel_v2'
+                           source: 'admin_panel_v2.1'
                        });
                        channel.close();
                    }
@@ -2050,9 +2309,8 @@
                    console.warn('⚠️ BroadcastChannel sync ไม่สำเร็จ');
                }
                
-               // Method 3: PostMessage
                try {
-                const windows = [window.opener, window.parent];
+                   const windows = [window.opener, window.parent];
                    windows.forEach(win => {
                        if (win && !win.closed && win !== window) {
                            win.postMessage({
@@ -2135,10 +2393,9 @@
        // === Event Listeners ===
        document.addEventListener('DOMContentLoaded', function() {
            try {
-               console.log('🎉 Admin Panel v2.0 เริ่มต้น');
+               console.log('🎉 Admin Panel v2.1 เริ่มต้น');
                checkLogin();
                
-               // Enter key ในฟอร์ม login
                document.getElementById('password').addEventListener('keypress', function(e) {
                    if (e.key === 'Enter') {
                        doLogin();
@@ -2191,7 +2448,6 @@
                    }
                }
                
-               // Quick tab switching
                if (e.altKey) {
                    switch(e.key) {
                        case '1':
@@ -2234,14 +2490,13 @@
            updateSyncStatus('error', '📵 Offline');
        });
 
-       // Close modal on Escape key
        document.addEventListener('keydown', function(e) {
            if (e.key === 'Escape') {
                closePreviewModal();
            }
        });
 
-       console.log('🎉 Admin Panel v2.0 โหลดเสร็จแล้ว - Air Quality Digital Signage Pro');
+       console.log('🎉 Admin Panel v2.1 โหลดเสร็จแล้ว - Digital Signage Pro');
        console.log('⌨️ Keyboard shortcuts:');
        console.log('   Ctrl+S = Save current tab');
        console.log('   Ctrl+T = Test (API/Add test ad)');
