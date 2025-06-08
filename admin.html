@@ -795,7 +795,7 @@
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label class="form-label" for="username">👤 ชื่อผู้ใช้</label>
-                    <input type="text" id="username" class="form-input" placeholder="กรุณาใส่ชื่อผู้ใช้" value="admin" required>
+                    <input type="text" id="username" class="form-input" placeholder="กรุณาใส่ชื่อผู้ใช้" value="" required>
                 </div>
                 
                 <div class="form-group">
@@ -1581,6 +1581,7 @@
        loadSettings();
        loadAdvertisements();
        initRichTextEditor();
+       initSheetsIntegration();
        updateDashboard();
        updatePreview();
        
@@ -2700,17 +2701,146 @@
    }
 
    // === CLOUD SYNC FUNCTIONS (Placeholder) ===
-   function setupGoogleSheets() {
-       showAlert('info', 'Google Sheets Sync - ฟีเจอร์นี้กำลังพัฒนา');
-   }
+   // === GOOGLE SHEETS FUNCTIONS ===
+let sheetsUrl = '';
 
-   function syncFromSheets() {
-       showAlert('info', 'Sync from Sheets - ฟีเจอร์นี้กำลังพัฒนา');
-   }
+function setupGoogleSheets() {
+    const url = document.getElementById('sheetsUrl').value.trim();
+    
+    if (!url) {
+        showAlert('error', '❌ กรุณาใส่ URL ของ Google Sheets');
+        return;
+    }
+    
+    if (!url.includes('docs.google.com/spreadsheets')) {
+        showAlert('error', '❌ URL ไม่ถูกต้อง กรุณาใส่ URL จาก Google Sheets');
+        return;
+    }
+    
+    sheetsUrl = convertToCSVUrl(url);
+    localStorage.setItem('vipart_sheets_url', sheetsUrl);
+    localStorage.setItem('vipart_sheets_original_url', url);
+    
+    showAlert('success', '🔗 เชื่อมต่อ Google Sheets สำเร็จ!');
+    console.log('📄 Sheets URL:', sheetsUrl);
+}
 
-   function testGoogleSheets() {
-       showAlert('info', 'Test Google Sheets - ฟีเจอร์นี้กำลังพัฒนา');
-   }
+function convertToCSVUrl(sheetsUrl) {
+    // แปลง Google Sheets URL เป็น CSV export URL
+    let csvUrl = sheetsUrl;
+    
+    // Extract spreadsheet ID
+    const match = sheetsUrl.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+    if (match) {
+        const spreadsheetId = match[1];
+        csvUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv&gid=0`;
+    }
+    
+    return csvUrl;
+}
+
+function syncFromSheets() {
+    const storedUrl = localStorage.getItem('vipart_sheets_url');
+    
+    if (!storedUrl) {
+        showAlert('error', '❌ กรุณาเชื่อมต่อ Google Sheets ก่อน');
+        return;
+    }
+    
+    showAlert('info', '🔄 กำลัง Sync ข้อมูลจาก Google Sheets...');
+    
+    const proxies = [
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(storedUrl)}`,
+        `https://corsproxy.io/?${encodeURIComponent(storedUrl)}`
+    ];
+    
+    syncWithMultipleProxies(proxies, 0);
+}
+
+function syncWithMultipleProxies(proxies, index) {
+    if (index >= proxies.length) {
+        showAlert('error', '❌ การ Sync ล้มเหลว กรุณาตรวจสอบการเชื่อมต่อ');
+        return;
+    }
+    
+    const proxyUrl = proxies[index];
+    console.log(`🔄 กำลัง sync ผ่าน proxy ${index + 1}`);
+    
+    fetch(proxyUrl, { 
+        signal: AbortSignal.timeout(15000) 
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        return response.text();
+    })
+    .then(csvData => {
+        const rows = parseCSV(csvData);
+        
+        if (rows.length <= 1) {
+            showAlert('warning', '⚠️ ไม่พบข้อมูลใน Google Sheets');
+            return;
+        }
+        
+        const newAds = convertCSVToAds(rows);
+        
+        if (newAds.length > 0) {
+            if (confirm(`📥 พบโฆษณาใหม่ ${newAds.length} รายการ\n\nต้องการนำเข้าและแทนที่โฆษณาปัจจุบันหรือไม่?`)) {
+                advertisements = newAds;
+                saveAdvertisements();
+                renderAdList();
+                updateDashboard();
+                updatePreview();
+                notifyMainPage();
+                
+                showAlert('success', `🔄 Sync สำเร็จ! นำเข้า ${newAds.length} โฆษณา`);
+            }
+        } else {
+            showAlert('warning', '⚠️ ไม่พบโฆษณาที่ถูกต้องใน Google Sheets');
+        }
+    })
+    .catch(error => {
+        console.warn(`❌ Sync proxy ${index + 1} failed:`, error.message);
+        syncWithMultipleProxies(proxies, index + 1);
+    });
+}
+
+function testGoogleSheets() {
+    const url = document.getElementById('sheetsUrl').value.trim();
+    
+    if (!url) {
+        showAlert('error', '❌ กรุณาใส่ URL ก่อนทดสอบ');
+        return;
+    }
+    
+    showAlert('info', '🧪 กำลังทดสอบการเชื่อมต่อ Google Sheets...');
+    
+    const csvUrl = convertToCSVUrl(url);
+    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(csvUrl)}`;
+    
+    fetch(proxyUrl, { 
+        signal: AbortSignal.timeout(10000)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        return response.text();
+    })
+    .then(csvData => {
+        const rows = parseCSV(csvData);
+        
+        if (rows.length > 1) {
+            showAlert('success', `✅ การเชื่อมต่อสำเร็จ!<br><br>📊 พบข้อมูล ${rows.length - 1} แถว`);
+        } else {
+            showAlert('warning', '⚠️ เชื่อมต่อสำเร็จ แต่ไม่พบข้อมูล');
+        }
+    })
+    .catch(error => {
+        showAlert('error', '❌ การทดสอบล้มเหลว ตรวจสอบ URL และการแชร์ Sheets');
+    });
+}
 
    function setupCloudSync() {
        showAlert('info', 'Cloud Sync Setup - ฟีเจอร์นี้กำลังพัฒนา');
@@ -2723,6 +2853,100 @@
    function syncFromCloud() {
        showAlert('info', 'Sync from Cloud - ฟีเจอร์นี้กำลังพัฒนา');
    }
+   // === GOOGLE SHEETS HELPER FUNCTIONS ===
+   function parseCSV(csvText) {
+        const rows = [];
+        const lines = csvText.split('\n');
+        
+        for (let line of lines) {
+            if (line.trim() === '') continue;
+            
+            const row = [];
+            let currentField = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    row.push(currentField.trim().replace(/^"|"$/g, ''));
+                    currentField = '';
+                } else {
+                    currentField += char;
+                }
+            }
+            
+            row.push(currentField.trim().replace(/^"|"$/g, ''));
+            rows.push(row);
+        }
+        
+        return rows;
+    }
+
+    function convertCSVToAds(rows) {
+        const ads = [];
+        
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            
+            if (row.length < 4 || !row[0] || !row[1]) continue;
+            
+            const title = row[0].trim();
+            const content = row[1].trim();
+            const colorName = row[2] ? row[2].trim().toLowerCase() : 'blue';
+            const duration = parseInt(row[3]) || 15;
+            
+            const colorMap = {
+                'blue': 'linear-gradient(45deg, #667eea, #764ba2)',
+                'green': 'linear-gradient(45deg, #11998e, #38ef7d)',
+                'red': 'linear-gradient(45deg, #ff512f, #dd2476)',
+                'orange': 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
+                'purple': 'linear-gradient(45deg, #a8edea, #fed6e3)',
+                'pink': 'linear-gradient(45deg, #f093fb, #f5576c)',
+                'yellow': 'linear-gradient(45deg, #ffecd2, #fcb69f)',
+                'dark': 'linear-gradient(45deg, #1e1e1e, #434343)'
+            };
+            
+            const ad = {
+                type: 'text',
+                content: content,
+                background: colorMap[colorName] || colorMap['blue'],
+                duration: duration * 1000,
+                id: Date.now() + i,
+                title: title,
+                source: 'google_sheets'
+            };
+            
+            ads.push(ad);
+        }
+        
+        return ads;
+    }
+
+    function initSheetsIntegration() {
+        // โหลด Sheets URL ที่บันทึกไว้
+        try {
+            const stored = localStorage.getItem('vipart_sheets_original_url');
+            if (stored) {
+                document.getElementById('sheetsUrl').value = stored;
+            }
+        } catch (error) {
+            console.warn('⚠️ โหลด sheets URL ไม่สำเร็จ');
+        }
+        
+        // Auto sync ทุก 5 นาที
+        setInterval(() => {
+            const storedUrl = localStorage.getItem('vipart_sheets_url');
+            if (storedUrl) {
+                console.log('🔄 Auto sync from Google Sheets...');
+                syncFromSheets();
+            }
+        }, 5 * 60 * 1000);
+        
+        console.log('📄 Google Sheets Integration พร้อมใช้งาน');
+    }
 
    function exportData() {
        exportAllData();
