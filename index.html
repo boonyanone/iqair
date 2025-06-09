@@ -1584,44 +1584,99 @@ body.theme-sunset {
        }
 
        // === KEYBOARD CONTROLS (Samsung TV Remote Support) ===
-       function setupKeyboardControls() {
-           document.addEventListener('keydown', (e) => {
-               console.log(`⌨️ Key pressed: ${e.keyCode}`);
-               
-               // Prevent default browser behaviors
-               e.preventDefault();
-               
-               switch(e.keyCode) {
-    // Display Modes (1-5)
-    case 49: // 1
+function setupKeyboardControls() {
+    document.addEventListener('keydown', (e) => {
+        console.log(`⌨️ Key pressed: ${e.keyCode}`);
+        
+        // Prevent default browser behaviors
         e.preventDefault();
-        setDisplayMode(1); 
-        break;
-    case 50: // 2
-        e.preventDefault();
-        setDisplayMode(2); 
-        break;
-    case 51: // 3
-        e.preventDefault();
-        setDisplayMode(3); 
-        break;
-    case 52: // 4
-        e.preventDefault();
-        setDisplayMode(4); 
-        break;
-    case 53: // 5
-        e.preventDefault();
-        setDisplayMode(5); 
-        break;
+        
+        switch(e.keyCode) {
+            // Display Modes (1-5)
+            case 49: // 1
+                e.preventDefault();
+                setDisplayMode(1); 
+                break;
+            case 50: // 2
+                e.preventDefault();
+                setDisplayMode(2); 
+                break;
+            case 51: // 3
+                e.preventDefault();
+                setDisplayMode(3); 
+                break;
+            case 52: // 4
+                e.preventDefault();
+                setDisplayMode(4); 
+                break;
+            case 53: // 5
+                e.preventDefault();
+                setDisplayMode(5); 
+                break;
+            
+            // Themes (6-8)
+            case 54: setTheme(7); break; // 6 = Default
+            case 55: setTheme(8); break; // 7 = Dark
+            case 56: setTheme(9); break; // 8 = Green
+            
+            // Fullscreen (0)
+            case 48: // 0
+                e.preventDefault();
+                toggleFullscreen();
+                break;
+                
+            // Navigation Controls
+            case 37: // Left Arrow
+                e.preventDefault();
+                prevAd();
+                break;
+            case 39: // Right Arrow
+                e.preventDefault();
+                nextAd();
+                break;
+            case 38: // Up Arrow
+                e.preventDefault();
+                cycleLocation(1);
+                break;
+            case 40: // Down Arrow
+                e.preventDefault();
+                cycleLocation(-1);
+                break;
+            case 13: // Enter
+                e.preventDefault();
+                updateAirQualityData();
+                break;
+            case 32: // Space
+                e.preventDefault();
+                toggleAdRotation();
+                break;
+            case 27: // Esc
+                e.preventDefault();
+                // แสดง/ซ่อนคำแนะนำ (placeholder)
+                console.log('🔧 แสดง/ซ่อนคำแนะนำ');
+                break;
+        }
+    });
+}
+
+function setTheme(themeIndex) {
+    const themes = ['default', 'dark', 'green'];
+    const themeMap = { 7: 0, 8: 1, 9: 2 }; // 6=default, 7=dark, 8=green
     
-    // Themes (7-0) - ย้ายมาใช้ 6-9 แทน
-    case 54: setTheme(7); break; // 6 = Default
-    case 55: setTheme(8); break; // 7 = Dark
-    case 56: setTheme(9); break; // 8 = Green
-    case 57: setTheme(0); break; // 9 = Sunset
-               }
-           });
-       }
+    if (!themeMap.hasOwnProperty(themeIndex)) return;
+    
+    const theme = themes[themeMap[themeIndex]];
+    const body = document.body;
+    
+    themes.forEach(t => {
+        body.classList.remove(`theme-${t}`);
+    });
+    
+    body.classList.add(`theme-${theme}`);
+    currentTheme = theme;
+    
+    console.log(`🎨 เปลี่ยนธีม: ${theme}`);
+}
 
        function setDisplayMode(modeIndex) {
     const modes = ['landscape', 'landscape-v2', 'portrait', 'fullscreen-aqi', 'fullscreen-ads'];
