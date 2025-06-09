@@ -9,563 +9,991 @@
    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
    
    <style>
-       /* Base Styles and Thai Typography */
-       * {
-           margin: 0;
-           padding: 0;
-           box-sizing: border-box;
-       }
-       
-       :root {
-           /* Theme Colors */
-           --primary-bg: #1a1a2e;
-           --secondary-bg: #16213e;
-           --accent-color: #0f3460;
-           --text-primary: #ffffff;
-           --text-secondary: #b8b8b8;
-           --success-color: #00e400;
-           --warning-color: #ffff00;
-           --danger-color: #ff0000;
-           --critical-color: #8f3f97;
-           
-           /* Typography */
-           --font-primary: 'Kanit', 'Thonburi', 'Leelawadee UI', sans-serif;
-           --font-size-xl: 4rem;
-           --font-size-lg: 2.5rem;
-           --font-size-md: 1.8rem;
-           --font-size-sm: 1.2rem;
-           
-           /* Spacing */
-           --spacing-xs: 0.5rem;
-           --spacing-sm: 1rem;
-           --spacing-md: 1.5rem;
-           --spacing-lg: 2rem;
-           --spacing-xl: 3rem;
-           
-           /* Animation */
-           --transition-fast: 0.2s ease;
-           --transition-normal: 0.3s ease;
-           --transition-slow: 0.5s ease;
-       }
-       
-       body {
-           font-family: var(--font-primary);
-           background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
-           color: var(--text-primary);
-           overflow: hidden;
-           height: 100vh;
-           letter-spacing: 0.02em;
-           text-rendering: optimizeLegibility;
-       }
-       
-       /* Samsung TV Fullscreen Fix */
-       html, body {
-           width: 100vw;
-           height: 100vh;
-           margin: 0;
-           padding: 0;
-           overflow: hidden;
-       }
-       
-       /* Force fullscreen on Samsung TV */
-       @media screen and (min-width: 1280px) {
-           body {
-               zoom: 1.0;
-               transform: scale(1.0);
-               transform-origin: 0 0;
-           }
-       }
-       
-       /* Theme Variations */
-       body.theme-dark {
-           --primary-bg: #000000;
-           --secondary-bg: #1a1a1a;
-           --accent-color: #333333;
-       }
-       
-       body.theme-green {
-           --primary-bg: #0d4f3c;
-           --secondary-bg: #1a5c4a;
-           --accent-color: #2d7a5e;
-       }
-       
-       body.theme-sunset {
-           --primary-bg: #4a1810;
-           --secondary-bg: #6b2c1f;
-           --accent-color: #8b3f2e;
-       }
-       
-       /* Layout System - TV Optimized */
-       .container {
-           height: 100vh;
-           width: 100vw;
-           display: flex;
-           flex-direction: column;
-           position: relative;
-           overflow: hidden;
-       }
-       
-       .main-content {
-           flex: 1;
-           display: grid;
-           gap: var(--spacing-md);
-           padding: var(--spacing-md);
-           position: relative;
-           width: 100%;
-           height: 100%;
-       }
-       
-       /* Display Mode Layouts - TV Responsive */
-       .display-landscape .main-content {
-           grid-template-columns: 2fr 1fr 1fr;
-           grid-template-rows: 1fr 1fr;
-       }
-       
-       .display-portrait .main-content {
-           grid-template-columns: 1fr;
-           grid-template-rows: auto 1fr auto auto;
-       }
-       
-       .display-fullscreen-aqi .main-content {
-           grid-template-columns: 1fr;
-           grid-template-rows: 1fr;
-       }
-       
-       .display-fullscreen-ads .main-content {
-           grid-template-columns: 1fr;
-           grid-template-rows: 1fr;
-       }
-       
-       .display-split .main-content {
-           grid-template-columns: 1fr 1fr;
-           grid-template-rows: 1fr;
-       }
-       
-       .display-compact .main-content {
-           grid-template-columns: repeat(4, 1fr);
-           grid-template-rows: repeat(2, 1fr);
-           gap: var(--spacing-sm);
-       }
-       
-       /* Widget Styles */
-       .widget {
-           background: rgba(255, 255, 255, 0.1);
-           backdrop-filter: blur(10px);
-           border-radius: 16px;
-           padding: var(--spacing-md);
-           border: 1px solid rgba(255, 255, 255, 0.2);
-           transition: all var(--transition-normal);
-           position: relative;
-           overflow: hidden;
-           display: flex;
-           flex-direction: column;
-           justify-content: center;
-           align-items: center;
-           text-align: center;
-       }
-       
-       .widget::before {
-           content: '';
-           position: absolute;
-           top: 0;
-           left: 0;
-           right: 0;
-           height: 4px;
-           background: linear-gradient(90deg, var(--success-color), var(--warning-color), var(--danger-color));
-           opacity: 0;
-           transition: opacity var(--transition-normal);
-       }
-       
-       .widget.critical::before {
-           opacity: 1;
-       }
-       
-       /* AQI Display */
-       .aqi-main {
-           grid-row: span 2;
-           grid-column: 1;
-       }
-       
-       .aqi-value {
-           font-size: var(--font-size-xl);
-           font-weight: 700;
-           margin: var(--spacing-md) 0;
-           text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-           transition: all var(--transition-normal);
-       }
-       
-       .aqi-status {
-           font-size: var(--font-size-lg);
-           font-weight: 500;
-           margin-bottom: var(--spacing-md);
-           padding: var(--spacing-sm) var(--spacing-md);
-           border-radius: 24px;
-           display: inline-block;
-           backdrop-filter: blur(5px);
-       }
-       
-       .aqi-location {
-           font-size: var(--font-size-md);
-           opacity: 0.9;
-           margin-bottom: var(--spacing-sm);
-       }
-       
-       .aqi-time {
-           font-size: var(--font-size-sm);
-           opacity: 0.7;
-       }
-       
-       /* Status Colors */
-       .status-good {
-           background-color: var(--success-color);
-           color: #000;
-       }
-       
-       .status-moderate {
-           background-color: var(--warning-color);
-           color: #000;
-       }
-       
-       .status-unhealthy {
-           background-color: #ff7e00;
-           color: #fff;
-       }
-       
-       .status-bad {
-           background-color: var(--danger-color);
-           color: #fff;
-       }
-       
-       .status-hazardous {
-           background-color: var(--critical-color);
-           color: #fff;
-       }
-       
-       .status-critical {
-           background-color: #7e0023;
-           color: #fff;
-       }
-       
-       /* Weather Widget */
-       .weather-widget {
-           grid-column: 2;
-           grid-row: 1;
-       }
-       
-       .weather-info {
-           display: grid;
-           grid-template-columns: 1fr 1fr;
-           gap: var(--spacing-sm);
-           margin-top: var(--spacing-md);
-           width: 100%;
-       }
-       
-       .weather-item {
-           text-align: center;
-           padding: var(--spacing-sm);
-           background: rgba(255, 255, 255, 0.05);
-           border-radius: 8px;
-       }
-       
-       .weather-label {
-           font-size: 0.9rem;
-           opacity: 0.7;
-           margin-bottom: 4px;
-       }
-       
-       .weather-value {
-           font-size: 1.1rem;
-           font-weight: 500;
-       }
-       
-       /* Advertisement Widget */
-       .ad-widget {
-           grid-column: 3;
-           grid-row: span 2;
-           background: linear-gradient(45deg, #667eea, #764ba2);
-           color: white;
-           position: relative;
-           overflow: hidden;
-           padding: var(--spacing-lg);
-       }
-       
-       .ad-content {
-           z-index: 2;
-           position: relative;
-           width: 100%;
-           height: 100%;
-           display: flex;
-           flex-direction: column;
-           justify-content: center;
-           align-items: center;
-           text-align: center;
-       }
-       
-       .ad-text {
-           font-size: var(--font-size-md);
-           font-weight: 600;
-           line-height: 1.5;
-           text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-       }
-       
-       .ad-counter {
-           position: absolute;
-           top: 10px;
-           right: 10px;
-           background: rgba(255, 255, 255, 0.2);
-           padding: 5px 10px;
-           border-radius: 15px;
-           font-size: 0.9rem;
-           font-weight: 600;
-       }
-       
-       /* Forecast Widget */
-       .forecast-widget {
-           grid-column: 2;
-           grid-row: 2;
-       }
-       
-       .forecast-list {
-           display: flex;
-           gap: var(--spacing-xs);
-           margin-top: var(--spacing-sm);
-           justify-content: space-around;
-       }
-       
-       .forecast-item {
-           flex: 1;
-           text-align: center;
-           padding: var(--spacing-xs);
-           background: rgba(255, 255, 255, 0.05);
-           border-radius: 8px;
-       }
-       
-       .forecast-day {
-           font-size: 0.8rem;
-           opacity: 0.8;
-           margin-bottom: 4px;
-       }
-       
-       .forecast-aqi {
-           font-size: 1rem;
-           font-weight: 600;
-           margin: 4px 0;
-       }
-       
-       .forecast-status {
-           font-size: 0.7rem;
-           padding: 2px 4px;
-           border-radius: 12px;
-       }
-       
-       /* Network Status */
-       .network-status {
-           position: fixed;
-           bottom: 10px;
-           left: 10px;
-           width: 12px;
-           height: 12px;
-           border-radius: 50%;
-           background: var(--success-color);
-           transition: background-color var(--transition-normal);
-           z-index: 1000;
-       }
-       
-       .network-status.offline {
-           background: var(--danger-color);
-           animation: pulse 1s infinite;
-       }
-       
-       /* Connection Status */
-       .connection-status {
-           position: fixed;
-           top: 10px;
-           right: 10px;
-           background: rgba(0, 0, 0, 0.7);
-           color: white;
-           padding: 8px 12px;
-           border-radius: 6px;
-           font-size: 0.8rem;
-           z-index: 1000;
-           transition: all var(--transition-normal);
-       }
-       
-       .connection-status.success {
-           background: rgba(0, 228, 0, 0.3);
-           color: #00e400;
-       }
-       
-       .connection-status.error {
-           background: rgba(255, 0, 0, 0.3);
-           color: #ff4444;
-       }
-       
-       .connection-status.connecting {
-           background: rgba(0, 123, 255, 0.3);
-           color: #007bff;
-       }
-       
-       /* Data Source Indicator */
-       .data-source {
-           position: absolute;
-           bottom: var(--spacing-xs);
-           right: var(--spacing-xs);
-           font-size: 0.7rem;
-           opacity: 0.6;
-           background: rgba(0, 0, 0, 0.5);
-           padding: 2px 6px;
-           border-radius: 4px;
-       }
-       
-       /* Display Mode Hiding */
-       .display-fullscreen-aqi .weather-widget,
-       .display-fullscreen-aqi .forecast-widget,
-       .display-fullscreen-aqi .ad-widget {
-           display: none;
-       }
-       
-       .display-fullscreen-ads .aqi-main,
-       .display-fullscreen-ads .weather-widget,
-       .display-fullscreen-ads .forecast-widget {
-           display: none;
-       }
-       
-       /* Animations */
-       @keyframes pulse {
-           0%, 100% { opacity: 1; }
-           50% { opacity: 0.7; }
-       }
-       
-       @keyframes slideIn {
-           from {
-               transform: translateX(-100%);
-               opacity: 0;
-           }
-           to {
-               transform: translateX(0);
-               opacity: 1;
-           }
-       }
-       
-       @keyframes fadeInUp {
-           from {
-               transform: translateY(20px);
-               opacity: 0;
-           }
-           to {
-               transform: translateY(0);
-               opacity: 1;
-           }
-       }
-       
-       .animate-pulse {
-           animation: pulse 2s infinite;
-       }
-       
-       .animate-slide-in {
-           animation: slideIn 0.5s ease-out;
-       }
-       
-       .animate-fade-in-up {
-           animation: fadeInUp 0.6s ease-out;
-       }
-       
-       /* Responsive Design for TV */
-       @media screen and (max-width: 1280px) {
-           :root {
-               --font-size-xl: 3rem;
-               --font-size-lg: 2rem;
-               --font-size-md: 1.5rem;
-               --font-size-sm: 1rem;
-           }
-           
-           .display-landscape .main-content {
-               grid-template-columns: 1fr 1fr;
-               grid-template-rows: 1fr 1fr;
-           }
-           
-           .ad-widget {
-               grid-column: 2;
-               grid-row: span 2;
-           }
-           
-           .weather-widget {
-               grid-column: 1;
-               grid-row: 2;
-           }
-       }
-       
-       @media screen and (max-width: 768px) {
-           :root {
-               --font-size-xl: 2.5rem;
-               --font-size-lg: 1.8rem;
-               --font-size-md: 1.2rem;
-               --font-size-sm: 0.9rem;
-           }
-           
-           .main-content {
-               grid-template-columns: 1fr !important;
-               grid-template-rows: auto auto auto !important;
-               gap: var(--spacing-sm);
-           }
-           
-           .widget {
-               grid-column: 1 !important;
-               grid-row: auto !important;
-           }
-       }
-       
-       /* Error States */
-       .error-state {
-           background: rgba(255, 0, 0, 0.1);
-           border: 1px solid rgba(255, 0, 0, 0.3);
-           padding: var(--spacing-md);
-           border-radius: 8px;
-           text-align: center;
-           color: #ff6b6b;
-       }
-       
-       .loading-state {
-           display: flex;
-           align-items: center;
-           justify-content: center;
-           min-height: 200px;
-       }
-       
-       .spinner {
-           width: 40px;
-           height: 40px;
-           border: 4px solid rgba(255, 255, 255, 0.3);
-           border-top: 4px solid var(--text-primary);
-           border-radius: 50%;
-           animation: spin 1s linear infinite;
-       }
-       
-       @keyframes spin {
-           0% { transform: rotate(0deg); }
-           100% { transform: rotate(360deg); }
-       }
-       
-       /* Admin Link */
-       .admin-link {
-           position: fixed;
-           bottom: 10px;
-           right: 10px;
-           background: rgba(0, 0, 0, 0.7);
-           color: white;
-           padding: 8px 12px;
-           border-radius: 50%;
-           text-decoration: none;
-           font-size: 1rem;
-           opacity: 0.3;
-           transition: all var(--transition-normal);
-           z-index: 1000;
-       }
-       
-       .admin-link:hover {
-           opacity: 1;
-           transform: scale(1.1);
-       }
+   /* Base Styles and Thai Typography */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Theme Colors */
+    --primary-bg: #1a1a2e;
+    --secondary-bg: #16213e;
+    --accent-color: #0f3460;
+    --text-primary: #ffffff;
+    --text-secondary: #b8b8b8;
+    --success-color: #00e400;
+    --warning-color: #ffff00;
+    --danger-color: #ff0000;
+    --critical-color: #8f3f97;
+    
+    /* Typography */
+    --font-primary: 'Kanit', 'Thonburi', 'Leelawadee UI', sans-serif;
+    --font-size-xl: 4rem;
+    --font-size-lg: 2.5rem;
+    --font-size-md: 1.8rem;
+    --font-size-sm: 1.2rem;
+    
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    
+    /* Animation */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+body {
+    font-family: var(--font-primary);
+    background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
+    color: var(--text-primary);
+    overflow: hidden;
+    height: 100vh;
+    letter-spacing: 0.02em;
+    text-rendering: optimizeLegibility;
+}
+
+/* Samsung TV Fullscreen Fix */
+html, body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Force fullscreen on Samsung TV */
+@media screen and (min-width: 1280px) {
+    body {
+        zoom: 1.0;
+        transform: scale(1.0);
+        transform-origin: 0 0;
+    }
+}
+
+/* Theme Variations */
+body.theme-dark {
+    --primary-bg: #000000;
+    --secondary-bg: #1a1a1a;
+    --accent-color: #333333;
+}
+
+body.theme-green {
+    --primary-bg: #0d4f3c;
+    --secondary-bg: #1a5c4a;
+    --accent-color: #2d7a5e;
+}
+
+body.theme-sunset {
+    --primary-bg: #4a1810;
+    --secondary-bg: #6b2c1f;
+    --accent-color: #8b3f2e;
+}
+
+/* Layout System - TV Optimized (25/25/50) */
+.container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.main-content {
+    flex: 1;
+    display: grid;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Display Mode Layouts - Preset 1 (25/25/50) */
+.display-landscape .main-content {
+    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+.display-portrait .main-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr auto auto;
+}
+
+.display-fullscreen-aqi .main-content {
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr 1fr;
+    gap: var(--spacing-lg);
+}
+
+.display-fullscreen-ads .main-content {
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr;
+    gap: var(--spacing-lg);
+}
+
+.display-split .main-content {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+.display-compact .main-content {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+}
+/* === PRESET 4: AQI+Details 25% | Ads 75% === */
+.display-fullscreen-aqi .aqi-main {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.display-fullscreen-aqi .aqi-details {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+}
+
+.display-fullscreen-aqi .ad-widget {
+    grid-column: 2;
+    grid-row: span 2;
+}
+
+.display-fullscreen-aqi .weather-widget,
+.display-fullscreen-aqi .forecast-widget {
+    display: none;
+}
+
+/* === PRESET 5: AQI 25% | Ads 75% === */
+.display-fullscreen-ads .aqi-main {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.display-fullscreen-ads .ad-widget {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.display-fullscreen-ads .weather-widget,
+.display-fullscreen-ads .forecast-widget,
+.display-fullscreen-ads .aqi-details {
+    display: none;
+}
+
+/* === PRESET 2 - AQI แบ่ง 2 ส่วน === */
+.display-landscape-v2 .main-content {
+    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+/* AQI Display ส่วนบน (25% บน) */
+.display-landscape-v2 .aqi-main {
+    grid-row: 1;
+    grid-column: 1;
+}
+
+/* AQI Details ส่วนล่าง (25% ล่าง) - ใหม่ */
+.aqi-details {
+    grid-row: 2;
+    grid-column: 1;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: var(--spacing-lg);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.aqi-details-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.95;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.aqi-details-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+    padding: 0 var(--spacing-sm);
+}
+
+.aqi-details-advice {
+    font-size: 1rem;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    text-align: center;
+}
+
+/* Weather และ Forecast สำหรับ Preset 2 */
+.display-landscape-v2 .weather-widget {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.display-landscape-v2 .forecast-widget {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+/* Ads สำหรับ Preset 2 */
+.display-landscape-v2 .ad-widget {
+    grid-column: 3;
+    grid-row: span 2;
+}
+
+/* ซ่อน aqi-details ใน preset อื่น */
+.aqi-details {
+    display: none;
+}
+
+.display-landscape-v2 .aqi-details {
+    display: flex;
+}
+
+/* Widget Styles */
+.widget {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: var(--spacing-lg);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.widget::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--success-color), var(--warning-color), var(--danger-color));
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.widget.critical::before {
+    opacity: 1;
+}
+
+/* AQI Display (25%) - Preset 1 */
+.display-landscape .aqi-main {
+    grid-row: span 2;
+    grid-column: 1;
+}
+
+/* Weather และ Forecast สำหรับ Preset 1 */
+.display-landscape .weather-widget {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.display-landscape .forecast-widget {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+/* Ads สำหรับ Preset 1 */
+.display-landscape .ad-widget {
+    grid-column: 3;
+    grid-row: span 2;
+}
+
+/* ซ่อน aqi-details ใน Preset 1 */
+.display-landscape .aqi-details {
+    display: none;
+}
+
+.aqi-location {
+    font-size: 2.2rem;
+    opacity: 0.9;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 700;
+}
+
+.aqi-label {
+    font-size: 1.2rem;
+    opacity: 0.7;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 500;
+    color: #cccccc;
+}
+
+.aqi-value {
+    font-size: 6rem;
+    font-weight: 800;
+    margin: var(--spacing-md) 0;
+    text-shadow: 
+        0 0 8px currentColor,
+        0 4px 8px rgba(0, 0, 0, 0.5);
+    transition: all var(--transition-normal);
+    background: none !important;
+    padding: 0 !important;
+}
+
+/* AQI Glow Colors */
+.aqi-value.status-good {
+    color: #00ff00;
+    text-shadow: 
+        0 0 8px #00ff00,
+        0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.aqi-value.status-moderate {
+    color: #ffff00;
+    text-shadow: 
+        0 0 8px #ffff00,
+        0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.aqi-value.status-unhealthy {
+    color: #ff8800;
+    text-shadow: 
+        0 0 8px #ff8800,
+        0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.aqi-value.status-bad {
+    color: #ff0000;
+    text-shadow: 
+        0 0 8px #ff0000,
+        0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.aqi-value.status-hazardous {
+    color: #aa00ff;
+    text-shadow: 
+        0 0 8px #aa00ff,
+        0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.aqi-value.status-critical {
+    color: #ff0066;
+    text-shadow: 
+        0 0 8px #ff0066,
+        0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.aqi-status {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 20px;
+    display: inline-block;
+    backdrop-filter: blur(5px);
+}
+
+.aqi-time {
+    font-size: var(--font-size-sm);
+    opacity: 0.7;
+}
+
+/* Status Colors */
+.status-good {
+    background-color: var(--success-color);
+    color: #000;
+}
+
+.status-moderate {
+    background-color: var(--warning-color);
+    color: #000;
+}
+
+.status-unhealthy {
+    background-color: #ff7e00;
+    color: #fff;
+}
+
+.status-bad {
+    background-color: var(--danger-color);
+    color: #fff;
+}
+
+.status-hazardous {
+    background-color: var(--critical-color);
+    color: #fff;
+}
+
+.status-critical {
+    background-color: #7e0023;
+    color: #fff;
+}
+
+/* Weather Widget (25% บน) */
+.weather-widget {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.weather-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+    width: 100%;
+}
+
+.weather-item {
+    text-align: center;
+    padding: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.weather-label {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-bottom: 4px;
+}
+
+.weather-value {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Forecast Widget (25% ล่าง) - แก้ใหม่ให้เรียงกัน */
+.forecast-widget {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.forecast-list {
+    display: flex;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+    justify-content: space-between;
+    padding: 0 var(--spacing-xs);
+}
+
+.forecast-item {
+    flex: 1;
+    text-align: center;
+    padding: var(--spacing-md) var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 80px;
+}
+
+.forecast-day {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-bottom: 4px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.forecast-aqi {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 4px 0;
+    white-space: nowrap;
+}
+
+.forecast-status {
+    font-size: 0.7rem;
+    padding: 3px 5px;
+    border-radius: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* Advertisement Widget (50%) */
+.ad-widget {
+    grid-column: 3;
+    grid-row: span 2;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    padding: var(--spacing-lg);
+}
+
+.ad-content {
+    z-index: 2;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.ad-text {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    line-height: 1.5;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.ad-counter {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Network Status */
+.network-status {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--success-color);
+    transition: background-color var(--transition-normal);
+    z-index: 1000;
+}
+
+.network-status.offline {
+    background: var(--danger-color);
+    animation: pulse 1s infinite;
+}
+
+/* Connection Status */
+.connection-status {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    z-index: 1000;
+    transition: all var(--transition-normal);
+}
+
+.connection-status.success {
+    background: rgba(0, 228, 0, 0.3);
+    color: #00e400;
+}
+
+.connection-status.error {
+    background: rgba(255, 0, 0, 0.3);
+    color: #ff4444;
+}
+
+.connection-status.connecting {
+    background: rgba(0, 123, 255, 0.3);
+    color: #007bff;
+}
+
+/* Data Source Indicator */
+.data-source {
+    position: absolute;
+    bottom: var(--spacing-xs);
+    right: var(--spacing-xs);
+    font-size: 0.7rem;
+    opacity: 0.6;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.display-fullscreen-ads .weather-widget,
+.display-fullscreen-ads .forecast-widget,
+.display-fullscreen-ads .aqi-details {
+    display: none;
+}
+
+/* Preset 5: Split 25/75 Layout */
+.display-fullscreen-ads .main-content {
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr;
+    gap: var(--spacing-lg);
+}
+/* ปรับ AQI ใน Preset 5 ให้ใหญ่ขึ้น */
+.display-fullscreen-ads .aqi-location {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.display-fullscreen-ads .aqi-label {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.display-fullscreen-ads .aqi-value {
+    font-size: 8rem;
+    margin: var(--spacing-xl) 0;
+}
+
+.display-fullscreen-ads .aqi-status {
+    font-size: 2rem;
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.display-fullscreen-ads .aqi-time {
+    font-size: 1.4rem;
+}
+
+/* ปรับ Ads ใน Preset 5 ให้ใหญ่ขึ้น */
+.display-fullscreen-ads .ad-text {
+    font-size: 3rem;
+    line-height: 1.4;
+    font-weight: 700;
+}
+
+.display-fullscreen-ads .ad-counter {
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 20px;
+}
+
+.display-fullscreen-ads .aqi-main {
+    grid-column: 1;
+    grid-row: 1;
+    padding: var(--spacing-xl);
+}
+
+.display-fullscreen-ads .ad-widget {
+    grid-column: 2;
+    grid-row: 1;
+    padding: var(--spacing-xl);
+}
+.display-fullscreen-ads .weather-widget,
+.display-fullscreen-ads .forecast-widget {
+    display: none;
+}
+
+/* Portrait Mode Adjustments */
+.display-portrait .aqi-main {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.display-portrait .ad-widget {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.display-portrait .weather-widget {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.display-portrait .forecast-widget {
+    grid-column: 1;
+    grid-row: 4;
+}
+
+/* Compact Mode Adjustments */
+.display-compact .aqi-main {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+}
+
+.display-compact .weather-widget {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.display-compact .forecast-widget {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.display-compact .ad-widget {
+    grid-column: 3 / 5;
+    grid-row: 1 / 3;
+}
+
+/* Split Mode Adjustments (25/75) */
+.display-split .main-content {
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr;
+    gap: var(--spacing-lg);
+}
+
+.display-split .aqi-main {
+    grid-column: 1;
+    grid-row: 1;
+    padding: var(--spacing-xl);
+}
+
+.display-split .ad-widget {
+    grid-column: 2;
+    grid-row: 1;
+    padding: var(--spacing-xl);
+}
+
+.display-split .weather-widget,
+.display-split .forecast-widget,
+.display-split .aqi-details {
+    display: none;
+}
+
+/* ปรับ AQI ใน Split Mode ให้ใหญ่ขึ้น */
+.display-split .aqi-location {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.display-split .aqi-label {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.display-split .aqi-value {
+    font-size: 8rem;
+    margin: var(--spacing-xl) 0;
+}
+
+.display-split .aqi-status {
+    font-size: 2rem;
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.display-split .aqi-time {
+    font-size: 1.4rem;
+}
+
+/* ปรับ Ads ใน Split Mode ให้ใหญ่ขึ้น */
+.display-split .ad-text {
+    font-size: 3rem;
+    line-height: 1.4;
+    font-weight: 700;
+}
+
+.display-split .ad-counter {
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 20px;
+}
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+.animate-slide-in {
+    animation: slideIn 0.5s ease-out;
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive Design for TV */
+@media screen and (max-width: 1280px) {
+    :root {
+        --font-size-xl: 3.5rem;
+        --font-size-lg: 2.2rem;
+        --font-size-md: 1.6rem;
+        --font-size-sm: 1.1rem;
+    }
+    
+    .aqi-value {
+        font-size: 5rem;
+    }
+    
+    .aqi-location {
+        font-size: 1.8rem;
+    }
+    
+    .aqi-label {
+        font-size: 1rem;
+    }
+    
+    .display-landscape .main-content {
+        grid-template-columns: 1fr 1fr 2fr;
+        grid-template-rows: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    :root {
+        --font-size-xl: 2.8rem;
+        --font-size-lg: 1.8rem;
+        --font-size-md: 1.3rem;
+        --font-size-sm: 1rem;
+    }
+    
+    .aqi-value {
+        font-size: 4rem;
+    }
+    
+    .aqi-location {
+        font-size: 1.5rem;
+    }
+    
+    .aqi-label {
+        font-size: 0.9rem;
+    }
+    
+    .main-content {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto auto auto auto !important;
+        gap: var(--spacing-sm);
+    }
+    
+    .widget {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+        min-height: 200px;
+    }
+    
+    .weather-info {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-xs);
+    }
+    
+}
+/* Responsive สำหรับ Split Mode */
+@media screen and (max-width: 1280px) {
+    .display-split .aqi-value {
+        font-size: 6rem;
+    }
+    
+    .display-split .aqi-location {
+        font-size: 2rem;
+    }
+    
+    .display-split .ad-text {
+        font-size: 2.5rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .display-split .main-content {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: 1fr 1fr !important;
+    }
+    
+    .display-split .aqi-value {
+        font-size: 4rem;
+    }
+    
+    .display-split .ad-text {
+        font-size: 2rem;
+    }
+}
+
+
+/* Error States */
+.error-state {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    text-align: center;
+    color: #ff6b6b;
+}
+
+.loading-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid var(--text-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Admin Link */
+.admin-link {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 1rem;
+    opacity: 0.3;
+    transition: all var(--transition-normal);
+    z-index: 1000;
+}
+
+.admin-link:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
    </style>
 </head>
 <body class="theme-default display-landscape">
@@ -582,12 +1010,23 @@
        <main class="main-content" id="mainContent">
            <!-- AQI Main Display -->
            <div class="widget aqi-main animate-fade-in-up" id="aqiMain">
-               <div class="aqi-location" id="currentLocation">กำลังโหลดข้อมูล...</div>
-               <div class="aqi-value" id="aqiValue">--</div>
+            <div class="aqi-location" id="currentLocation">กำลังโหลดข้อมูล...</div>
+            <div class="aqi-label">US AQI</div>
+            <div class="aqi-value" id="aqiValue">--</div>
                <div class="aqi-status" id="aqiStatus">กำลังเชื่อมต่อ...</div>
                <div class="aqi-time" id="lastUpdate">อัปเดตล่าสุด: --</div>
                <div class="data-source" id="dataSource">IQAir</div>
            </div>
+           <!-- AQI Details Widget (สำหรับ Preset 2) -->
+<div class="widget aqi-details" id="aqiDetails">
+    <div class="aqi-details-title" id="aqiDetailsTitle">รายละเอียดคุณภาพอากาศ</div>
+    <div class="aqi-details-description" id="aqiDetailsDescription">
+        ค่า US AQI อยู่ในระดับดี เหมาะสำหรับกิจกรรมกลางแจ้ง
+    </div>
+    <div class="aqi-details-advice" id="aqiDetailsAdvice">
+        💡 แนะนำ: สามารถออกกำลังกายกลางแจ้งได้ตามปกติ
+    </div>
+</div>
            
            <!-- Weather Widget -->
            <div class="widget weather-widget animate-fade-in-up" style="animation-delay: 0.2s;">
@@ -1024,32 +1463,31 @@
        }
 
        function updateForecast() {
-           const forecastList = document.getElementById('forecastList');
-           forecastList.innerHTML = '';
-           
-           // Generate forecast data (5 days)
-           for (let i = 1; i <= 5; i++) {
-               const date = new Date();
-               date.setDate(date.getDate() + i);
-               
-               const forecastItem = document.createElement('div');
-               forecastItem.className = 'forecast-item';
-               
-               const dayName = new Intl.DateTimeFormat('th-TH', { weekday: 'short' }).format(date);
-               const mockAQI = Math.floor(Math.random() * 200) + 20;
-               const status = getAQIStatus(mockAQI);
-               
-               forecastItem.innerHTML = `
-                   <div class="forecast-day">${dayName}</div>
-                   <div class="forecast-aqi">${mockAQI}</div>
-                   <div class="forecast-status ${status.class}">
-                       ${mockAQI <= 50 ? 'ดี' : mockAQI <= 100 ? 'ปกติ' : mockAQI <= 150 ? 'เสี่ยง' : 'ไม่ดี'}
-                   </div>
-               `;
-               
-               forecastList.appendChild(forecastItem);
-           }
-       }
+    const forecastList = document.getElementById('forecastList');
+    forecastList.innerHTML = '';
+    
+    for (let i = 1; i <= 5; i++) {
+        const date = new Date();
+        date.setDate(date.getDate() + i);
+        
+        const forecastItem = document.createElement('div');
+        forecastItem.className = 'forecast-item';
+        
+        const dayName = new Intl.DateTimeFormat('th-TH', { weekday: 'short' }).format(date);
+        const mockAQI = Math.floor(Math.random() * 200) + 20;
+        const status = getAQIStatus(mockAQI);
+        
+        forecastItem.innerHTML = `
+            <div class="forecast-day">${dayName}</div>
+            <div class="forecast-aqi">${mockAQI}</div>
+            <div class="forecast-status ${status.class}">
+                ${mockAQI <= 50 ? 'ดี' : mockAQI <= 100 ? 'ปกติ' : mockAQI <= 150 ? 'เสี่ยง' : 'ไม่ดี'}
+            </div>
+        `;
+        
+        forecastList.appendChild(forecastItem);
+    }
+}
 
        // === SYNC SYSTEM ===
        function setupSyncListeners() {
@@ -1154,62 +1592,93 @@
                e.preventDefault();
                
                switch(e.keyCode) {
-                   // Display Modes (1-6)
-                   case 49: setDisplayMode(1); break; // 1
-                   case 50: setDisplayMode(2); break; // 2
-                   case 51: setDisplayMode(3); break; // 3
-                   case 52: setDisplayMode(4); break; // 4
-                   case 53: setDisplayMode(5); break; // 5
-                   case 54: setDisplayMode(6); break; // 6
-                   
-                   // Themes (7-0)
-                   case 55: setTheme(7); break; // 7
-                   case 56: setTheme(8); break; // 8
-                   case 57: setTheme(9); break; // 9
-                   case 48: setTheme(0); break; // 0
-                   
-                   // Navigation
-                   case 37: // Left arrow
-                       prevAd();
-                       break;
-                   case 39: // Right arrow
-                       nextAd();
-                       break;
-                   case 38: // Up arrow
-                       cycleLocation(-1);
-                       break;
-                   case 40: // Down arrow
-                       cycleLocation(1);
-                       break;
-                   case 13: // Enter
-                       updateAirQualityData();
-                       break;
-                   case 32: // Space
-                       toggleAdRotation();
-                       break;
-                   case 27: // Escape
-                       toggleFullscreen();
-                       break;
+    // Display Modes (1-5)
+    case 49: // 1
+        e.preventDefault();
+        setDisplayMode(1); 
+        break;
+    case 50: // 2
+        e.preventDefault();
+        setDisplayMode(2); 
+        break;
+    case 51: // 3
+        e.preventDefault();
+        setDisplayMode(3); 
+        break;
+    case 52: // 4
+        e.preventDefault();
+        setDisplayMode(4); 
+        break;
+    case 53: // 5
+        e.preventDefault();
+        setDisplayMode(5); 
+        break;
+    
+    // Themes (7-0) - ย้ายมาใช้ 6-9 แทน
+    case 54: setTheme(7); break; // 6 = Default
+    case 55: setTheme(8); break; // 7 = Dark
+    case 56: setTheme(9); break; // 8 = Green
+    case 57: setTheme(0); break; // 9 = Sunset
                }
            });
        }
 
        function setDisplayMode(modeIndex) {
-           const modes = ['landscape', 'portrait', 'fullscreen-aqi', 'fullscreen-ads', 'split', 'compact'];
-           if (modeIndex < 1 || modeIndex > 6) return;
-           
-           const mode = modes[modeIndex - 1];
-           const body = document.body;
-           
-           modes.forEach(m => {
-               body.classList.remove(`display-${m}`);
-           });
-           
-           body.classList.add(`display-${mode}`);
-           currentMode = mode;
-           
-           console.log(`📱 เปลี่ยนโหมดการแสดงผล: ${mode}`);
-       }
+    const modes = ['landscape', 'landscape-v2', 'portrait', 'fullscreen-aqi', 'fullscreen-ads'];
+    if (modeIndex < 1 || modeIndex > 5) return;
+    
+    const mode = modes[modeIndex - 1];
+    const body = document.body;
+    
+    // ลบ mode เก่าทั้งหมด (เก็บ theme ไว้)
+    body.classList.remove('display-landscape', 'display-landscape-v2', 'display-portrait', 'display-fullscreen-aqi', 'display-fullscreen-ads');
+    
+    // เพิ่ม mode ใหม่
+    body.classList.add(`display-${mode}`);
+    currentMode = mode;
+    
+    // อัพเดท AQI Details สำหรับ Preset 2
+    if (mode === 'landscape-v2') {
+        updateAQIDetails();
+    }
+    
+    console.log(`📱 เปลี่ยนโหมดการแสดงผล: ${mode} (กด ${modeIndex})`);
+}
+
+function updateAQIDetails() {
+    const title = document.getElementById('aqiDetailsTitle');
+    const description = document.getElementById('aqiDetailsDescription');
+    const advice = document.getElementById('aqiDetailsAdvice');
+    
+    const currentAQI = parseInt(document.getElementById('aqiValue').textContent) || 45;
+    
+    if (currentAQI <= 50) {
+        title.innerHTML = '🌟 คุณภาพอากาศดีเยี่ยม';
+        description.innerHTML = 'ค่า US AQI อยู่ในระดับดี<br><strong>อากาศบริสุทธิ์ ปลอดภัยทุกกลุ่ม</strong>';
+        advice.innerHTML = '💚 <strong>แนะนำ:</strong> เหมาะสำหรับกิจกรรมกลางแจ้งทุกประเภท';
+        advice.style.background = 'linear-gradient(135deg, rgba(0, 228, 0, 0.2), rgba(0, 200, 0, 0.1))';
+    } else if (currentAQI <= 100) {
+        title.innerHTML = '⚡ คุณภาพอากาศปานกลาง';
+        description.innerHTML = 'ค่า US AQI อยู่ในระดับยอมรับได้<br><strong>ปกติสำหรับคนทั่วไป</strong>';
+        advice.innerHTML = '💛 <strong>แนะนำ:</strong> คนไวต่อมลพิษควรระวังตัว';
+        advice.style.background = 'linear-gradient(135deg, rgba(255, 255, 0, 0.2), rgba(255, 200, 0, 0.1))';
+    } else if (currentAQI <= 150) {
+        title.innerHTML = '⚠️ คุณภาพอากาศไม่ดี';
+        description.innerHTML = 'ค่า US AQI เริ่มมีผลต่อสุขภาพ<br><strong>กลุ่มเสี่ยงควรระมัดระวัง</strong>';
+        advice.innerHTML = '🧡 <strong>แนะนำ:</strong> ลดกิจกรรมกลางแจ้งที่หนักหน่วง';
+        advice.style.background = 'linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(255, 100, 0, 0.1))';
+    } else if (currentAQI <= 200) {
+        title.innerHTML = '🚨 คุณภาพอากาศแย่';
+        description.innerHTML = 'ค่า US AQI อยู่ในระดับอันตราย<br><strong>มีผลต่อสุขภาพทุกคน</strong>';
+        advice.innerHTML = '❤️ <strong>แนะนำ:</strong> หลีกเลี่ยงกิจกรรมกลางแจ้ง';
+        advice.style.background = 'linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(200, 0, 0, 0.1))';
+    } else {
+        title.innerHTML = '☠️ คุณภาพอากาศอันตราย';
+        description.innerHTML = 'ค่า US AQI อยู่ในระดับวิกฤต<br><strong>อันตรายต่อสุขภาพอย่างรุนแรง</strong>';
+        advice.innerHTML = '🆘 <strong>แนะนำ:</strong> อยู่ในที่ร่ม ใส่หน้ากาก N95';
+        advice.style.background = 'linear-gradient(135deg, rgba(143, 63, 151, 0.2), rgba(100, 0, 100, 0.1))';
+    }
+}
 
        function setTheme(themeIndex) {
            const themes = ['default', 'dark', 'green', 'sunset'];
