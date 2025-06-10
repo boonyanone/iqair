@@ -944,390 +944,415 @@ body.theme-green {
    <a href="admin.html" class="admin-link" title="จัดการระบบ" target="_blank">⚙️</a>
 
    <script>
-       // === ตัวแปรระบบหลัก ===
-       let CONFIG = {
-           API_KEY: '',
-           CITY: 'Bangkok',
-           STATE: 'Bangkok', 
-           COUNTRY: 'Thailand',
-           UPDATE_INTERVAL: 10 * 60 * 1000,
-           AD_ROTATION_INTERVAL: 15 * 1000,
-       };
+    // === ตัวแปรระบบหลัก ===
+let CONFIG = {
+    API_KEY: '',
+    CITY: 'Bangkok',
+    STATE: 'Bangkok', 
+    COUNTRY: 'Thailand',
+    UPDATE_INTERVAL: 10 * 60 * 1000,
+    AD_ROTATION_INTERVAL: 15 * 1000,
+};
 
-       let advertisements = [];
-       let currentAdIndex = 0;
-       let adRotationTimer = null;
-       let apiUpdateTimer = null;
-       let isSystemReady = false;
-       let currentMode = 'landscape';
-       let currentTheme = 'default';
-       let isOnline = navigator.onLine;
+let advertisements = [];
+let currentAdIndex = 0;
+let adRotationTimer = null;
+let apiUpdateTimer = null;
+let isSystemReady = false;
+let currentMode = 'landscape';
+let currentTheme = 'default';
+let isOnline = navigator.onLine;
 
-       // Thai cities database (เพิ่มข้อมูลเมืองไทย)
-       const locations = {
-           'bangkok': { thai: 'กรุงเทพมหานคร', english: 'Bangkok', lat: 13.7563, lon: 100.5018, country: 'Thailand' },
-           'chiang-mai': { thai: 'เชียงใหม่', english: 'Chiang Mai', lat: 18.7883, lon: 98.9853, country: 'Thailand' },
-           'nonthaburi': { thai: 'นนทบุรี', english: 'Nonthaburi', lat: 13.8621, lon: 100.5144, country: 'Thailand' },
-           'nakhon-ratchasima': { thai: 'นครราชสีมา', english: 'Nakhon Ratchasima', lat: 14.9799, lon: 102.0977, country: 'Thailand' },
-           'chiang-rai': { thai: 'เชียงราย', english: 'Chiang Rai', lat: 19.9071, lon: 99.8325, country: 'Thailand' },
-           'khon-kaen': { thai: 'ขอนแก่น', english: 'Khon Kaen', lat: 16.4419, lon: 102.8359, country: 'Thailand' },
-           'hat-yai': { thai: 'หาดใหญ่', english: 'Hat Yai', lat: 7.0061, lon: 100.4681, country: 'Thailand' },
-           'phuket': { thai: 'ภูเก็ต', english: 'Phuket', lat: 7.8804, lon: 98.3923, country: 'Thailand' }
-       };
+// Thai cities database
+const locations = {
+    'bangkok': { thai: 'กรุงเทพมหานคร', english: 'Bangkok', lat: 13.7563, lon: 100.5018, country: 'Thailand' },
+    'chiang-mai': { thai: 'เชียงใหม่', english: 'Chiang Mai', lat: 18.7883, lon: 98.9853, country: 'Thailand' },
+    'nonthaburi': { thai: 'นนทบุรี', english: 'Nonthaburi', lat: 13.8621, lon: 100.5144, country: 'Thailand' },
+    'nakhon-ratchasima': { thai: 'นครราชสีมา', english: 'Nakhon Ratchasima', lat: 14.9799, lon: 102.0977, country: 'Thailand' },
+    'chiang-rai': { thai: 'เชียงราย', english: 'Chiang Rai', lat: 19.9071, lon: 99.8325, country: 'Thailand' },
+    'khon-kaen': { thai: 'ขอนแก่น', english: 'Khon Kaen', lat: 16.4419, lon: 102.8359, country: 'Thailand' },
+    'hat-yai': { thai: 'หาดใหญ่', english: 'Hat Yai', lat: 7.0061, lon: 100.4681, country: 'Thailand' },
+    'phuket': { thai: 'ภูเก็ต', english: 'Phuket', lat: 7.8804, lon: 98.3923, country: 'Thailand' }
+};
 
-       let currentLocation = 'bangkok';
+let currentLocation = 'bangkok';
 
-       // === เริ่มต้นระบบ ===
-       async function init() {
-           console.log('🚀 เริ่มต้น Digital Signage Pro v3.0 TV Edition');
-           
-           try {
-               updateConnectionStatus('connecting', '🔄 โหลดการตั้งค่า');
-               
-               await loadSettings();
-               await loadAdvertisements();
-               
-               setupSyncListeners();
-               setupKeyboardControls();
-               setupNetworkMonitoring();
-               setupTimers();
-               await startSystem();
-               
-               isSystemReady = true;
-               console.log('✅ ระบบพร้อมใช้งาน');
-               
-           } catch (error) {
-               console.error('❌ Error initializing system:', error);
-               handleSystemError('เกิดข้อผิดพลาดในการเริ่มต้นระบบ');
-           }
-       }
+// === เริ่มต้นระบบ ===
+async function init() {
+    console.log('🚀 เริ่มต้น Digital Signage Pro v3.0 TV Edition');
+    
+    try {
+        updateConnectionStatus('connecting', '🔄 โหลดการตั้งค่า');
+        
+        await loadSettings();
+        await loadAdvertisements();
+        
+        setupSyncListeners();
+        setupKeyboardControls();
+        setupNetworkMonitoring();
+        setupTimers();
+        await startSystem();
+        
+        isSystemReady = true;
+        console.log('✅ ระบบพร้อมใช้งาน');
+        
+    } catch (error) {
+        console.error('❌ Error initializing system:', error);
+        handleSystemError('เกิดข้อผิดพลาดในการเริ่มต้นระบบ');
+    }
+}
 
-       async function loadSettings() {
-           try {
-               let settings = {};
-               
-               try {
-                   settings = JSON.parse(localStorage.getItem('vipart_settings') || '{}');
-               } catch (e) {
-                   console.warn('⚠️ localStorage ไม่พร้อมใช้งาน - ใช้ default settings');
-               }
-               
-               CONFIG.API_KEY = settings.apiKey || '';
-               CONFIG.UPDATE_INTERVAL = (settings.updateInterval || 10) * 60 * 1000;
-               CONFIG.AD_ROTATION_INTERVAL = (settings.adInterval || 15) * 1000;
-               
-               // โหลดสถานที่
-               const location = JSON.parse(localStorage.getItem('vipart_location') || '{}');
-               CONFIG.CITY = location.city || 'Bangkok';
-               CONFIG.STATE = location.state || 'Bangkok';
-               CONFIG.COUNTRY = location.country || 'Thailand';
-               currentLocation = CONFIG.CITY.toLowerCase().replace(/\s+/g, '-');
-               
-               console.log('⚙️ โหลดการตั้งค่า:', CONFIG);
-               
-           } catch (error) {
-               console.error('❌ Error loading settings:', error);
-           }
-       }
+async function loadSettings() {
+    try {
+        let settings = {};
+        
+        try {
+            if (typeof(Storage) !== "undefined" && typeof localStorage !== 'undefined') {
+                settings = JSON.parse(localStorage.getItem('vipart_settings') || '{}');
+            } else {
+                console.warn('⚠️ localStorage ไม่พร้อมใช้งาน - ใช้ default settings');
+            }
+        } catch (e) {
+            console.warn('⚠️ localStorage ไม่พร้อมใช้งาน - ใช้ default settings');
+        }
+        
+        CONFIG.API_KEY = settings.apiKey || '';
+        CONFIG.UPDATE_INTERVAL = (settings.updateInterval || 10) * 60 * 1000;
+        CONFIG.AD_ROTATION_INTERVAL = (settings.adInterval || 15) * 1000;
+        
+        // โหลดสถานที่
+        try {
+            if (typeof(Storage) !== "undefined" && typeof localStorage !== 'undefined') {
+                const location = JSON.parse(localStorage.getItem('vipart_location') || '{}');
+                CONFIG.CITY = location.city || 'Bangkok';
+                CONFIG.STATE = location.state || 'Bangkok';
+                CONFIG.COUNTRY = location.country || 'Thailand';
+                currentLocation = CONFIG.CITY.toLowerCase().replace(/\s+/g, '-');
+            }
+        } catch (e) {
+            console.warn('⚠️ โหลดตำแหน่งไม่สำเร็จ');
+        }
+        
+        console.log('⚙️ โหลดการตั้งค่า:', CONFIG);
+        
+    } catch (error) {
+        console.error('❌ Error loading settings:', error);
+    }
+}
 
-       async function loadAdvertisements() {
-           try {
-               let stored = null;
-               
-               try {
-                   stored = localStorage.getItem('vipart_advertisements');
-               } catch (e) {
-                   console.warn('⚠️ โหลดโฆษณาไม่สำเร็จ - ใช้ default');
-               }
-               
-               if (stored) {
-                   advertisements = JSON.parse(stored);
-               } else {
-                   advertisements = getDefaultAds();
-               }
-               
-               if (advertisements.length === 0) {
-                   advertisements = getDefaultAds();
-               }
-               
-               console.log('📢 โหลดโฆษณา:', advertisements.length, 'รายการ');
-               
-           } catch (error) {
-               console.error('❌ Error loading ads:', error);
-               advertisements = getDefaultAds();
-           }
-       }
+async function loadAdvertisements() {
+    try {
+        let stored = null;
+        
+        try {
+            if (typeof(Storage) !== "undefined" && typeof localStorage !== 'undefined') {
+                stored = localStorage.getItem('vipart_advertisements');
+            } else {
+                console.warn('⚠️ localStorage ไม่รองรับ - ใช้ default ads');
+            }
+        } catch (e) {
+            console.warn('⚠️ โหลดโฆษณาไม่สำเร็จ - ใช้ default');
+        }
+        
+        if (stored) {
+            advertisements = JSON.parse(stored);
+        } else {
+            advertisements = getDefaultAds();
+        }
+        
+        if (advertisements.length === 0) {
+            advertisements = getDefaultAds();
+        }
+        
+        console.log('📢 โหลดโฆษณา:', advertisements.length, 'รายการ');
+        
+    } catch (error) {
+        console.error('❌ Error loading ads:', error);
+        advertisements = getDefaultAds();
+        console.log('📢 ใช้ default ads:', advertisements.length, 'รายการ');
+    }
+}
 
-       function getDefaultAds() {
-           const now = Date.now();
-           return [
-               {
-                   type: 'text',
-                   content: '🌟 <strong>ยินดีต้อนรับสู่ระบบ</strong><br><br>📊 Digital Signage Pro v3.0<br><br>⚡ ข้อมูลคุณภาพอากาศแบบเรียลไทม์<br><br>🎯 TV Edition',
-                   background: 'linear-gradient(45deg, #667eea, #764ba2)',
-                   duration: 20000,
-                   id: now + 1
-               },
-               {
-                   type: 'text',
-                   content: '🏢 <strong>ชื่อธุรกิจของคุณ</strong><br><br>📞 <strong>โทร:</strong> 02-xxx-xxxx<br><br>🌟 บริการคุณภาพระดับพรีเมียม<br><br>💎 ราคาเริ่มต้น 999 บาท',
-                   background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
-                   duration: 18000,
-                   id: now + 2
-               },
-               {
-                   type: 'text',
-                   content: '🎉 <strong>โปรโมชั่นพิเศษ!</strong><br><br>💰 <strong>ลดราคา 50%</strong><br><br>⏰ <strong>สิ้นสุด:</strong> 31 ธ.ค. 2568<br><br>🛍️ รีบมาช็อปกันเลย!',
-                   background: 'linear-gradient(45deg, #f093fb, #f5576c)',
-                   duration: 22000,
-                   id: now + 3
-               }
-           ];
-       }
+function getDefaultAds() {
+    const now = Date.now();
+    return [
+        {
+            type: 'text',
+            content: '🌟 <strong>ยินดีต้อนรับสู่ระบบ</strong><br><br>📊 Digital Signage Pro v3.0<br><br>⚡ ข้อมูลคุณภาพอากาศแบบเรียลไทม์<br><br>🎯 TV Edition',
+            background: 'linear-gradient(45deg, #667eea, #764ba2)',
+            duration: 20000,
+            id: now + 1
+        },
+        {
+            type: 'text',
+            content: '🏢 <strong>ชื่อธุรกิจของคุณ</strong><br><br>📞 <strong>โทร:</strong> 02-xxx-xxxx<br><br>🌟 บริการคุณภาพระดับพรีเมียม<br><br>💎 ราคาเริ่มต้น 999 บาท',
+            background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
+            duration: 18000,
+            id: now + 2
+        },
+        {
+            type: 'text',
+            content: '🎉 <strong>โปรโมชั่นพิเศษ!</strong><br><br>💰 <strong>ลดราคา 50%</strong><br><br>⏰ <strong>สิ้นสุด:</strong> 31 ธ.ค. 2568<br><br>🛍️ รีบมาช็อปกันเลย!',
+            background: 'linear-gradient(45deg, #f093fb, #f5576c)',
+            duration: 22000,
+            id: now + 3
+        }
+    ];
+}
 
-       async function startSystem() {
-           await updateAirQualityData();
-           await new Promise(resolve => setTimeout(resolve, 1000));
-           startAdRotation();
-           updateForecast();
-       }
+async function startSystem() {
+    await updateAirQualityData();
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    startAdRotation();
+    updateForecast();
+}
 
-       function setupTimers() {
-           if (apiUpdateTimer) clearInterval(apiUpdateTimer);
-           if (adRotationTimer) clearInterval(adRotationTimer);
-           
-           apiUpdateTimer = setInterval(() => {
-               if (isSystemReady) {
-                   updateAirQualityData();
-               }
-           }, CONFIG.UPDATE_INTERVAL);
-           
-           console.log(`⏰ ตั้งเวลา: อัพเดททุก ${CONFIG.UPDATE_INTERVAL / 60000} นาที`);
-       }
+function setupTimers() {
+    if (apiUpdateTimer) clearInterval(apiUpdateTimer);
+    if (adRotationTimer) clearInterval(adRotationTimer);
+    
+    apiUpdateTimer = setInterval(() => {
+        if (isSystemReady) {
+            updateAirQualityData();
+        }
+    }, CONFIG.UPDATE_INTERVAL);
+    
+    console.log(`⏰ ตั้งเวลา: อัพเดททุก ${CONFIG.UPDATE_INTERVAL / 60000} นาที`);
+}
 
-       function startAdRotation() {
-           if (adRotationTimer) clearInterval(adRotationTimer);
-           
-           if (advertisements && advertisements.length > 0) {
-               displayCurrentAd();
-               adRotationTimer = setInterval(() => {
-                   nextAd();
-               }, CONFIG.AD_ROTATION_INTERVAL);
-               console.log(`🎬 เริ่มหมุนเวียนโฆษณา: ${advertisements.length} รายการ`);
-           } else {
-               console.warn('⚠️ ไม่มีโฆษณาให้แสดง - ใช้ default ads');
-               advertisements = getDefaultAds();
-               startAdRotation();
-           }
-       }
+function startAdRotation() {
+    console.log('🎬 startAdRotation called');
+    if (adRotationTimer) clearInterval(adRotationTimer);
+    
+    if (advertisements && advertisements.length > 0) {
+        displayCurrentAd();
+        adRotationTimer = setInterval(() => {
+            nextAd();
+        }, CONFIG.AD_ROTATION_INTERVAL);
+        console.log(`🎬 เริ่มหมุนเวียนโฆษณา: ${advertisements.length} รายการ`);
+    } else {
+        console.warn('⚠️ ไม่มีโฆษณาให้แสดง - ใช้ default ads');
+        advertisements = getDefaultAds();
+        startAdRotation();
+    }
+}
 
-       function nextAd() {
-           currentAdIndex = (currentAdIndex + 1) % advertisements.length;
-           displayCurrentAd();
-       }
+function nextAd() {
+    currentAdIndex = (currentAdIndex + 1) % advertisements.length;
+    displayCurrentAd();
+}
 
-       function displayCurrentAd() {
-           if (!advertisements || advertisements.length === 0) {
-               advertisements = getDefaultAds();
-               return;
-           }
-           const adContent = document.getElementById('adContent');
-           const adCounter = document.getElementById('adCounter');
-           const adWidget = document.getElementById('adWidget');
-           const ad = advertisements[currentAdIndex];
-           
-           if (!ad) {
-               console.warn('⚠️ โฆษณาไม่ถูกต้อง:', currentAdIndex);
-               currentAdIndex = 0;
-               return;
-           }
-           
-           adCounter.textContent = `${currentAdIndex + 1}/${advertisements.length}`;
-           
-           adWidget.style.transform = 'scale(0.95)';
-           adWidget.style.opacity = '0.7';
-           
-           setTimeout(() => {
-               try {
-                   if (ad.type === 'text') {
-                       const background = ad.background || 'linear-gradient(45deg, #667eea, #764ba2)';
-                       adWidget.style.background = background;
-                       adContent.innerHTML = `<div class="ad-text">${ad.content}</div>`;
-                   } else if (ad.type === 'image') {
-                       adWidget.style.background = '#000';
-                       adContent.innerHTML = `<img src="${ad.src}" style="max-width: 100%; max-height: 100%; object-fit: contain;" alt="Advertisement">`;
-                   } else if (ad.type === 'video') {
-                       adWidget.style.background = '#000';
-                       adContent.innerHTML = `<video src="${ad.src}" style="max-width: 100%; max-height: 100%; object-fit: contain;" autoplay muted loop></video>`;
-                   }
-                   
-                   adWidget.style.transform = 'scale(1)';
-                   adWidget.style.opacity = '1';
-                   
-               } catch (error) {
-                   console.error('❌ Error displaying ad:', error);
-                   adContent.innerHTML = `<div class="ad-text">เกิดข้อผิดพลาดในการแสดงโฆษณา</div>`;
-                   adWidget.style.transform = 'scale(1)';
-                   adWidget.style.opacity = '1';
-               }
-           }, 300);
-           
-           console.log(`📢 แสดงโฆษณาที่ ${currentAdIndex + 1}/${advertisements.length}`);
-       }
+function displayCurrentAd() {
+    console.log('🎬 displayCurrentAd called:', currentAdIndex, advertisements.length);
+    
+    if (!advertisements || advertisements.length === 0) {
+        console.log('❌ No ads available');
+        advertisements = getDefaultAds();
+        return;
+    }
+    
+    const adContent = document.getElementById('adContent');
+    const adCounter = document.getElementById('adCounter');
+    const adWidget = document.getElementById('adWidget');
+    
+    // เช็คว่า elements มีอยู่จริงมั้ย
+    if (!adContent || !adCounter || !adWidget) {
+        console.error('❌ Ad elements not found');
+        return;
+    }
+    
+    const ad = advertisements[currentAdIndex];
+    console.log('📢 Current ad:', ad);
+    
+    if (!ad) {
+        console.warn('⚠️ โฆษณาไม่ถูกต้อง:', currentAdIndex);
+        currentAdIndex = 0;
+        return;
+    }
+    
+    adCounter.textContent = `${currentAdIndex + 1}/${advertisements.length}`;
+    
+    adWidget.style.transform = 'scale(0.95)';
+    adWidget.style.opacity = '0.7';
+    
+    setTimeout(() => {
+        try {
+            if (ad.type === 'text') {
+                const background = ad.background || 'linear-gradient(45deg, #667eea, #764ba2)';
+                adWidget.style.background = background;
+                adContent.innerHTML = `<div class="ad-text">${ad.content}</div>`;
+            } else if (ad.type === 'image') {
+                adWidget.style.background = '#000';
+                adContent.innerHTML = `<img src="${ad.src}" style="max-width: 100%; max-height: 100%; object-fit: contain;" alt="Advertisement">`;
+            } else if (ad.type === 'video') {
+                adWidget.style.background = '#000';
+                adContent.innerHTML = `<video src="${ad.src}" style="max-width: 100%; max-height: 100%; object-fit: contain;" autoplay muted loop></video>`;
+            }
+            
+            adWidget.style.transform = 'scale(1)';
+            adWidget.style.opacity = '1';
+            
+        } catch (error) {
+            console.error('❌ Error displaying ad:', error);
+            adContent.innerHTML = `<div class="ad-text">เกิดข้อผิดพลาดในการแสดงโฆษณา</div>`;
+            adWidget.style.transform = 'scale(1)';
+            adWidget.style.opacity = '1';
+        }
+    }, 300);
+    
+    console.log(`📢 แสดงโฆษณาที่ ${currentAdIndex + 1}/${advertisements.length}`);
+}
 
-       // === API Functions ===
-       async function updateAirQualityData() {
-           if (!CONFIG.API_KEY) {
-               showDemoData();
-               return;
-           }
-           
-           updateConnectionStatus('connecting', '🔄 กำลังอัพเดท');
-           
-           const url = `https://api.airvisual.com/v2/city?city=${encodeURIComponent(CONFIG.CITY)}&state=${encodeURIComponent(CONFIG.STATE)}&country=${encodeURIComponent(CONFIG.COUNTRY)}&key=${CONFIG.API_KEY}`;
-           
-           try {
-               const response = await fetch(url, { 
-                   signal: AbortSignal.timeout(15000)
-               });
-               
-               if (!response.ok) {
-                   throw new Error(`HTTP ${response.status}`);
-               }
-               
-               const data = await response.json();
-               if (data && data.status === 'success' && data.data) {
-                   processApiData(data.data);
-               } else {
-                   throw new Error('API returned invalid data');
-               }
-               
-           } catch (error) {
-               console.error('❌ API Error:', error);
-               handleApiError(error.message);
-           }
-       }
+// === API Functions ===
+async function updateAirQualityData() {
+    if (!CONFIG.API_KEY) {
+        showDemoData();
+        return;
+    }
+    
+    updateConnectionStatus('connecting', '🔄 กำลังอัพเดท');
+    
+    const url = `https://api.airvisual.com/v2/city?city=${encodeURIComponent(CONFIG.CITY)}&state=${encodeURIComponent(CONFIG.STATE)}&country=${encodeURIComponent(CONFIG.COUNTRY)}&key=${CONFIG.API_KEY}`;
+    
+    try {
+        const response = await fetch(url, { 
+            signal: AbortSignal.timeout(15000)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const data = await response.json();
+        if (data && data.status === 'success' && data.data) {
+            processApiData(data.data);
+        } else {
+            throw new Error('API returned invalid data');
+        }
+        
+    } catch (error) {
+        console.error('❌ API Error:', error);
+        handleApiError(error.message);
+    }
+}
 
-       function processApiData(data) {
-           try {
-               const current = data.current;
-               const pollution = current.pollution;
-               const weather = current.weather;
-               
-               // อัพเดท Location
-               const location = locations[currentLocation];
-               document.getElementById('currentLocation').innerHTML = `📍 ${location ? location.thai : CONFIG.CITY}`;
-               
-               // อัพเดท AQI
-               const aqiValue = pollution.aqius;
-               const aqiStatus = getAQIStatus(aqiValue);
-               
-               const aqiElement = document.getElementById('aqiValue');
-               const statusElement = document.getElementById('aqiStatus');
-               const aqiMainElement = document.getElementById('aqiMain');
-               
-               aqiElement.textContent = aqiValue;
-               aqiElement.className = `aqi-value ${aqiStatus.class}`;
-               statusElement.textContent = aqiStatus.text;
-               statusElement.className = `aqi-status ${aqiStatus.class}`;
-               
-               // Update widget styling based on AQI level
-               aqiMainElement.className = `widget aqi-main animate-fade-in-up ${aqiValue > 200 ? 'critical' : ''}`;
-               
-               // อัพเดท PM2.5 (ถ้ามี)
-               // const pm25Value = (pollution.pm25 && pollution.pm25.v) ? pollution.pm25.v : '--';
-               
-               // อัพเดท Weather
-               document.getElementById('temperature').textContent = 
-                   weather.tp ? weather.tp + '°C' : '--°C';
-               document.getElementById('humidity').textContent = 
-                   weather.hu ? weather.hu + '%' : '--%';
-               document.getElementById('pressure').textContent = 
-                   weather.pr ? weather.pr + ' hPa' : '-- hPa';
-               document.getElementById('windSpeed').textContent = 
-                   weather.ws ? weather.ws + ' m/s' : '-- m/s';
-               
-               // อัพเดท Last Update
-               document.getElementById('lastUpdate').textContent = 
-                   `อัปเดตล่าสุด: ${formatThaiDateTime(new Date())}`;
-               
-               updateConnectionStatus('success', '✅ ข้อมูลล่าสุด');
-               
-           } catch (error) {
-               console.error('❌ Process data error:', error);
-               handleApiError('Data processing error');
-           }
-       }
+function processApiData(data) {
+    try {
+        const current = data.current;
+        const pollution = current.pollution;
+        const weather = current.weather;
+        
+        // อัพเดท Location
+        const location = locations[currentLocation];
+        document.getElementById('currentLocation').innerHTML = `📍 ${location ? location.thai : CONFIG.CITY}`;
+        
+        // อัพเดท AQI
+        const aqiValue = pollution.aqius;
+        const aqiStatus = getAQIStatus(aqiValue);
+        
+        const aqiElement = document.getElementById('aqiValue');
+        const statusElement = document.getElementById('aqiStatus');
+        const aqiMainElement = document.getElementById('aqiMain');
+        
+        aqiElement.textContent = aqiValue;
+        aqiElement.className = `aqi-value ${aqiStatus.class}`;
+        statusElement.textContent = aqiStatus.text;
+        statusElement.className = `aqi-status ${aqiStatus.class}`;
+        
+        // Update widget styling based on AQI level
+        aqiMainElement.className = `widget aqi-main animate-fade-in-up ${aqiValue > 200 ? 'critical' : ''}`;
+        
+        // อัพเดท Weather
+        document.getElementById('temperature').textContent = 
+            weather.tp ? weather.tp + '°C' : '--°C';
+        document.getElementById('humidity').textContent = 
+            weather.hu ? weather.hu + '%' : '--%';
+        document.getElementById('pressure').textContent = 
+            weather.pr ? weather.pr + ' hPa' : '-- hPa';
+        document.getElementById('windSpeed').textContent = 
+            weather.ws ? weather.ws + ' m/s' : '-- m/s';
+        
+        // อัพเดท Last Update
+        document.getElementById('lastUpdate').textContent = 
+            `อัปเดตล่าสุด: ${formatThaiDateTime(new Date())}`;
+        
+        updateConnectionStatus('success', '✅ ข้อมูลล่าสุด');
+        
+    } catch (error) {
+        console.error('❌ Process data error:', error);
+        handleApiError('Data processing error');
+    }
+}
 
-       function getAQIStatus(aqi) {
-           if (aqi <= 50) return { 
-               text: 'ดี 😊 เหมาะกับกิจกรรมกลางแจ้ง', 
-               class: 'status-good' 
-           };
-           if (aqi <= 100) return { 
-               text: 'ปานกลาง 😐 ปกติสำหรับคนทั่วไป', 
-               class: 'status-moderate' 
-           };
-           if (aqi <= 150) return { 
-               text: 'ไม่ดีสำหรับผู้แพ้ง่าย 😷', 
-               class: 'status-unhealthy' 
-           };
-           if (aqi <= 200) return { 
-               text: 'ไม่ดี ⚠️ หลีกเลี่ยงกิจกรรมกลางแจ้ง', 
-               class: 'status-bad' 
-           };
-           if (aqi <= 300) return { 
-               text: 'ไม่ดีมาก 🚨 ควรอยู่ในที่ร่ม', 
-               class: 'status-hazardous' 
-           };
-           return { 
-               text: 'อันตราย ☠️ ห้ามออกจากบ้าน', 
-               class: 'status-critical' 
-           };
-       }
+function getAQIStatus(aqi) {
+    if (aqi <= 50) return { 
+        text: 'ดี 😊 เหมาะกับกิจกรรมกลางแจ้ง', 
+        class: 'status-good' 
+    };
+    if (aqi <= 100) return { 
+        text: 'ปานกลาง 😐 ปกติสำหรับคนทั่วไป', 
+        class: 'status-moderate' 
+    };
+    if (aqi <= 150) return { 
+        text: 'ไม่ดีสำหรับผู้แพ้ง่าย 😷', 
+        class: 'status-unhealthy' 
+    };
+    if (aqi <= 200) return { 
+        text: 'ไม่ดี ⚠️ หลีกเลี่ยงกิจกรรมกลางแจ้ง', 
+        class: 'status-bad' 
+    };
+    if (aqi <= 300) return { 
+        text: 'ไม่ดีมาก 🚨 ควรอยู่ในที่ร่ม', 
+        class: 'status-hazardous' 
+    };
+    return { 
+        text: 'อันตราย ☠️ ห้ามออกจากบ้าน', 
+        class: 'status-critical' 
+    };
+}
 
-       function formatThaiDateTime(date) {
-           const options = {
-               hour: '2-digit',
-               minute: '2-digit',
-               day: 'numeric',
-               month: 'short',
-               timeZone: 'Asia/Bangkok'
-           };
-           
-           const thaiDate = new Intl.DateTimeFormat('th-TH', options).format(date);
-           return thaiDate + ' น.';
-       }
+function formatThaiDateTime(date) {
+    const options = {
+        hour: '2-digit',
+        minute: '2-digit',
+        day: 'numeric',
+        month: 'short',
+        timeZone: 'Asia/Bangkok'
+    };
+    
+    const thaiDate = new Intl.DateTimeFormat('th-TH', options).format(date);
+    return thaiDate + ' น.';
+}
 
-       function handleApiError(error) {
-           console.error('❌ API Error:', error);
-           updateConnectionStatus('error', '📊 ข้อมูล Demo');
-           showDemoData();
-       }
+function handleApiError(error) {
+    console.error('❌ API Error:', error);
+    updateConnectionStatus('error', '📊 ข้อมูล Demo');
+    showDemoData();
+}
 
-       function showDemoData() {
-           const location = locations[currentLocation];
-           const demoData = {
-               city: CONFIG.CITY,
-               state: CONFIG.STATE,
-               country: CONFIG.COUNTRY,
-               current: {
-                   pollution: { 
-                       aqius: 67 + Math.floor(Math.random() * 30), 
-                       pm25: { v: 28 + Math.floor(Math.random() * 20) } 
-                   },
-                   weather: { 
-                       tp: 32 + Math.floor(Math.random() * 8), 
-                       hu: 65 + Math.floor(Math.random() * 20),
-                       pr: 1010 + Math.floor(Math.random() * 20),
-                       ws: 8 + Math.floor(Math.random() * 15)
-                   }
-               }
-           };
-           processApiData(demoData);
-       }
+function showDemoData() {
+    const location = locations[currentLocation];
+    const demoData = {
+        city: CONFIG.CITY,
+        state: CONFIG.STATE,
+        country: CONFIG.COUNTRY,
+        current: {
+            pollution: { 
+                aqius: 67 + Math.floor(Math.random() * 30), 
+                pm25: { v: 28 + Math.floor(Math.random() * 20) } 
+            },
+            weather: { 
+                tp: 32 + Math.floor(Math.random() * 8), 
+                hu: 65 + Math.floor(Math.random() * 20),
+                pr: 1010 + Math.floor(Math.random() * 20),
+                ws: 8 + Math.floor(Math.random() * 15)
+            }
+        }
+    };
+    processApiData(demoData);
+}
 
-       function updateForecast() {
+function updateForecast() {
     const forecastList = document.getElementById('forecastList');
     forecastList.innerHTML = '';
     
@@ -1354,101 +1379,103 @@ body.theme-green {
     }
 }
 
-       // === SYNC SYSTEM ===
-       function setupSyncListeners() {
-           console.log('📡 ตั้งค่า Sync Listeners');
-           
-           try {
-               window.addEventListener('storage', handleStorageChange);
-           } catch (e) {
-               console.warn('⚠️ Storage listener ไม่พร้อมใช้งาน');
-           }
-           
-           try {
-               if (typeof BroadcastChannel !== 'undefined') {
-                   const channel = new BroadcastChannel('vipart_updates');
-                   channel.onmessage = handleBroadcastMessage;
-                   window.vipartChannel = channel;
-               }
-           } catch (e) {
-               console.warn('⚠️ BroadcastChannel ไม่พร้อมใช้งาน');
-           }
-           
-           document.addEventListener('visibilitychange', handleVisibilityChange);
-           setInterval(checkForUpdates, 3000);
-       }
+// === SYNC SYSTEM ===
+function setupSyncListeners() {
+    console.log('📡 ตั้งค่า Sync Listeners');
+    
+    try {
+        window.addEventListener('storage', handleStorageChange);
+    } catch (e) {
+        console.warn('⚠️ Storage listener ไม่พร้อมใช้งาน');
+    }
+    
+    try {
+        if (typeof BroadcastChannel !== 'undefined') {
+            const channel = new BroadcastChannel('vipart_updates');
+            channel.onmessage = handleBroadcastMessage;
+            window.vipartChannel = channel;
+        }
+    } catch (e) {
+        console.warn('⚠️ BroadcastChannel ไม่พร้อมใช้งาน');
+    }
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    setInterval(checkForUpdates, 3000);
+}
 
-       function handleStorageChange(e) {
-           console.log('📡 Storage Event:', e.key);
-           
-           switch(e.key) {
-               case 'vipart_settings':
-                   setTimeout(async () => {
-                       await loadSettings();
-                       setupTimers();
-                       updateAirQualityData();
-                   }, 500);
-                   break;
-                   
-               case 'vipart_advertisements':
-                   setTimeout(async () => {
-                       await loadAdvertisements();
-                       startAdRotation();
-                   }, 500);
-                   break;
-                   
-               case 'vipart_force_reload':
-                   setTimeout(() => {
-                       location.reload();
-                   }, 1000);
-                   break;
-           }
-       }
+function handleStorageChange(e) {
+    console.log('📡 Storage Event:', e.key);
+    
+    switch(e.key) {
+        case 'vipart_settings':
+            setTimeout(async () => {
+                await loadSettings();
+                setupTimers();
+                updateAirQualityData();
+            }, 500);
+            break;
+            
+        case 'vipart_advertisements':
+            setTimeout(async () => {
+                await loadAdvertisements();
+                startAdRotation();
+            }, 500);
+            break;
+            
+        case 'vipart_force_reload':
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+            break;
+    }
+}
 
-       function handleBroadcastMessage(e) {
-           if (e.data && e.data.type === 'admin_update') {
-               console.log('📡 Admin Update ผ่าน BroadcastChannel');
-               setTimeout(async () => {
-                   await loadSettings();
-                   await loadAdvertisements();
-                   setupTimers();
-                   startAdRotation();
-               }, 1000);
-           }
-       }
+function handleBroadcastMessage(e) {
+    if (e.data && e.data.type === 'admin_update') {
+        console.log('📡 Admin Update ผ่าน BroadcastChannel');
+        setTimeout(async () => {
+            await loadSettings();
+            await loadAdvertisements();
+            setupTimers();
+            startAdRotation();
+        }, 1000);
+    }
+}
 
-       function handleVisibilityChange() {
-           if (!document.hidden && isSystemReady) {
-               console.log('👁️ หน้าต่างกลับมามองเห็น - sync ข้อมูล');
-               setTimeout(async () => {
-                   await loadSettings();
-                   await loadAdvertisements();
-                   startAdRotation();
-               }, 1000);
-           }
-       }
+function handleVisibilityChange() {
+    if (!document.hidden && isSystemReady) {
+        console.log('👁️ หน้าต่างกลับมามองเห็น - sync ข้อมูล');
+        setTimeout(async () => {
+            await loadSettings();
+            await loadAdvertisements();
+            startAdRotation();
+        }, 1000);
+    }
+}
 
-       function checkForUpdates() {
-           try {
-               const lastUpdate = localStorage.getItem('vipart_last_update');
-               const currentCheck = Date.now();
-               
-               if (lastUpdate && parseInt(lastUpdate) > (window.lastSyncCheck || 0)) {
-                   console.log('🔄 ตรวจพบการอัพเดทใหม่');
-                   window.lastSyncCheck = currentCheck;
-                   
-                   setTimeout(async () => {
-                       await loadSettings();
-                       await loadAdvertisements();
-                       startAdRotation();
-                   }, 1000);
-               }
-           } catch (error) {
-               // ไม่แสดง error หาก localStorage ไม่ทำงาน
-           }
-       }
+function checkForUpdates() {
+    try {
+        if (typeof(Storage) !== "undefined" && typeof localStorage !== 'undefined') {
+            const lastUpdate = localStorage.getItem('vipart_last_update');
+            const currentCheck = Date.now();
+            
+            if (lastUpdate && parseInt(lastUpdate) > (window.lastSyncCheck || 0)) {
+                console.log('🔄 ตรวจพบการอัพเดทใหม่');
+                window.lastSyncCheck = currentCheck;
+                
+                setTimeout(async () => {
+                    await loadSettings();
+                    await loadAdvertisements();
+                    startAdRotation();
+                }, 1000);
+            }
+        }
+    } catch (error) {
+        // ไม่แสดง error หาก localStorage ไม่ทำงาน
+    }
+}
 
-       // === KEYBOARD CONTROLS (Samsung TV Remote Support) ===
+// === KEYBOARD CONTROLS (Samsung TV Remote Support) ===
 function setupKeyboardControls() {
     document.addEventListener('keydown', (e) => {
         console.log(`⌨️ Key pressed: ${e.keyCode}`);
@@ -1517,33 +1544,13 @@ function setupKeyboardControls() {
                 break;
             case 27: // Esc
                 e.preventDefault();
-                // แสดง/ซ่อนคำแนะนำ (placeholder)
                 console.log('🔧 แสดง/ซ่อนคำแนะนำ');
                 break;
         }
     });
 }
 
-function setTheme(themeIndex) {
-    const themes = ['default', 'dark', 'green'];
-    const themeMap = { 7: 0, 8: 1, 9: 2 }; // 6=default, 7=dark, 8=green
-    
-    if (!themeMap.hasOwnProperty(themeIndex)) return;
-    
-    const theme = themes[themeMap[themeIndex]];
-    const body = document.body;
-    
-    themes.forEach(t => {
-        body.classList.remove(`theme-${t}`);
-    });
-    
-    body.classList.add(`theme-${theme}`);
-    currentTheme = theme;
-    
-    console.log(`🎨 เปลี่ยนธีม: ${theme}`);
-}
-
-       function setDisplayMode(modeIndex) {
+function setDisplayMode(modeIndex) {
     const modes = ['landscape', 'landscape-v2', 'portrait', 'fullscreen-aqi', 'fullscreen-ads'];
     if (modeIndex < 1 || modeIndex > 5) return;
     
@@ -1600,201 +1607,279 @@ function updateAQIDetails() {
     }
 }
 
-       function setTheme(themeIndex) {
-           const themes = ['default', 'dark', 'green', 'sunset'];
-           const themeMap = { 7: 0, 8: 1, 9: 2, 0: 3 };
-           
-           if (!themeMap.hasOwnProperty(themeIndex)) return;
-           
-           const theme = themes[themeMap[themeIndex]];
-           const body = document.body;
-           
-           themes.forEach(t => {
-               body.classList.remove(`theme-${t}`);
-           });
-           
-           body.classList.add(`theme-${theme}`);
-           currentTheme = theme;
-           
-           console.log(`🎨 เปลี่ยนธีม: ${theme}`);
-       }
-
-       function cycleLocation(direction) {
-           const locationKeys = Object.keys(locations);
-           const currentIndex = locationKeys.indexOf(currentLocation);
-           let newIndex = currentIndex + direction;
-           
-           if (newIndex < 0) newIndex = locationKeys.length - 1;
-           if (newIndex >= locationKeys.length) newIndex = 0;
-           
-           currentLocation = locationKeys[newIndex];
-           CONFIG.CITY = locations[currentLocation].english;
-           CONFIG.STATE = locations[currentLocation].english;
-           CONFIG.COUNTRY = locations[currentLocation].country;
-           
-           console.log(`📍 เปลี่ยนสถานที่: ${locations[currentLocation].thai}`);
-           updateAirQualityData();
-       }
-
-       function prevAd() {
-           currentAdIndex = currentAdIndex > 0 ? currentAdIndex - 1 : advertisements.length - 1;
-           displayCurrentAd();
-       }
-
-       function toggleAdRotation() {
-           if (adRotationTimer) {
-               clearInterval(adRotationTimer);
-               adRotationTimer = null;
-               console.log('⏸️ หยุดหมุนเวียนโฆษณา');
-               updateConnectionStatus('warning', '⏸️ หยุดโฆษณา');
-           } else {
-               startAdRotation();
-               console.log('▶️ เริ่มหมุนเวียนโฆษณา');
-               updateConnectionStatus('success', '▶️ เริ่มโฆษณา');
-           }
-       }
-
-       function toggleFullscreen() {
-           if (!document.fullscreenElement) {
-               document.documentElement.requestFullscreen().catch(err => {
-                   console.log('Fullscreen failed:', err);
-               });
-           } else {
-               document.exitFullscreen();
-           }
-       }
-
-       // === NETWORK MONITORING ===
-       function setupNetworkMonitoring() {
-           const updateNetworkStatus = () => {
-               isOnline = navigator.onLine;
-               const indicator = document.getElementById('networkStatus');
-               indicator.className = `network-status ${isOnline ? '' : 'offline'}`;
-               indicator.title = isOnline ? 'เชื่อมต่อเครือข่าย' : 'ไม่มีการเชื่อมต่อเครือข่าย';
-           };
-           
-           window.addEventListener('online', updateNetworkStatus);
-           window.addEventListener('offline', updateNetworkStatus);
-           updateNetworkStatus();
-       }
-
-       // === UTILITY FUNCTIONS ===
-       function updateConnectionStatus(status, message) {
-           const statusElement = document.getElementById('connectionStatus');
-           statusElement.className = `connection-status ${status}`;
-           statusElement.textContent = message;
-           
-           // Auto-hide after 3 seconds for success messages
-           if (status === 'success') {
-               setTimeout(() => {
-                   statusElement.style.opacity = '0.3';
-               }, 3000);
-           } else {
-               statusElement.style.opacity = '1';
-           }
-       }
-
-       function handleSystemError(message) {
-           console.error('❌ System Error:', message);
-           updateConnectionStatus('error', '❌ ข้อผิดพลาดระบบ');
-           document.getElementById('aqiStatus').textContent = message;
-       }
-
-       // === SAMSUNG TV FULLSCREEN OPTIMIZATION ===
-       function optimizeForTV() {
-           // Force fullscreen mode
-           if (screen.width >= 1280) {
-               document.body.style.zoom = '1.0';
-               document.body.style.transform = 'scale(1.0)';
-               
-               // Hide cursor after 3 seconds
-               let cursorTimer;
-               const hideCursor = () => {
-                   document.body.style.cursor = 'none';
-               };
-               
-               const showCursor = () => {
-                   document.body.style.cursor = 'default';
-                   clearTimeout(cursorTimer);
-                   cursorTimer = setTimeout(hideCursor, 3000);
-               };
-               
-               document.addEventListener('mousemove', showCursor);
-               cursorTimer = setTimeout(hideCursor, 3000);
-           }
-           
-           // Prevent context menu on Samsung TV
-           document.addEventListener('contextmenu', e => e.preventDefault());
-           
-           // Prevent selection
-           document.addEventListener('selectstart', e => e.preventDefault());
-           
-           // Auto-request fullscreen on load
-           setTimeout(() => {
-               if (!document.fullscreenElement) {
-                   document.documentElement.requestFullscreen().catch(() => {
-                       console.log('Auto-fullscreen not available');
-                   });
-               }
-           }, 2000);
-       }
-
-       // === INITIALIZATION ===
-       document.addEventListener('DOMContentLoaded', () => {
-           init();
-           optimizeForTV();
-       });
-
-       // Handle page visibility changes
-       document.addEventListener('visibilitychange', () => {
-           if (!document.hidden && isSystemReady) {
-               // Refresh data when page becomes visible again
-               updateAirQualityData();
-           }
-       });
-
-       // Cleanup and memory management
-       setInterval(() => {
-           // Force garbage collection if available
-           if (window.gc && Math.random() < 0.1) {
-               window.gc();
-           }
-       }, 300000); // Every 5 minutes
-
-       console.log('🎉 Digital Signage Pro v3.0 TV Edition พร้อมใช้งาน!');
-       console.log('🎮 Samsung TV Controls:');
-       console.log('   1-6 = Display Modes | 7-0 = Themes');
-       console.log('   ← → = Ads | ↑ ↓ = Locations');
-       console.log('   Enter = Refresh | Space = Pause/Play | Esc = Fullscreen');
-       async function loadAdvertisements() {
-    try {
-        let stored = null;
-        
-        // เพิ่ม check localStorage
-        if (typeof(Storage) !== "undefined" && typeof localStorage !== 'undefined') {
-            stored = localStorage.getItem('vipart_advertisements');
-        } else {
-            console.warn('⚠️ localStorage ไม่รองรับ - ใช้ default ads');
-        }
-        
-        if (stored) {
-            advertisements = JSON.parse(stored);
-        } else {
-            advertisements = getDefaultAds();
-        }
-        
-        if (advertisements.length === 0) {
-            advertisements = getDefaultAds();
-        }
-        
-        console.log('📢 โหลดโฆษณา:', advertisements.length, 'รายการ');
-        
-    } catch (error) {
-        console.error('❌ Error loading ads:', error);
-        advertisements = getDefaultAds();
-        console.log('📢 ใช้ default ads:', advertisements.length, 'รายการ');
-    }
+function setTheme(themeIndex) {
+   const themes = ['default', 'dark', 'green', 'sunset'];
+   const themeMap = { 7: 0, 8: 1, 9: 2, 0: 3 };
+   
+   if (!themeMap.hasOwnProperty(themeIndex)) return;
+   
+   const theme = themes[themeMap[themeIndex]];
+   const body = document.body;
+   
+   themes.forEach(t => {
+       body.classList.remove(`theme-${t}`);
+   });
+   
+   body.classList.add(`theme-${theme}`);
+   currentTheme = theme;
+   
+   console.log(`🎨 เปลี่ยนธีม: ${theme}`);
 }
+
+function cycleLocation(direction) {
+   const locationKeys = Object.keys(locations);
+   const currentIndex = locationKeys.indexOf(currentLocation);
+   let newIndex = currentIndex + direction;
+   
+   if (newIndex < 0) newIndex = locationKeys.length - 1;
+   if (newIndex >= locationKeys.length) newIndex = 0;
+   
+   currentLocation = locationKeys[newIndex];
+   CONFIG.CITY = locations[currentLocation].english;
+   CONFIG.STATE = locations[currentLocation].english;
+   CONFIG.COUNTRY = locations[currentLocation].country;
+   
+   console.log(`📍 เปลี่ยนสถานที่: ${locations[currentLocation].thai}`);
+   updateAirQualityData();
+}
+
+function prevAd() {
+   currentAdIndex = currentAdIndex > 0 ? currentAdIndex - 1 : advertisements.length - 1;
+   displayCurrentAd();
+}
+
+function toggleAdRotation() {
+   if (adRotationTimer) {
+       clearInterval(adRotationTimer);
+       adRotationTimer = null;
+       console.log('⏸️ หยุดหมุนเวียนโฆษณา');
+       updateConnectionStatus('warning', '⏸️ หยุดโฆษณา');
+   } else {
+       startAdRotation();
+       console.log('▶️ เริ่มหมุนเวียนโฆษณา');
+       updateConnectionStatus('success', '▶️ เริ่มโฆษณา');
+   }
+}
+
+function toggleFullscreen() {
+   if (!document.fullscreenElement) {
+       document.documentElement.requestFullscreen().catch(err => {
+           console.log('Fullscreen failed:', err);
+       });
+   } else {
+       document.exitFullscreen();
+   }
+}
+
+// === NETWORK MONITORING ===
+function setupNetworkMonitoring() {
+   const updateNetworkStatus = () => {
+       isOnline = navigator.onLine;
+       const indicator = document.getElementById('networkStatus');
+       indicator.className = `network-status ${isOnline ? '' : 'offline'}`;
+       indicator.title = isOnline ? 'เชื่อมต่อเครือข่าย' : 'ไม่มีการเชื่อมต่อเครือข่าย';
+   };
+   
+   window.addEventListener('online', updateNetworkStatus);
+   window.addEventListener('offline', updateNetworkStatus);
+   updateNetworkStatus();
+}
+
+// === UTILITY FUNCTIONS ===
+function updateConnectionStatus(status, message) {
+   const statusElement = document.getElementById('connectionStatus');
+   statusElement.className = `connection-status ${status}`;
+   statusElement.textContent = message;
+   
+   // Auto-hide after 3 seconds for success messages
+   if (status === 'success') {
+       setTimeout(() => {
+           statusElement.style.opacity = '0.3';
+       }, 3000);
+   } else {
+       statusElement.style.opacity = '1';
+   }
+}
+
+function handleSystemError(message) {
+   console.error('❌ System Error:', message);
+   updateConnectionStatus('error', '❌ ข้อผิดพลาดระบบ');
+   document.getElementById('aqiStatus').textContent = message;
+}
+
+// === SAMSUNG TV FULLSCREEN OPTIMIZATION ===
+function optimizeForTV() {
+   // Force fullscreen mode
+   if (screen.width >= 1280) {
+       document.body.style.zoom = '1.0';
+       document.body.style.transform = 'scale(1.0)';
+       
+       // Hide cursor after 3 seconds
+       let cursorTimer;
+       const hideCursor = () => {
+           document.body.style.cursor = 'none';
+       };
+       
+       const showCursor = () => {
+           document.body.style.cursor = 'default';
+           clearTimeout(cursorTimer);
+           cursorTimer = setTimeout(hideCursor, 3000);
+       };
+       
+       document.addEventListener('mousemove', showCursor);
+       cursorTimer = setTimeout(hideCursor, 3000);
+   }
+   
+   // Prevent context menu on Samsung TV
+   document.addEventListener('contextmenu', e => e.preventDefault());
+   
+   // Prevent selection
+   document.addEventListener('selectstart', e => e.preventDefault());
+   
+   // Auto-request fullscreen on load
+   setTimeout(() => {
+       if (!document.fullscreenElement) {
+           document.documentElement.requestFullscreen().catch(() => {
+               console.log('Auto-fullscreen not available');
+           });
+       }
+   }, 2000);
+}
+
+// === INITIALIZATION ===
+document.addEventListener('DOMContentLoaded', () => {
+   init();
+   optimizeForTV();
+});
+
+// Handle page visibility changes
+document.addEventListener('visibilitychange', () => {
+   if (!document.hidden && isSystemReady) {
+       // Refresh data when page becomes visible again
+       updateAirQualityData();
+   }
+});
+
+// Cleanup and memory management
+setInterval(() => {
+   // Force garbage collection if available
+   if (window.gc && Math.random() < 0.1) {
+       window.gc();
+   }
+}, 300000); // Every 5 minutes
+
+console.log('🎉 Digital Signage Pro v3.0 TV Edition พร้อมใช้งาน!');
+console.log('🎮 Samsung TV Controls:');
+console.log('   1-5 = Display Modes | 6-9 = Themes');
+console.log('   ← → = Ads | ↑ ↓ = Locations');
+console.log('   Enter = Refresh | Space = Pause/Play | 0 = Fullscreen');
+
+// Test function for debugging
+console.log('🧪 Script loaded successfully');
+window.testFunction = function() {
+   console.log('✅ Functions working');
+   console.log('Ads:', advertisements);
+   console.log('Current Index:', currentAdIndex);
+   console.log('Timer:', adRotationTimer);
+};
+// === FALLBACK SYSTEM FOR PRODUCTION ===
+// ตรวจสอบและแก้ไขปัญหาอัตโนมัติ
+function initFallbackSystem() {
+    console.log('🔧 เริ่มต้น Fallback System');
+    
+    // ตรวจสอบ functions หลัก
+    if (typeof displayCurrentAd !== 'function') {
+        console.warn('⚠️ displayCurrentAd ไม่พร้อม - สร้างใหม่');
+        
+        window.displayCurrentAd = function() {
+            console.log('🎬 Fallback displayCurrentAd called');
+            
+            const adContent = document.getElementById('adContent');
+            const adCounter = document.getElementById('adCounter');
+            const adWidget = document.getElementById('adWidget');
+            
+            if (!adContent || !adCounter || !adWidget) {
+                console.error('❌ Ad elements not found');
+                return;
+            }
+            
+            // ใช้ advertisements ที่มีอยู่หรือ default
+            const ads = window.advertisements || getDefaultAds();
+            const index = window.currentAdIndex || 0;
+            const ad = ads[index] || ads[0];
+            
+            if (ad) {
+                adCounter.textContent = `${index + 1}/${ads.length}`;
+                adWidget.style.background = ad.background || 'linear-gradient(45deg, #667eea, #764ba2)';
+                adContent.innerHTML = `<div class="ad-text">${ad.content}</div>`;
+                console.log('✅ แสดงโฆษณาสำเร็จ:', ad.content.substring(0, 30) + '...');
+            }
+        };
+    }
+    
+    // ตรวจสอบ startAdRotation
+    if (typeof startAdRotation !== 'function') {
+        console.warn('⚠️ startAdRotation ไม่พร้อม - สร้างใหม่');
+        
+        window.startAdRotation = function() {
+            console.log('🎬 Fallback startAdRotation called');
+            
+            if (window.adRotationTimer) {
+                clearInterval(window.adRotationTimer);
+            }
+            
+            // แสดงโฆษณาแรก
+            displayCurrentAd();
+            
+            // ตั้งเวลาหมุนเวียน
+            window.adRotationTimer = setInterval(() => {
+                const ads = window.advertisements || getDefaultAds();
+                window.currentAdIndex = ((window.currentAdIndex || 0) + 1) % ads.length;
+                displayCurrentAd();
+            }, 15000);
+            
+            console.log('✅ เริ่มหมุนเวียนโฆษณา');
+        };
+    }
+    
+    // ตรวจสอบข้อมูลโฆษณา
+    if (!window.advertisements || window.advertisements.length === 0) {
+        console.warn('⚠️ ไม่มีโฆษณา - โหลดใหม่');
+        
+        try {
+            const stored = localStorage.getItem('vipart_advertisements');
+            if (stored) {
+                window.advertisements = JSON.parse(stored);
+            } else {
+                window.advertisements = getDefaultAds();
+            }
+        } catch (e) {
+            window.advertisements = getDefaultAds();
+        }
+        
+        console.log('📢 โหลดโฆษณา:', window.advertisements.length, 'รายการ');
+    }
+    
+    // เริ่มระบบ
+    setTimeout(() => {
+        startAdRotation();
+        console.log('🚀 Fallback System เริ่มทำงาน');
+    }, 2000);
+}
+
+// เรียกใช้ Fallback System
+setTimeout(initFallbackSystem, 3000);
+
+// ตรวจสอบทุก 30 วินาที ว่าโฆษณาทำงานมั้ย
+setInterval(() => {
+    const adContent = document.getElementById('adContent');
+    if (adContent && (!adContent.innerHTML || adContent.innerHTML.includes('กำลังโหลด'))) {
+        console.log('🔧 ตรวจพบปัญหา - เริ่มต้นใหม่');
+        initFallbackSystem();
+    }
+}, 30000);
+
+console.log('✅ Fallback System พร้อมใช้งาน');
        
    </script>
 </body>
