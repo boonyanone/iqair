@@ -1212,28 +1212,63 @@ async function updateAirQualityData() {
     
     updateConnectionStatus('connecting', '🔄 กำลังอัพเดท');
     
-    const url = `https://api.airvisual.com/v2/city?city=${encodeURIComponent(CONFIG.CITY)}&state=${encodeURIComponent(CONFIG.STATE)}&country=${encodeURIComponent(CONFIG.COUNTRY)}&key=${CONFIG.API_KEY}`;
+    const originalUrl = `https://api.airvisual.com/v2/city?city=${encodeURIComponent(CONFIG.CITY)}&state=${encodeURIComponent(CONFIG.STATE)}&country=${encodeURIComponent(CONFIG.COUNTRY)}&key=${CONFIG.API_KEY}`;
     
-    try {
-        const response = await fetch(url, { 
-            signal: AbortSignal.timeout(15000)
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+    // ลองใช้ CORS Proxy หลายตัว เพื่อความเสถียร
+    const proxies = [
+        `https://api.allorigins.win/get?url=${encodeURIComponent(originalUrl)}`,
+        `https://corsproxy.io/?${encodeURIComponent(originalUrl)}`,
+        originalUrl // ลองตรงก่อน
+    ];
+    
+    let lastError = null;
+    
+    for (let i = 0; i < proxies.length; i++) {
+        try {
+            console.log(`🔄 กำลังลอง proxy ${i + 1}/${proxies.length}`);
+            
+            const response = await fetch(proxies[i], { 
+                signal: AbortSignal.timeout(15000)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            let data;
+            
+            // ถ้าใช้ allorigins proxy
+            if (proxies[i].includes('allorigins.win')) {
+                const result = await response.json();
+                data = JSON.parse(result.contents);
+            }
+            // ถ้าใช้ corsproxy หรือตรง
+            else {
+                data = await response.json();
+            }
+            
+            if (data && data.status === 'success' && data.data) {
+                console.log(`✅ สำเร็จผ่าน proxy ${i + 1}`);
+                processApiData(data.data);
+                return; // สำเร็จแล้ว ออกจาก loop
+            } else {
+                throw new Error('API returned invalid data');
+            }
+            
+        } catch (error) {
+            console.warn(`❌ Proxy ${i + 1} ล้มเหลว:`, error.message);
+            lastError = error;
+            
+            // ถ้าไม่ใช่ proxy สุดท้าย ให้ลองต่อ
+            if (i < proxies.length - 1) {
+                continue;
+            }
         }
-        
-        const data = await response.json();
-        if (data && data.status === 'success' && data.data) {
-            processApiData(data.data);
-        } else {
-            throw new Error('API returned invalid data');
-        }
-        
-    } catch (error) {
-        console.error('❌ API Error:', error);
-        handleApiError(error.message);
     }
+    
+    // ถ้าทุก proxy ล้มเหลว
+    console.error('❌ ทุก API proxy ล้มเหลว:', lastError);
+    handleApiError(lastError ? lastError.message : 'All proxies failed');
 }
 
 function processApiData(data) {
