@@ -1766,7 +1766,35 @@ function updateAQIDetails() {
        console.log('   1-6 = Display Modes | 7-0 = Themes');
        console.log('   ← → = Ads | ↑ ↓ = Locations');
        console.log('   Enter = Refresh | Space = Pause/Play | Esc = Fullscreen');
-
+       async function loadAdvertisements() {
+    try {
+        let stored = null;
+        
+        // เพิ่ม check localStorage
+        if (typeof(Storage) !== "undefined" && typeof localStorage !== 'undefined') {
+            stored = localStorage.getItem('vipart_advertisements');
+        } else {
+            console.warn('⚠️ localStorage ไม่รองรับ - ใช้ default ads');
+        }
+        
+        if (stored) {
+            advertisements = JSON.parse(stored);
+        } else {
+            advertisements = getDefaultAds();
+        }
+        
+        if (advertisements.length === 0) {
+            advertisements = getDefaultAds();
+        }
+        
+        console.log('📢 โหลดโฆษณา:', advertisements.length, 'รายการ');
+        
+    } catch (error) {
+        console.error('❌ Error loading ads:', error);
+        advertisements = getDefaultAds();
+        console.log('📢 ใช้ default ads:', advertisements.length, 'รายการ');
+    }
+}
        
    </script>
 </body>
