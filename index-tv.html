@@ -111,11 +111,60 @@ body.theme-green {
     grid-template-rows: 1fr 1fr;
 }
 
+.display-portrait .main-content { /* ปรับเป็นแนวตั้ง*/
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto; /* เปลี่ยนจาก 1fr 1fr auto auto */
+    gap: var(--spacing-sm); /* ลดระยะห่าง */
+    padding: var(--spacing-sm); /* ลด padding */
+}
+.display-portrait .aqi-value {
+    font-size: 4rem; /* ลดจาก 6rem */
+}
+
+.display-portrait .aqi-location {
+    font-size: 1.6rem;
+}
+
+.display-portrait .ad-text {
+    font-size: 1.4rem; /* ลดขนาด */
+}
 .display-portrait .main-content {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 0.7fr 0.7fr;
-    gap: 0.4rem;
-    padding: 0.4rem;
+    grid-template-rows: 1fr 1fr 1fr 1fr; /* เปลี่ยนเป็นเท่ากัน 4 ส่วน */
+    gap: var(--spacing-sm);
+    height: 100vh; /* เพิ่มบรรทัดนี้ */
+}
+
+/* เพิ่มใหม่ */
+.display-portrait .widget {
+    min-height: 20vh;
+}
+
+.display-portrait .aqi-value {
+    font-size: 3rem;
+}
+
+.display-portrait .ad-text {
+    font-size: 1.2rem;
+}
+.display-portrait .container {
+    transform: rotate(90deg);
+    transform-origin: center center;
+    width: 100vh;
+    height: 100vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -50vh;
+    margin-top: -50vw;
+}
+
+.display-portrait .main-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    gap: var(--spacing-sm);
+    height: 100%;
+    width: 100%;
 }
 
 .display-fullscreen-aqi .main-content {
@@ -601,14 +650,14 @@ body.theme-green {
 .display-fullscreen-aqi .aqi-location,
 .display-fullscreen-ads .aqi-location,
 .display-split .aqi-location {
-    font-size: 2rem;
+    font-size: 1.6rem;
     margin-bottom: var(--spacing-md);
 }
 
 .display-fullscreen-aqi .aqi-status,
 .display-fullscreen-ads .aqi-status,
 .display-split .aqi-status {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     padding: var(--spacing-sm) var(--spacing-lg);
     margin-bottom: var(--spacing-lg);
 }
